@@ -1,0 +1,5 @@
+---
+include:
+  - project: "tmobile/tss/pipeline-templates/ci-templates"
+    ref: main
+    file: "/esd.template.gitlab-ci.yml"
