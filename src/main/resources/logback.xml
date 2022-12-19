@@ -1,0 +1,21 @@
+<configuration>
+    <appender name="fileAppender" class="ch.qos.logback.core.FileAppender">
+        <file>build/logs/testLog.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d [%-5level] Thread=[%thread] from %logger{35} class. %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="WARN">
+        <appender-ref ref="fileAppender"/>
+    </root>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date{ISO8601} [%level] [%thread] %logger{10}.%M\(%F:%L{}\) - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <variable name="QE_LOG_LEVEL" value="${QE_LOG_LEVEL:-INFO}" />
+    <root level="${QE_LOG_LEVEL}">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

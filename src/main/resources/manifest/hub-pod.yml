@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: selenium-hub2
+  labels:
+    run: selenium-hub2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: selenium-hub2
+  template:
+    metadata:
+      labels:
+        run: selenium-hub2
+    spec:
+      containers:
+      - name: selenium-hub2
+        image: selenium/hub:3.141.59-gold
+        ports:
+        - containerPort: 4444
+
+
+

@@ -1,0 +1,39 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Demo Parallel test suite" parallel="classes" thread-count="5">
+    <parameter name="isDataSeeding" value="false"/>
+    <test name="Demo Test Runner ">
+        <parameter name="url" value="https://magentabuiltstg.t-mobile.com/Login.do"/>
+        <!--        <parameter name="isDataSeeding" value="false"/>-->
+        <!--        <parameter name="updateOnJira" value="false"/>-->
+        <!--        <parameter name="monitoringDB" value="false"/>-->
+        <!--        <parameter name="jsonReports" value="false"/>-->
+        <!--        <parameter name="ZipReports" value="false"/>-->
+        <!--        <parameter name="webPublish" value="false"/>-->
+        <parameter name="selGrid" value="false"/>
+        <parameter name="nodeURL" value="http://stgpwsele0012:4444/wd/hub"/>
+        <!--        <parameter name="browserName" value="chrome"/>-->
+        <!--        <parameter name="localDriverPath" value="C:\driver\chromedriver.exe"/>-->
+        <!--        <parameter name="deviceType" value=""/>-->
+
+        <classes>
+<!--                        <class name="web.mb.tracker.PORTests"/>-->
+            <!--      <class name="web.mb.tracker.RingTests"/>-->
+<!--                        <class name="web.mb.tracker.SiteTests"/>-->
+<!--                       <class name="web.mb.tracker.DevRingTests"/>-->
+<!--                        <class name="web.mb.tracker.ProjectTests"/>-->
+<!--                        <class name="web.mb.tracker.sector.StatusFlows"/>-->
+
+                        <class name="web.mb.users.NonSuperUserTests"/>
+<!--                        <class name="web.mb.tracker.ReportVerificationTest"/>-->
+
+<!--                        <class name="web.mb.seeder.TrackerSeeder"/>-->
+<!--                        <class name="web.mb.edb.EdbConsumerTest"/>-->
+<!--                        <class name="web.mb.edb.EdbProducerTest"/>-->
+<!--                        <class name="web.mb.tracker.ReportsTests"/>-->
+            <!--          <class name="web.mb.tracker.AcsTests"/>-->
+<!--                        <class name="web.mb.tracker.sector.StatusFlows"/>-->
+            <!--     <class name="web.mb.tracker.sector.ProvisionFieldsAndRecordManagementTests"/>-->
+<!--            <class name="web.mb.tracker.sector.RFSectorTests"/>-->
+        </classes>
+    </test>
+</suite>

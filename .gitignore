@@ -1,0 +1,12 @@
+target/
+.settings/
+.vscode/
+.classpath
+.project
+reports/*.*
+reports/*/*.*
+!reports/config.xml
+AppCredentials.txt
+.idea/
+log/
+build/
