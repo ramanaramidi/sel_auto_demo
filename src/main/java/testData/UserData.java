@@ -105,6 +105,7 @@ public final class UserData {
     }
 
     public static Users getRfEngUserDetails(Users userDetails) {
+        System.out.println("getting RF Engineer");
         userDetails.setUserName(userProperties.getProperty("RfEng.user_name"));
         //userDetails.setPassword(userProperties.getProperty("Super.pass_code"));
         userDetails.setNtCode(userProperties.getProperty("RfEng.nt_code"));
