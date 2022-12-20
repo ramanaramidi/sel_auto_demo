@@ -18,6 +18,6 @@ build-and-run-test:
   artifacts:
       name: "$CI_JOB_NAME"
       paths:
-        - reports/TestReports.html
+        - reports/*
       expire_in: 15 mins
       when: always
