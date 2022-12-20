@@ -29,7 +29,7 @@ public class StatusFlows extends BaseTest {
 
     public  String envURL = System.getProperty("TestEnv");
     public  String testSuite = System.getProperty("TestRunner");
-    public Users alphaUser = new Users();
+    //public Users alphaUser = new Users();
     public Users rfEngineer = new Users();
     LoginPage loginPage;
     MainSideMenu mainSideMenu;
@@ -50,7 +50,7 @@ public class StatusFlows extends BaseTest {
 
     public StatusFlows()
     {
-        alphaUser = UserData.getAlphaUserDetails(alphaUser);
+       // alphaUser = UserData.getAlphaUserDetails(alphaUser);
         rfEngineer = UserData.getRfEngUserDetails(rfEngineer);
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
         if(testSuite == null) {testSuite = 	"TestRunner.xml";}

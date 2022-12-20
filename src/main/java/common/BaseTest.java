@@ -157,9 +157,13 @@ public abstract class BaseTest extends TestListenerAdapter{
 		//Dimension dimension = new Dimension(1920, 1024);
 		//	driver.manage().window().setSize(dimension);
 		userName = System.getProperty("USER_ID");
+		System.out.println(userName);
 		password = System.getProperty("USER_PASS");
+		System.out.println(password);
 		ntCode = System.getProperty("USER_NTID");
+		System.out.println(ntCode);
 		privateKey = System.getProperty("USER_KEY");
+		System.out.println(privateKey);
 		UserData.getToken(privateKey);
 		superUser = UserData.getSuperUserDetails(superUser);
 		nonSuper = UserData.getNonSuperUserDetails(nonSuper);
