@@ -24,13 +24,14 @@ public final class UserData {
     private static String token;
     static Properties userProperties;
     static Properties alphaUserProperties;
-    static {
-        try {
-            alphaUserProperties = LoadPropertiesFiles.loadProperties("C:\\driver\\userData.properties");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    //TODO Need to find a better solution for this also test the use-case more
+//    static {
+//        try {
+//            alphaUserProperties = LoadPropertiesFiles.loadProperties("C:\\driver\\userData.properties");
+//        } catch (IOException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
     static {
         try {
@@ -41,6 +42,7 @@ public final class UserData {
     }
 
     public static Users setAlphaUserBasicDetails(String email,String password,String ntCode, Users userDetails){
+        System.out.println("setting the right values");
         userDetails.setUserName(email);
         userDetails.setPassword(password);
         userDetails.setNtCode(ntCode);
@@ -54,10 +56,17 @@ public final class UserData {
     }
     public static void getToken(String privateKey)throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException,
             BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+        System.out.println("Getting token");
         String tokenCipher = userProperties.getProperty("Super.token");
         String publicKey = userProperties.getProperty("Super.publicKey");
         String iv = null;
         if(privateKey ==null){
+            try {
+                alphaUserProperties = LoadPropertiesFiles.loadProperties("C:\\driver\\userData.properties");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            System.out.println("Getting alfa");
             iv = alphaUserProperties.getProperty("Super.privateKey");
         }
         else
@@ -72,6 +81,11 @@ public final class UserData {
     }
 
     public static Users getAlphaUserDetails(Users userDetails) {
+        try {
+            alphaUserProperties = LoadPropertiesFiles.loadProperties("C:\\driver\\userData.properties");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         userDetails.setUserName(alphaUserProperties.getProperty("Alpha.user_name"));
         userDetails.setPassword(alphaUserProperties.getProperty("Alpha.pass_code"));
         userDetails.setNtCode(alphaUserProperties.getProperty("Alpha.nt_code"));
@@ -82,6 +96,7 @@ public final class UserData {
     }
 
     public static Users getSuperUserDetails(Users userDetails) {
+        System.out.println("getting super");
         userDetails.setUserName(userProperties.getProperty("Super.user_name"));
         //userDetails.setPassword(userProperties.getProperty("Super.pass_code"));
         userDetails.setNtCode(userProperties.getProperty("Super.nt_code"));
@@ -98,6 +113,7 @@ public final class UserData {
     }
 
     public static Users getNonSuperUserDetails(Users userDetails) {
+        System.out.println("getting nonsuper");
         userDetails.setUserName(userProperties.getProperty("NonSuper.user_name"));
         //userDetails.setPassword(userProperties.getProperty("NonSuper.pass_code"));
         userDetails.setNtCode(userProperties.getProperty("NonSuper.nt_code"));
