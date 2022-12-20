@@ -3,3 +3,20 @@ include:
   - project: "tmobile/tss/pipeline-templates/ci-templates"
     ref: main
     file: "/esd.template.gitlab-ci.yml"
+
+stages:
+  #  - tmo
+  #  - test
+  - build
+
+build-and-run-test:
+  stage: build
+  tags:
+    - exclusively-esd-test
+  script: 
+    - mvn clean test -DTestRunner="$TestRunner" -DUSER_ID="$USER_ID" -DUSER_PASS="$USER_PASS" -DUSER_NTID="$USER_NTID" -DUSER_KEY="$USER_KEY"
+  artifacts:
+      name: "$CI_JOB_NAME"
+      paths:
+        - reports/TestReports.html
+      expire_in: 3 mins
