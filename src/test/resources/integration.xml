@@ -23,7 +23,7 @@
 <!--                        <class name="web.mb.tracker.ProjectTests"/>-->
 <!--                        <class name="web.mb.tracker.sector.StatusFlows"/>-->
 
-                        <class name="web.mb.users.NonSuperUserTests"/>
+<!--                        <class name="web.mb.users.NonSuperUserTests"/>-->
 <!--                        <class name="web.mb.tracker.ReportVerificationTest"/>-->
 
 <!--                        <class name="web.mb.seeder.TrackerSeeder"/>-->
@@ -31,7 +31,7 @@
 <!--                        <class name="web.mb.edb.EdbProducerTest"/>-->
 <!--                        <class name="web.mb.tracker.ReportsTests"/>-->
             <!--          <class name="web.mb.tracker.AcsTests"/>-->
-<!--                        <class name="web.mb.tracker.sector.StatusFlows"/>-->
+                        <class name="web.mb.tracker.sector.StatusFlows"/>
             <!--     <class name="web.mb.tracker.sector.ProvisionFieldsAndRecordManagementTests"/>-->
 <!--            <class name="web.mb.tracker.sector.RFSectorTests"/>-->
         </classes>
