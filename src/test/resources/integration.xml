@@ -10,7 +10,7 @@
         <!--        <parameter name="ZipReports" value="false"/>-->
         <!--        <parameter name="webPublish" value="false"/>-->
         <parameter name="selGrid" value="true"/>
-        <parameter name="nodeURL" value="http://stgpwsele0012:4444/grid/console"/>
+        <parameter name="nodeURL" value="http://stgpwsele0012:4444/grid/wd/hub"/>
         <!-- <parameter name="nodeURL" value="https://selenium-grid4-demo.px-prd1103.pks.t-mobile.com/"/> -->
         <!--        <parameter name="browserName" value="chrome"/>-->
         <!--        <parameter name="localDriverPath" value="C:\driver\chromedriver.exe"/>-->
@@ -24,13 +24,13 @@
 <!--            <class name="web.mb.tracker.DevRingTests"/>-->
 <!--            <class name="web.mb.tracker.DevSiteTests"/>-->
 <!--            <class name="web.mb.tracker.DevTests"/>-->
-<!--            <class name="web.mb.tracker.ESRTests"/>-->
-<!--            <class name="web.mb.tracker.ImportDataTests"/>-->
-<!--            <class name="web.mb.tracker.PORTests"/>-->
-<!--            <class name="web.mb.tracker.ProjectTests"/>-->
-<!--            <class name="web.mb.tracker.ReportsTests"/>-->
-<!--            <class name="web.mb.tracker.RingTests"/>-->
-<!--            <class name="web.mb.tracker.SiteTests"/>-->
+            <class name="web.mb.tracker.ESRTests"/>
+            <class name="web.mb.tracker.ImportDataTests"/>
+            <class name="web.mb.tracker.PORTests"/>
+            <class name="web.mb.tracker.ProjectTests"/>
+            <class name="web.mb.tracker.ReportsTests"/>
+            <class name="web.mb.tracker.RingTests"/>
+            <class name="web.mb.tracker.SiteTests"/>
 <!--            &lt;!&ndash;tracker-ntp&ndash;&gt;-->
 <!--            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>-->
 <!--            <class name="web.mb.tracker.ntp.ProjectNtpTests"/>-->
@@ -44,7 +44,7 @@
 <!--            &lt;!&ndash;users&ndash;&gt;-->
 <!--            <class name="web.mb.users.VendorTests"/>-->
 <!--            <class name="web.mb.users.SdmUserTests"/>-->
-            <class name="web.mb.users.NonSuperUserTests"/>
+<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
             <!--edb-->
 <!--            <class name="web.mb.edb.EdbConsumerTest"/>-->
 <!--            <class name="web.mb.edb.EdbProducerTest"/>-->
