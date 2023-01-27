@@ -35,7 +35,7 @@ public final class UserData {
 
     static {
         try {
-            userProperties = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\test\\resources\\testData\\userData.properties");
+            userProperties = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/test/resources/testData/userData.properties");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +62,7 @@ public final class UserData {
         String iv = null;
         if(privateKey ==null){
             try {
-                alphaUserProperties = LoadPropertiesFiles.loadProperties("C:\\driver\\userData.properties");
+                alphaUserProperties = LoadPropertiesFiles.loadProperties("C:/driver/userData.properties");
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -82,7 +82,7 @@ public final class UserData {
 
     public static Users getAlphaUserDetails(Users userDetails) {
         try {
-            alphaUserProperties = LoadPropertiesFiles.loadProperties("C:\\driver\\userData.properties");
+            alphaUserProperties = LoadPropertiesFiles.loadProperties("C:/driver/userData.properties");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

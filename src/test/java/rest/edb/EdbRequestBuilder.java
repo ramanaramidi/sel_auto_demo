@@ -5,19 +5,18 @@ import commons.objects.Ring;
 import commons.objects.Sector;
 import commons.objects.Site;
 import commons.objects.Users;
-import testData.UserData;
-
 import java.util.HashMap;
 import java.util.Map;
+import testData.UserData;
 
 public class EdbRequestBuilder {
 
-    public Map<String,String> getHeader() {
-        Map<String,String> header = new HashMap<>();
+    public Map<String, String> getHeader() {
+        Map<String, String> header = new HashMap<>();
         String authToken = UserData.getInstance();
         System.out.println(authToken);
-        header.put("Authorization",authToken);
-        header.put("Content-Type","application/json");
+        header.put("Authorization", authToken);
+        header.put("Content-Type", "application/json");
         return header;
     }
 
@@ -60,6 +59,15 @@ public class EdbRequestBuilder {
         return baseRequest;
     }
 
+    public String updateSiteLatLongEDB(Site site, Users user) {
+        String baseRequest = EdbConstants.EDB_C_UPDATE_SITE_LATLONG_ASSET;
+        baseRequest = baseRequest.replace("REPLACEWITHSITEID", site.siteId);
+        baseRequest = baseRequest.replace("REPLACEWITHLATITUDE", site.latitude);
+        baseRequest = baseRequest.replace("REPLACEWITHLONGITUDE", site.longitude);
+        baseRequest = baseRequest.replace("REPLACEWITHUSER", user.getNtCode());
+        return baseRequest;
+    }
+
     public String createNewSectorEDB(Sector sector, Users user) {
         String baseRequest = EdbConstants.EDB_C_CREATE_SECTOR_ASSET;
         baseRequest = baseRequest.replace("REPLACEWITHSECTORID", sector.sectorId);
@@ -86,6 +94,19 @@ public class EdbRequestBuilder {
         String baseRequest = EdbConstants.EDB_C_ELEMENT_EVENT_SITE;
         baseRequest = baseRequest.replace("REPLACEWITHSITEID", site.siteId);
         baseRequest = baseRequest.replace("REPLACEWITHUSER", user.getNtCode());
+        return baseRequest;
+    }
+
+    public String updateElementOnAirOffAirSiteEDB(Site site) {
+        String baseRequest = EdbConstants.EDB_C_ELEMENT_ONAIR_OFFAIR_UPDATE_SITE;
+        baseRequest = baseRequest.replace("REPLACEWITHSITECODE", site.siteId);
+        return baseRequest;
+    }
+
+    public String updateElementOnAirOffAirSiteStatusEDB(Site site) {
+        String baseRequest = EdbConstants.EDB_C_ELEMENT_ONAIR_OFFAIR_UPDATE_SITE;
+        baseRequest = baseRequest.replace("REPLACEWITHSITECODE", site.siteId);
+        baseRequest = baseRequest.replace("REPLACEWITHSITESTATUS", site.siteStatus);
         return baseRequest;
     }
 

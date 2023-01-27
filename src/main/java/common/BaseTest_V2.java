@@ -96,7 +96,7 @@ public abstract class BaseTest_V2 {
 	@Parameters({"selGrid","nodeURL", "os", "browserName", "url","localDriverPath"})
 	@BeforeClass (alwaysRun = true)
 	public void beforeClass(@Optional("false") boolean selGrid,@Optional("http://10.154.94.65:5557/wd/hub")
-			String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName,@Optional("http://www.t-mobile.com") String url,@Optional("C:\\driver\\chromedriver.exe") String localDriverPath) throws IOException, InterruptedException {
+			String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName,@Optional("http://www.t-mobile.com") String url,@Optional("C:/driver/chromedriver.exe") String localDriverPath) throws IOException, InterruptedException {
 		//BasicConfigurator.configure();
 
 
@@ -134,7 +134,7 @@ public abstract class BaseTest_V2 {
 	@BeforeMethod(alwaysRun = true)
 	public void beforeMethod(@Optional("false") boolean selGrid, @Optional("tanvirahmmed") String userName, @Optional("http://10.154.94.65:5557/wd/hub")
 			String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName, @Optional("")
-									 String browserVersion, @Optional("http://www.t-mobile.com") String url, @Optional("C:\\Report\\test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:\\chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
+									 String browserVersion, @Optional("http://www.t-mobile.com") String url, @Optional("C:/Report/test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:/chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
 
 		driver.navigate().refresh();
 		ExtentTestManager.startTest(""+method.getName());
@@ -179,7 +179,7 @@ public abstract class BaseTest_V2 {
 				testResultData.put("created_by", "Automation Framework");
 				testResultData.put("create_date", dateFormatMonitoring.format(testStartDate));
 				testResultData.put("json_File_Path",txtLog[2].toString());
-				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
+				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
 				testResultData.put("test_result_url", prop.getProperty("App.reportPublishUrl") + "" + txtLog[0].toString()+"/");
 
 			}
@@ -208,9 +208,9 @@ public abstract class BaseTest_V2 {
 			currentDate = currentDate.toString().replace(" ", "_");
 			currentDate = currentDate.toString().replace(":", "_");
 			String methodName = "SC_error__"+currentDate;
-			 fileName = System.getProperty("user.dir")+"\\Reports\\failure_screenshots\\"+methodName+".png";
+			 fileName = System.getProperty("user.dir")+"/Reports/failure_screenshots/"+methodName+".png";
 			takeSnapShot(driver,fileName);
-			ExtentTestManager.getTest().log(LogStatus.FAIL, "Error Screenshort"+ ExtentTestManager.getTest().addScreenCapture("failure_screenshots\\"+methodName+".png"));
+			ExtentTestManager.getTest().log(LogStatus.FAIL, "Error Screenshort"+ ExtentTestManager.getTest().addScreenCapture("failure_screenshots/"+methodName+".png"));
 			ExtentTestManager.getTest().log(LogStatus.FAIL, result.getThrowable());
 			ExtentTestManager.getTest().log(LogStatus.FAIL, "Test Failed");
 			testStatus =2;
@@ -473,7 +473,7 @@ public abstract class BaseTest_V2 {
 	@BeforeSuite(alwaysRun = true)
 	protected void createJiraTestCycle(@Optional("false") boolean updateOnJira, @Optional("") String jiraPropertiesFile,@Optional("false") boolean jsonReports) throws IOException {
 		// LOG4J Configuration
-		//PropertyConfigurator.configure(System.getProperty("user.dir") + "\\src\\main\\resources\\Log4j.properties");
+		//PropertyConfigurator.configure(System.getProperty("user.dir") + "/src/main/resources/Log4j.properties");
 	//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		// Create the session Name.
@@ -483,10 +483,10 @@ public abstract class BaseTest_V2 {
 //////////////////////// Write to Log Files
 
 if(jsonReports) {
-    Properties prop2 = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
+    Properties prop2 = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
     String jsonReportPath = prop2.getProperty("App.jsonOutputPath");
     String jsonFileNamePrefix = prop2.getProperty("App.jsonFileNamePrefix");
-    String jsonFiles = jsonReportPath + "\\" + jsonFileNamePrefix + "" + testSessionName + ".json";   //System.getProperty("user.dir")+"\\Reports.zip";
+    String jsonFiles = jsonReportPath + "/" + jsonFileNamePrefix + "" + testSessionName + ".json";   //System.getProperty("user.dir")+"/Reports.zip";
     TextDataWriterReader.logCurrentSession(testSessionName, dateFormatMonitoring.format(date), jsonFiles);
     File file = new File(jsonFiles);
     file.createNewFile();
@@ -504,7 +504,7 @@ if(jsonReports) {
 
 			// Read AppCredentials FROM Text File.
 			try {
-				String fileName = System.getProperty("user.dir") + "\\AppCredentials.txt";
+				String fileName = System.getProperty("user.dir") + "/AppCredentials.txt";
 				String line = null;
 				String[] logData = new String[4];
 
@@ -530,7 +530,7 @@ if(jsonReports) {
 		//////////////////
 
 
-		Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\JiraZephyr.properties");
+		Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/JiraZephyr.properties");
 		ServiceURI = prop.getProperty("AUT.ServiceURI");
 		if(jiraIntregration)
 		{
@@ -600,9 +600,9 @@ if(jsonReports) {
 				//DateFormat dateFormatFolder = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss_SSS");
 				String[] txtLog = TextDataWriterReader.getSessionLog();
 				Date dateRpt = new Date();
-				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
-				File sourceLocation = new File(System.getProperty("user.dir") + "\\Reports");
-				File targetLocation = new File(prop.getProperty("App.reportPublishDir") + "\\" + txtLog[0].toString());
+				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
+				File sourceLocation = new File(System.getProperty("user.dir") + "/Reports");
+				File targetLocation = new File(prop.getProperty("App.reportPublishDir") + "/" + txtLog[0].toString());
 				zip.copyDirectory(sourceLocation, targetLocation);
 			}
 			if(ZipReports)

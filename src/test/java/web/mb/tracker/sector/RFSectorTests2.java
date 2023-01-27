@@ -47,16 +47,22 @@ public class RFSectorTests2 extends BaseTest {
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
-    public void login(Method method) throws Exception {
+    public void login_RfSectorSet2(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
         }
-         generateData();
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
+        }
+        generateData();
         mainSideMenu = loginPage.LoginAsUser(rfEngineer);
-       // mainSideMenu = loginPage.LoginAsUser(Tautoma);
+
     }
 
     private void generateData(){

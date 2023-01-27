@@ -8,6 +8,7 @@ import commons.objects.Site;
 import org.testng.annotations.Test;
 import pages.web.Tracker.EdbConsumerTrackerPage;
 import pages.web.Tracker.RingTrackerPage;
+import pages.web.Tracker.site.SiteTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
 import rest.edb.EdbHelper;
@@ -32,6 +33,7 @@ public class EdbConsumerTest extends BaseTest {
     SectorHelper sectorHelper = new SectorHelper();
     Sector sector5G;
     Ring ringNew;
+    SiteTrackerPage siteTrackerPage;
     EdbHelper edbHelper = new EdbHelper();
     EdbConsumerTrackerPage edbConsumerTrackerPage ;
     Map<String,String> keys = new HashMap<>();
@@ -45,13 +47,20 @@ public class EdbConsumerTest extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         generateData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
+
     }
 
     private void generateData(){
@@ -149,6 +158,90 @@ public class EdbConsumerTest extends BaseTest {
         System.out.println(":::"+response);
         keys.put("UpdateLatLongRing",key);
         trackers.put("UpdateLatLongRing",ring.ringId);
+        softAssert.closeAssert();
+    }
+
+    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 3)
+    public void createNewEdbCEntryForUpdatingSiteLatLong(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        String key = edbHelper.updateSiteLatLongEDB(siteForSector,superUser);
+        edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();
+        edbConsumerTrackerPage.searchForValue(key ,"ECM:Message Id");
+        String response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Interface","ECM:Message Id",key);
+        softAssert.assertContains(response,"Asset","ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Consumer Message","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Created Timestamp (PT)","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        keys.put("UpdateLatLongSite",key);
+        trackers.put("UpdateLatLongSite",siteForSector.siteId);
+        softAssert.closeAssert();
+    }
+
+    @Test(groups = {"Integration"},description = "createNewEdbCEntryForUpdatingSiteOnAirOffAir",priority = 3)
+    public void createNewEdbCEntryForUpdatingSiteOnAirOffAir(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        String key = edbHelper.updateElementOnAirOffAirSiteEDB(siteForSector);
+        edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();
+        edbConsumerTrackerPage.searchForValue(key ,"ECM:Message Id");
+        String response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Interface","ECM:Message Id",key);
+        softAssert.assertContains(response,"Element","ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Consumer Message","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Created Timestamp (PT)","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        keys.put("UpdateOnAirOffAirDates",key);
+        trackers.put("UpdateOnAirOffAirDates",siteForSector.siteId);
+        softAssert.closeAssert();
+    }
+
+    @Test(groups = {"Integration"},description = "createNewEdbCEntryForUpdatingSiteOnAirOffAir",priority = 3)
+    public void createNewEdbCEntryForSiteWithError(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        Site site = new Site(siteForSector.ringId,"Primary","Active Site");
+        site.siteId = site.siteId+"A";
+        String key = edbHelper.createNewSiteEDB(site,superUser);
+        edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();
+        edbConsumerTrackerPage.searchForValue(key ,"ECM:Message Id");
+        String response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Interface","ECM:Message Id",key);
+        softAssert.assertContains(response,"Asset","ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Consumer Message","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Created Timestamp (PT)","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        keys.put("incorrectSite",key);
+        trackers.put("incorrectSite",site.siteId);
+        softAssert.closeAssert();
+    }
+
+    @Test(groups = {"Integration"},description = "createNewEdbCEntryForUpdatingSiteOnAirOffAir",priority = 3)
+    public void createNewEdbCEntryForSiteWithNoRingInMB(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        Site site = new Site(siteForSector.ringId,"Primary","Active Site");
+        site.siteId = site.siteId+"A";
+        String key = edbHelper.createNewSiteEDB(site,superUser);
+        edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();
+        edbConsumerTrackerPage.searchForValue(key ,"ECM:Message Id");
+        String response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Interface","ECM:Message Id",key);
+        softAssert.assertContains(response,"Asset","ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Consumer Message","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Created Timestamp (PT)","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        keys.put("incorrectSite",key);
+        trackers.put("incorrectSite",site.siteId);
         softAssert.closeAssert();
     }
 
@@ -281,6 +374,52 @@ public class EdbConsumerTest extends BaseTest {
         softAssert.closeAssert();
     }
 
+    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 2)
+    public void createNewEdbCEntryForMovingNonExistingSite(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        Site site = new Site(siteForSector.ringId,"Primary","Active Site");
+        site.siteId = siteForSector.ringId+"Z";
+        String key = edbHelper.moveExistingSiteEDB(site,superUser);
+        System.out.println(key+"____________");
+        edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();
+        edbConsumerTrackerPage.searchForValue(key ,"ECM:Message Id");
+        String response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Interface","ECM:Message Id",key);
+        softAssert.assertContains(response,"Asset","ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Consumer Message","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Created Timestamp (PT)","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        keys.put("MovingNonExistingSite",key);
+        trackers.put("MovingNonExistingSite",site.siteId);
+        softAssert.closeAssert();
+    }
+
+    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 2)
+    public void createNewEdbCEntryForCreatingSiteWithoutRing(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        Site site = new Site("ZZ" + MiscHelpers.getRandomString(5, true).toUpperCase(),"Primary","Active Site");
+        site.siteId = site.ringId+"Z";
+        String key = edbHelper.moveExistingSiteEDB(site,superUser);
+        System.out.println(key+"____________");
+        edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();
+        edbConsumerTrackerPage.searchForValue(key ,"ECM:Message Id");
+        String response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Interface","ECM:Message Id",key);
+        softAssert.assertContains(response,"Asset","ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Consumer Message","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        response = edbConsumerTrackerPage.searchForValueInGrid("ECM:Created Timestamp (PT)","ECM:Message Id",key);
+        softAssert.assertNotNull(response,"ECM:Interface Should Match");
+        System.out.println(":::"+response);
+        keys.put("MovingNonExistingRing",key);
+        trackers.put("MovingNonExistingRing",site.siteId);
+        softAssert.closeAssert();
+    }
+
     @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 20)
     public void verifyEdbCEntryForNewRing(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -299,6 +438,16 @@ public class EdbConsumerTest extends BaseTest {
         ringTracker = mainSideMenu.goToRingTracker();
         ringTracker.searchForValue(ringNew.ringId, "R:Ring Code");
         softAssert.assertTrue(ringTracker.isDataPresentInTable(), "The ring should have been created");
+        softAssert.closeAssert();
+    }
+
+    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 20)
+    public void verifyEdbCEntryForNewIncorrectSite(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        String key = trackers.get("incorrectSite");
+        siteTrackerPage = mainSideMenu.goToSiteTracker();
+        siteTrackerPage.searchForValue(key ,"S:Site Code");
+        softAssert.assertFalse(siteTrackerPage.isDataPresentInTable(),"The Site should not have been created");
         softAssert.closeAssert();
     }
 
@@ -356,6 +505,24 @@ public class EdbConsumerTest extends BaseTest {
         softAssert.closeAssert();
     }
 
+    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 21)
+    public void verifyEdbCEntryMoveForNonExistingSite(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        String key = trackers.get("MovingNonExistingSite");
+        siteTrackerPage = mainSideMenu.goToSiteTracker();
+        siteTrackerPage.searchForValue(key ,"S:Site Code");
+        softAssert.assertTrue(siteTrackerPage.isDataPresentInTable(),"The Site should not have been created");
+        softAssert.closeAssert();
+    }
 
+    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 20)
+    public void verifyEdbCEntryMoveForNonExistingRing(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        String key = trackers.get("MovingNonExistingRing");
+        siteTrackerPage = mainSideMenu.goToSiteTracker();
+        siteTrackerPage.searchForValue(key ,"S:Site Code");
+        softAssert.assertFalse(siteTrackerPage.isDataPresentInTable(),"The Site should not have been created");
+        softAssert.closeAssert();
+    }
 
 }

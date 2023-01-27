@@ -4,6 +4,16 @@ import common.BaseTest;
 import commons.constants.Constants;
 import commons.enums.LoginOptionEnum;
 import commons.objects.*;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import org.testng.annotations.Test;
 import pages.web.Tracker.RFSectorPage;
 import pages.web.components.MainSideMenu;
@@ -16,20 +26,11 @@ import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-
 public class StatusFlows extends BaseTest {
 
-    public  String envURL = System.getProperty("TestEnv");
-    public  String testSuite = System.getProperty("TestRunner");
-    //public Users alphaUser = new Users();
+    public String envURL = System.getProperty("TestEnv");
+    public String testSuite = System.getProperty("TestRunner");
+
     public Users rfEngineer = new Users();
     LoginPage loginPage;
     MainSideMenu mainSideMenu;
@@ -39,6 +40,7 @@ public class StatusFlows extends BaseTest {
     SectorHelper sectorHelper = new SectorHelper();
     SiteHelper siteHelper = new SiteHelper();
     MiscHelper miscHelper = new MiscHelper();
+    MiscHelper miscHelperRest = new MiscHelper();
     String RFSectorID1;
     Sector sector5G;
     Sector sector5G13;
@@ -48,52 +50,67 @@ public class StatusFlows extends BaseTest {
     Sector sectorGSM;
     Sector sectorUMTS;
 
-    public StatusFlows()
-    {
-       // alphaUser = UserData.getAlphaUserDetails(alphaUser);
+    public StatusFlows() {
         rfEngineer = UserData.getRfEngUserDetails(rfEngineer);
-        if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
-
+        if (envURL == null) {
+            envURL = "https://magentabuiltstg.t-mobile.com/Login.do";
+        }
+        if (testSuite == null) {
+            testSuite = "TestRunner.xml";
+        }
     }
 
-    @Test(groups = {"Integration"},description = "login",priority = 1)
+    @Test(groups = { "Integration" }, description = "login", priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        if(alphaUser.getIsServiceAccount().equals("true")){
+        if (alphaUser.getIsServiceAccount().equals("true")) {
             loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
             loginPage.login(alphaUser);
-        }
-        else{
+        } else {
             loginPage.doLogin(LoginOptionEnum.SAML);
             String url = loginPage.getLoginUrl(alphaUser);
-            if(url!=null){
+            if (url != null) {
                 loginPage.launchUrl(url);
             }
         }
         generateData();
         mainSideMenu = loginPage.LoginAsUser(rfEngineer);
-
     }
 
-    private void generateData(){
-        String ringIdForSector = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        Ring ringActiveForSector = new Ring("Active", ringIdForSector, "Indoor Node");
-        siteForSector = new Site(ringIdForSector,"Primary","Active Site");
-        siteForSector = siteHelper.createActiveRingAndSite(ringActiveForSector,siteForSector);
-        RFSectorID1 = siteForSector.siteId+"_21LPW";
-        sector5G = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_12NEB"));
-        sectorLTE = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_13LAA"));
-        sector5G13 = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_13NEB"));
-//        sectorNBIOT = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_23TEA"));
-//        sectorGSM = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_13GDC"));
-//        sectorUMTS = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_11UAD"));
+    private void generateData() {
+        String ringIdForSector =
+                "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring ringActiveForSector = new Ring(
+                "Active",
+                ringIdForSector,
+                "Indoor Node"
+        );
+        siteForSector = new Site(ringIdForSector, "Primary", "Active Site");
+        siteForSector =
+                siteHelper.createActiveRingAndSite(ringActiveForSector, siteForSector);
+        RFSectorID1 = siteForSector.siteId + "_21LPW";
+        sector5G =
+                sectorHelper.createNewSector(
+                        new Sector(siteForSector.siteId, siteForSector.siteId + "_12NEB")
+                );
+        sectorLTE =
+                sectorHelper.createNewSector(
+                        new Sector(siteForSector.siteId, siteForSector.siteId + "_13LAA")
+                );
+        sector5G13 =
+                sectorHelper.createNewSector(
+                        new Sector(siteForSector.siteId, siteForSector.siteId + "_13NEB")
+                );
+        // sectorNBIOT = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_23TEA"));
+        // sectorGSM = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_13GDC"));
+        // sectorUMTS = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_11UAD"));
     }
 
-    private void generateSectorCsvData(Sector sector, String status) throws IOException {
+    private void generateSectorCsvData(Sector sector, String status)
+            throws IOException {
         List<List<String>> records = Arrays.asList(
-                Arrays.asList("SITE_ID", "SECTOR_ID", "SEC_SECTOR_STATUS"),
-                Arrays.asList(sector.siteId, sector.sectorId, status)
+                Arrays.asList("SECTOR_ID", "SEC_SECTOR_STATUS"),
+                Arrays.asList(sector.sectorId, status)
         );
         Path path = Paths.get(Constants.SECTOR_IMPORT_DATA);
         Files.deleteIfExists(path);
@@ -105,10 +122,19 @@ public class StatusFlows extends BaseTest {
         writer.close();
     }
 
-    private void generateSectorUpdateStatusCsvData(Sector sector, String status) throws IOException {
+    private void generateSectorUpdateStatusCsvData(Sector sector, String status)
+            throws IOException {
         List<List<String>> records = Arrays.asList(
-                Arrays.asList("SITE_ID", "SECTOR_ID", "SEC_SECTOR_STATUS","SEC_OFF_AIR_DATE"),
-                Arrays.asList(sector.siteId, sector.sectorId, status,MiscHelpers.currentDateTime("MM/dd/yyyy"))
+                Arrays.asList(
+                        "SECTOR_ID",
+                        "SEC_SECTOR_STATUS",
+                        "SEC_OFF_AIR_DATE"
+                ),
+                Arrays.asList(
+                        sector.sectorId,
+                        status,
+                        MiscHelpers.currentDateTime("MM/dd/yyyy")
+                )
         );
         Path path = Paths.get(Constants.SECTOR_IMPORT_DATA);
         Files.deleteIfExists(path);
@@ -120,208 +146,696 @@ public class StatusFlows extends BaseTest {
         writer.close();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 2)
-    public void create5GSectorWithOutMainDetailsAndMoveToProvision() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 2
+    )
+    public void create5GSectorWithOutMainDetailsAndMoveToProvision()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"New", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "New",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-       // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 3)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 3
+    )
     public void create5GSectorAndMoveToOnAirFromNew() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"New", "sector Status should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "New",
+                "sector Status should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 3)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 3
+    )
     public void create5GSectorAndMoveToOffAirFromNew() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"New", "sector Status should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "New",
+                "sector Status should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 3)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 3
+    )
     public void create5GSectorAndMoveToInactiveFromNew() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Inactive"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Inactive"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"New", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "New",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 3)
-    public void create5GSectorAndMoveToOffAirInProgressFromNew() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 3
+    )
+    public void create5GSectorAndMoveToOffAirInProgressFromNew()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air in Progress"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"New", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "New",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 4)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 4
+    )
     public void create5GSectorAndMoveToErrorFromNew() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("Error"),"User should not be able to update");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("Error"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 5)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 5
+    )
     public void create5GSectorAndMoveToNewFromError() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("New"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("New"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 5)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 5
+    )
     public void create5GSectorAndMoveToProvisionFromError() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 5)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 5
+    )
     public void create5GSectorAndMoveToOnAirFromError() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 5)
-    public void create5GSectorAndMoveToOffAirProgressFromError() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 5
+    )
+    public void create5GSectorAndMoveToOffAirProgressFromError()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air in Progress"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 5)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 5
+    )
     public void create5GSectorAndMoveToOffAirFromError() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 5)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 5
+    )
     public void create5GSectorAndMoveToInactiveFromError() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Inactive"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Inactive"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G.sectorId),sector5G.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G.sectorId),"Error", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                sector5G.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "Error",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G.sectorId),"12NEB", "sector Code should match");
-        //softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G.sectorId
+                ),
+                "12NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 6)
-    public void create5GSectorWithMainDetailsAndMoveToProvision() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 6
+    )
+    public void create5GSectorWithMainDetailsAndMoveToProvision()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         sector5G13.plannedCellId = "123";
         sector5G13.coverageType = "Indoor";
@@ -331,570 +845,1901 @@ public class StatusFlows extends BaseTest {
         sector5G13.plannedLacTac = "LAC000000085";
         sectorHelper.updateSectorWithPlannedValues(sector5G13);
         sectorHelper.createNodeAndAssignToSector(sector5G13);
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Provision", "sector Status should match");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Provision",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 7)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 7
+    )
     public void create5GSectorAndMoveToNewFromProvision() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("New"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Provision", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("New"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Provision",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 7)
-    public void create5GSectorAndMoveToOffAirInProgressFromProvision() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 7
+    )
+    public void create5GSectorAndMoveToOffAirInProgressFromProvision()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Provision", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air in Progress"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Provision",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 7)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 7
+    )
     public void create5GSectorAndMoveToOffAirFromProvision() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Provision", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Provision",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 7)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 7
+    )
     public void create5GSectorAndMoveToInactiveFromProvision() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Inactive"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Provision", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Inactive"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Provision",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 8)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 8
+    )
     public void create5GSectorAndMoveToOnAirFromProvision() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 9)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 9
+    )
     public void create5GSectorAndMoveToNewFromOnAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("New"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("New"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 9)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 9
+    )
     public void create5GSectorAndMoveToErrorFromOnAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Error"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Error"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 9)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 9
+    )
     public void create5GSectorAndMoveToProvisionFromOnAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 9)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 9
+    )
     public void create5GSectorAndMoveToOffAirFromOnAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 10)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 10
+    )
     public void create5GSectorAndMoveToInactiveFromOnAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("Inactive"),"User should not be able to update");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("Inactive"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Inactive", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Inactive",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 11)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 11
+    )
     public void create5GSectorAndMoveToNewFromInactive() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("New"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("New"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Inactive", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Inactive",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 11)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 11
+    )
     public void create5GSectorAndMoveToProvisionFromInactive() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Inactive", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Inactive",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 11)
-    public void create5GSectorAndMoveToOffAirInProgressFromInactive() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 11
+    )
+    public void create5GSectorAndMoveToOffAirInProgressFromInactive()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air in Progress"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Inactive", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Inactive",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 11)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 11
+    )
     public void create5GSectorAndMoveToOffAirFromInactive() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Inactive", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Inactive",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 11)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 11
+    )
     public void create5GSectorAndMoveToErrorFromInactive() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Error"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Error"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Inactive", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Inactive",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 12)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 12
+    )
     public void create5GSectorAndMoveToOnAirFromInactive() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 13)
-    public void create5GSectorAndMoveToOffAirInProgressFromOnAir() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 13
+    )
+    public void create5GSectorAndMoveToOffAirInProgressFromOnAir()
+            throws Exception {
+        HashMap<String, String> params = new HashMap<>();
+        params.put("action", "UPDATE");
+        LinkedHashMap<String, String> fieldValues = new LinkedHashMap<>();
+        fieldValues.put("SECTOR_ID", sector5G13.sectorId);
+        fieldValues.put("SEC_OFF_AIR_DATE", MiscHelpers.specificPastDateTime("MM/dd/YYYY", 10));
+        MiscHelpers.generateCsvSingleLineItem(
+                fieldValues,
+                Constants.SECTOR_IMPORT_DATA
+        );
+        ImportFile importFile = new ImportFile(
+                "10017339",
+                "sector_imports.csv",
+                Constants.SECTOR_IMPORT_DATA
+        );
+        importFile =
+                miscHelperRest.importFileAndGetStatusWithParam(importFile, params);
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        softAssert.assertNotNull(importFile,"Response should not be null");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air in Progress", "sector Status should match");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("Off-Air in Progress"),
+                "User should  be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air in Progress",
+                "sector Status should match"
+        );
+
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 14)
-    public void create5GSectorAndMoveToNewFromOffAirInProgress() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 14
+    )
+    public void create5GSectorAndMoveToNewFromOffAirInProgress()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("New"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air in Progress", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("New"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air in Progress",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 14)
-    public void create5GSectorAndMoveToProvisionFromOffAirInProgress() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 14
+    )
+    public void create5GSectorAndMoveToProvisionFromOffAirInProgress()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air in Progress", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air in Progress",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 14)
-    public void create5GSectorAndMoveToInactiveFromOffAirInProgress() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 14
+    )
+    public void create5GSectorAndMoveToInactiveFromOffAirInProgress()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Inactive"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air in Progress", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Inactive"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air in Progress",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 14)
-    public void create5GSectorAndMoveToErrorFromOffAirInProgress() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 14
+    )
+    public void create5GSectorAndMoveToErrorFromOffAirInProgress()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Error"),"User should not be able to update");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air in Progress", "sector Status should match");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Error"),
+                "User should not be able to update"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air in Progress",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 15)
-    public void create5GSectorAndMoveToOffAirFromOffAirInProgress() throws Exception {
-        generateSectorCsvData(sector5G13,"Off-Air");
-        ImportFile importFile = new ImportFile("10017339","sector_imports.csv");
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 15
+    )
+    public void create5GSectorAndMoveToOffAirFromOffAirInProgress()
+            throws Exception {
+        generateSectorCsvData(sector5G13, "Off-Air");
+        ImportFile importFile = new ImportFile("10017339", "sector_imports.csv");
         importFile = miscHelper.importFileAndGetStatus(importFile);
         AssertionsUtil softAssert = new AssertionsUtil();
-        if(importFile!=null){
-            rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-            rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        if (importFile != null) {
+            rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+            rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
             rfSectorPage.editRFSector();
-           // softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+            // softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to
+            // update");
 
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector ID",
+                            "SEC:Sector ID",
+                            sector5G13.sectorId
+                    ),
+                    sector5G13.sectorId,
+                    "sectorId should match"
+            );
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Type",
+                            "SEC:Sector ID",
+                            sector5G13.sectorId
+                    ),
+                    "Undefined",
+                    "sector Type should match"
+            );
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Status",
+                            "SEC:Sector ID",
+                            sector5G13.sectorId
+                    ),
+                    "Off-Air",
+                    "sector Status should match"
+            );
 
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Code",
+                            "SEC:Sector ID",
+                            sector5G13.sectorId
+                    ),
+                    "13NEB",
+                    "sector Code should match"
+            );
+            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+            // ID",sector5G.sectorId),"5G", "sector Technology should match");
             softAssert.closeAssert();
-        }
-        else
-            softAssert.assertTrue(false,"Looks like something went wrong in file import") ;
+        } else softAssert.assertTrue(
+                false,
+                "Looks like something went wrong in file import"
+        );
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 16)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 16
+    )
     public void create5GSectorAndMoveToNewFromOffAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("New"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("New"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 16)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 16
+    )
     public void create5GSectorAndMoveToProvisionFromOffAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Provision"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Provision"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 16)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 16
+    )
     public void create5GSectorAndMoveToOnAirFromOffAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 16)
-    public void create5GSectorAndMoveToOffAirInProgressFromOffAir() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 16
+    )
+    public void create5GSectorAndMoveToOffAirInProgressFromOffAir()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Off-Air in Progress"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 16)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 16
+    )
     public void create5GSectorAndMoveToInactiveFromOffAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Inactive"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Inactive"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 16)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 16
+    )
     public void create5GSectorAndMoveToErrorFromOffAir() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sector5G13.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sector5G13.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("Error"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("Error"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sector5G13.sectorId),sector5G13.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sector5G13.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sector5G13.sectorId),"Off-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                sector5G13.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "Off-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sector5G13.sectorId),"13NEB", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sector5G13.sectorId
+                ),
+                "13NEB",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 17)
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 17
+    )
     public void StatusUpdateWithAdminUpdateImport() throws Exception {
-        generateSectorCsvData(sectorLTE,"Off-Air in Progress");
-        ImportFile importFile = new ImportFile("10017339","sector_imports.csv");
+        generateSectorCsvData(sectorLTE, "Off-Air in Progress");
+        ImportFile importFile = new ImportFile("10017339", "sector_imports.csv");
         importFile = miscHelper.importFileAndGetStatus(importFile);
         AssertionsUtil softAssert = new AssertionsUtil();
-        if(importFile!=null){
-            rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-            rfSectorPage.searchForValue(sectorLTE.sectorId,"SEC:Sector ID");
+        if (importFile != null) {
+            rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+            rfSectorPage.searchForValue(sectorLTE.sectorId, "SEC:Sector ID");
             rfSectorPage.editRFSector();
-            // softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+            // softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to
+            // update");
 
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sectorLTE.sectorId),sectorLTE.sectorId, "sectorId should match");
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sectorLTE.sectorId),"Undefined", "sector Type should match");
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sectorLTE.sectorId),"Off-Air in Progress", "sector Status should match");
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector ID",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    sectorLTE.sectorId,
+                    "sectorId should match"
+            );
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Type",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    "Undefined",
+                    "sector Type should match"
+            );
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Status",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    "Off-Air in Progress",
+                    "sector Status should match"
+            );
 
-           // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sectorLTE.sectorId),"13LAA", "sector Code should match");
-            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector
+            // ID",sectorLTE.sectorId),"13LAA", "sector Code should match");
+            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+            // ID",sector5G.sectorId),"5G", "sector Technology should match");
             softAssert.closeAssert();
-        }
-        else
-            softAssert.assertTrue(false,"Looks like something went wrong in file import") ;
+        } else softAssert.assertTrue(
+                false,
+                "Looks like something went wrong in file import"
+        );
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 18)
-    public void create5GSectorAndMoveToOnAirFromOffAirInProgress() throws Exception {
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 18
+    )
+    public void create5GSectorAndMoveToOnAirFromOffAirInProgress()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sectorLTE.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sectorLTE.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertTrue(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
+        softAssert.assertTrue(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sectorLTE.sectorId),sectorLTE.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sectorLTE.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sectorLTE.sectorId),"On-Air", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                sectorLTE.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                "On-Air",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sectorLTE.sectorId),"13LAA", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                "13LAA",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 19)
-    public void moveLTESectorToOffAirInProgressFromOnAirWithDate() throws Exception {
-        generateSectorUpdateStatusCsvData(sectorLTE,"Off-Air in Progress");
-        ImportFile importFile = new ImportFile("10017339","sector_imports.csv");
+    @Test(
+            groups = { "Integration" },
+            description = "New Sector from GUI",
+            priority = 19
+    )
+    public void moveLTESectorToOffAirInProgressFromOnAirWithDate()
+            throws Exception {
+        generateSectorUpdateStatusCsvData(sectorLTE, "Off-Air in Progress");
+        ImportFile importFile = new ImportFile("10017339", "sector_imports.csv");
         importFile = miscHelper.importFileAndGetStatus(importFile);
         AssertionsUtil softAssert = new AssertionsUtil();
-        if(importFile!=null){
-            rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-            rfSectorPage.searchForValue(sectorLTE.sectorId,"SEC:Sector ID");
+        if (importFile != null) {
+            rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+            rfSectorPage.searchForValue(sectorLTE.sectorId, "SEC:Sector ID");
             rfSectorPage.editRFSector();
-            // softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to update");
+            // softAssert.assertTrue(rfSectorPage.setSectorStatus("Off-Air in Progress"),"User should not be able to
+            // update");
 
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sectorLTE.sectorId),sectorLTE.sectorId, "sectorId should match");
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sectorLTE.sectorId),"Undefined", "sector Type should match");
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sectorLTE.sectorId),"Off-Air in Progress", "sector Status should match");
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector ID",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    sectorLTE.sectorId,
+                    "sectorId should match"
+            );
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Type",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    "Undefined",
+                    "sector Type should match"
+            );
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Status",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    "Off-Air in Progress",
+                    "sector Status should match"
+            );
 
-            softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sectorLTE.sectorId),"13LAA", "sector Code should match");
-            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+            softAssert.assertContains(
+                    rfSectorPage.searchForValueInGrid(
+                            "SEC:Sector Code",
+                            "SEC:Sector ID",
+                            sectorLTE.sectorId
+                    ),
+                    "13LAA",
+                    "sector Code should match"
+            );
+            // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+            // ID",sector5G.sectorId),"5G", "sector Technology should match");
             softAssert.closeAssert();
-        }
-        else
-            softAssert.assertTrue(false,"Looks like something went wrong in file import") ;
+        } else softAssert.assertTrue(
+                false,
+                "Looks like something went wrong in file import"
+        );
     }
 
-   // @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 20)
-    public void MoveLTESectorToOnAirFromOffAirInProgressWithDate() throws Exception {
+    // @Test(groups = {"Integration"},description = "New Sector from GUI",priority = 20)
+    public void MoveLTESectorToOnAirFromOffAirInProgressWithDate()
+            throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTrackerAsEng();
-        rfSectorPage.searchForValue(sectorLTE.sectorId,"SEC:Sector ID");
+        rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
+        rfSectorPage.searchForValue(sectorLTE.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertFalse(rfSectorPage.setSectorStatus("On-Air"),"User should not be able to update");
+        softAssert.assertFalse(
+                rfSectorPage.setSectorStatus("On-Air"),
+                "User should not be able to update"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector ID","SEC:Sector ID",sectorLTE.sectorId),sectorLTE.sectorId, "sectorId should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",sectorLTE.sectorId),"Undefined", "sector Type should match");
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Status","SEC:Sector ID",sectorLTE.sectorId),"Off-Air in Progress", "sector Status should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector ID",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                sectorLTE.sectorId,
+                "sectorId should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Type",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                "Undefined",
+                "sector Type should match"
+        );
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Status",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                "Off-Air in Progress",
+                "sector Status should match"
+        );
 
-        softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Sector Code","SEC:Sector ID",sectorLTE.sectorId),"13LAA", "sector Code should match");
-        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector ID",sector5G.sectorId),"5G", "sector Technology should match");
+        softAssert.assertContains(
+                rfSectorPage.searchForValueInGrid(
+                        "SEC:Sector Code",
+                        "SEC:Sector ID",
+                        sectorLTE.sectorId
+                ),
+                "13LAA",
+                "sector Code should match"
+        );
+        // softAssert.assertContains(rfSectorPage.searchForValueInGrid("SEC:Technology","SEC:Sector
+        // ID",sector5G.sectorId),"5G", "sector Technology should match");
         softAssert.closeAssert();
     }
-
 }

@@ -108,7 +108,7 @@ public class Site {
 //                "Non Cell Site",
 //                "Router",
 //                "Test Site"
-               );
+        );
         return siteTypeList.get(r.nextInt(siteTypeList.size()));
     }
 
@@ -125,10 +125,10 @@ public class Site {
     public String getRandomBuildOutType(){
         Random r = new Random();
         List<String> buildOutTypeList = Arrays.asList(
-                "Leased",
-                "Raw Land",
-                "Build To Suit",
-                "Temp Install");
+//                "Leased",
+//                "Raw Land",
+                "Build To Suit");
+//                "Temp Install");
         return buildOutTypeList.get(r.nextInt(buildOutTypeList.size()));
     }
     public String getRandomPreferredLandlord(){

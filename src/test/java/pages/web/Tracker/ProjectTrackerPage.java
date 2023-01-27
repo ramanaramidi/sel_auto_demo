@@ -1,11 +1,12 @@
 package pages.web.Tracker;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.web.Tracker.site.SiteTrackerPage;
 import utility.helper.MiscHelpers;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectTrackerPage extends BasePage {
@@ -20,39 +21,26 @@ public class ProjectTrackerPage extends BasePage {
     public By searchOption = By.xpath("//input[@id='qsValue0']");
     public By  searchButton = By.xpath("//input[@id='btnSearch0']");
     public By  editProject  = By.xpath("//input[@id='btnEdit0']");
+    public By rowEditorProject = By.xpath("//input[@id='btnEditRow0']");
     public By  searchTypeDropdown  = By.xpath("//div[@id='qsField0']//div[@class='component button u_button_invert btn_raised btn_white']//child::*");
     public By  selectedOption  = By.xpath("//div[@id='qsField0']//div[@class='l_items']//div[@class='component item_select selected']");
     public String  topDivSearchTypeDropdown = "//div[@class='component item_select'][normalize-space()='textName']";
     public By totalProjectIDCount= By.xpath("//span[@id='gridStat0']");
     public By projectCountNav = By.xpath("//div[@id='navRange0']");
     public By tableHeader = By.xpath("//table[@class='hdr']//tr//td");
-    public By tableData = By.xpath("//table[@class='obj']//tr");
+    public By tableData = By.xpath("//table[@class='obj overlap']//tr");
     public By okButton  = By.xpath("//input[@id='btnOK']");
     public By projectIDClick  = By.xpath("//div[@class='objbox customscroll']//table//tbody//tr[2]//td[3]//a");
     public By okButton1 =By.xpath("//input[@id='btnOK0']");
     public By applyButton  = By.xpath("//input[@id='btnApply']");
-   // public By ntpTabs = By.xpath("//*[@id='tab30']");
-  //  public By ntpApprovals =By.xpath("//*[@id='tabName31']");
-    public By rfApproval = By.xpath("//*[@id='idx507']");
-    public By opsApproval = By.xpath("//*[@id='idx497']");
-    public By marketMgrApproval = By.xpath("//*[@id='idx517']");
-
-    //    public By scipPhotoUpload = By.xpath("//input[@id='idx174_but']");
-//    public By titleApprovedLabel = By.xpath("//label[@id='idx169_lbl']");
-//    public By coloAppSubmittedImageBox = By.xpath("//input[@id='idx174_disp']");
     public By cancelButton = By.xpath("//input[@id='btnCancel']");
     public By AETab = By.xpath("//span[text()='A and E']");
-    //    public By WorkPlanKickOffCheckBox = By.xpath("//label[@id='lblidx27']");
     public By WorkPlanCreationLocked = By.xpath("//div[@id='idx27_imglock']");
     public By BundlingDespositionUnlock = By.xpath("//div[@id='idx91_imglock']");
-    public By cxNTPStart = By.xpath("//*[@id='lblidx466']");
-    public By constructionApproval = By.xpath("//*[@id='idx488']");
     public By ntpConstruction = By.xpath("//span[normalize-space()='NTP Construction']");
-    public By ntpTabs = By.xpath("//*[@id='tabName25']");
-    public By ntpApprovals =By.xpath("//*[@id='tabName26']");
     public By label_NTPConstruction = By.xpath("//span[text()='NTP Construction']");
     public By label_NTPApproval = By.xpath("//span[text()='NTP Approvals']");
-    public By VendorField = By.xpath("//label[text()='PJ:Vendor']/parent::td/following-sibling::td//input");
+    public By VendorField = By.xpath("//label[text()='PJ:VDU Vendor Assignment']/parent::td/following-sibling::td//input");
     public By VendorSelection = By.xpath("//input[@id='btnOK0']");
     public By VendorSelectionInputBox = By.xpath("//input[@id='qsValue0']");
     public By VendorSearchButton = By.xpath("//input[@id='btnSearch0']");
@@ -66,8 +54,42 @@ public class ProjectTrackerPage extends BasePage {
     public By SaveChangesButton = By.xpath("//input[@value='Save Changes']");
     public By ClickStructuralModification = By.xpath("//label[text()='PJ(P 1375) Structural Modification Design Complete']");
     public By SelectNaTask = By.xpath("//div[text()='Un-N/A Task']");
-
+    public By tasksButton = By.xpath("//*[@id='btnTasks']");
+    public By textArea = By.xpath("//*[@id='idx13_disp']");
+    public By checkBox1 = By.xpath("//*[@id='gridbox0']/div[2]/div[2]/table/tbody/tr[3]/td[7]");
+    public By tactual = By.xpath("//*[@id='gridbox0']/div[2]/div[2]/table/tbody/tr[3]/td[6]");
+    public By DASTab = By.xpath("//div[@id='tabName15']");
+    public By checkAll = By.xpath("//*[@id='SelectCheckboxes0']");
+    public By projectSearchButton = By.xpath("//input[@id='btnSearch0']");
+    public By projectSearchTextBox = By.xpath("//input[@id='qsValue0']");
+    public By PJSectorsTab = By.id("tabName16");
+    public By taskName = By.xpath("//*[@id='gridbox0']/div[2]/table/tbody/tr[3]/td[2]");
+    public By NACheckBox = By.id("cb-0-10345003570-6");
+    public By tableValues = By.xpath("//*[@id='gridbox0']/div[2]/table");
+    public By checkBoxList = By.className("newGuiCheckbox");
+    public By label_PjLeasing = By.xpath("//span[text()='Leasing']");
+    public By label_PjRegulatory = By.xpath("//span[text()='Regulatory']");
+    public By label_PjZoningAndPermitting = By.xpath("//span[text()='Zoning and Permitting']");
+    public By selectedDDTList = By.xpath("//label[@name='lblcbSelected0']");
+    public By projectCompletionObjectiveDots  = By.xpath("(//label[text()='PJ:Project Completion Objective']/../following-sibling::td/div/div/input)[1]");
+    public By selectedCeckBox = By.xpath("//label[@id='lblcbSelected0']");
+    public By projectCompletionCount = By.xpath("//div[@id='navPager0']");
+    public By projectCompltionSeletedCount= By.xpath("//div[@id='navTotal0']");
+    public By closeButton = By.xpath("//input[@id='btnClose0']");
+    public By label_TransportTab = By.xpath("//span[text()='Transport']");
+    public By documentsTabCounter = By.xpath("//span[@id='tabCounter19']");
+    public By documentsTab = By.xpath("//span[@id='tabLabel19']");
+    public By documentCountNav = By.xpath("//div[@id='navRange19']");
+    public By totalDocumentCount = By.xpath("//span[@id='gridStat19']");
+    public By generalInfoPage = By.xpath("//span[@id='tabLabel1']");
+    public By documentOptions =By.id("btnoptionsGroupOpener19");
+    public By documentDeleteOption = By.xpath("//div[text()='Delete']");
+    public By currentVersionCheckBox = By.xpath("(//div[@class='hdr_cell']//div[text()='D:Current Version?']/ancestor::table/../following-sibling::div//label/input)[1]");
+    public By onAiroffAirTab = By.xpath("//div[@title='PJ:On Air / Off Air & Comp Obj']");
     String parentWindow;
+    String parentWindow1;
+    String parentWindowHolder;
+    // String parentWindow2;
 
     public void searchForValue(String data, String type) throws Exception
     {
@@ -78,7 +100,7 @@ public class ProjectTrackerPage extends BasePage {
         selectSearchType(type);
         click(find(searchButton));
         waitForPageToLoad();
-        // sleep(10);
+         sleep(10);
         //waitUntilVisibleElement(find(editProject));
         // sleep(20);
     }
@@ -113,6 +135,39 @@ public class ProjectTrackerPage extends BasePage {
         List<WebElement> cellDataForTheFirstRow = findAll(By.tagName("td"),tableContents.get(1));
         String cellData = getText(cellDataForTheFirstRow.get(columnToFind));
         return !cellData.isEmpty() && !cellData.equals(null) && !cellData.equals(" ");
+    }
+    public void applyChanges() throws Exception {
+        click(find(applyButton));
+        sleep(5);
+        waitUntilVisibleElement(find(okButton));
+    }
+    public List<String> getTableValues(String fieldName, int index,String addString) throws Exception{
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        applyChanges();
+        scrollToElement(selectionBoxBySname("SEC:Vendor - Planned").get(0));
+        sleep(2);
+        dropDownDotsClick(fieldName);
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(okButton1));
+        sleep(5);
+        String tableList = tableDataList(index);
+        List<String> switchList = getDocumentTextListByXpathJs(tableList);
+        List<String> msmList = new ArrayList<>();
+        System.out.println(switchList.size());
+        for (int i = 0; i < switchList.size(); i++) {
+            msmList.add(addString+switchList.get(i));
+        }
+        System.out.println("++++"+msmList);
+        sleep(2);
+        click(find(okButton1));
+        switchToSpecificWindow(parent1);
+        fullScreenChildWindow();
+        click(find(okButton));
+        sleep(10);
+        switchToSpecificWindow(parent);
+        return msmList;
     }
 
     public int getTableData(String columnName) throws Exception {
@@ -760,6 +815,8 @@ public class ProjectTrackerPage extends BasePage {
 
     public String searchForImgInGrid(String columnName, String searchByColumn, String searchValue) throws Exception {
         fullScreen();
+        waitForPageToLoad();
+        sleep(5);
         int columnToFind = getTableData(columnName);
         int columnValueToMatch = getTableData(searchByColumn);
         List<WebElement> tableContents = findAll(tableData);
@@ -819,8 +876,8 @@ public class ProjectTrackerPage extends BasePage {
 
     public void selectVendor(String vendorName) throws Exception {
         sleep(5);
-        scrollToElement(inputBoxDataBySname("PJ:Vendor"));
-        dropDownDotsClick("PJ:Vendor");
+        scrollToElement(inputBoxDataBySname("PJ:VDU Vendor Assignment"));
+        dropDownDotsClick("PJ:VDU Vendor Assignment");
         String parent2 = switchToChildWindows();
         waitUntilVisibleElement(find(VendorSelection));
         fullScreenChildWindow();
@@ -860,17 +917,21 @@ public class ProjectTrackerPage extends BasePage {
         return  getFirstSelectedOptionInDropdown(status);
     }
     public void goToView(String viewName) throws Exception{
-        sleep(5);
-        waitUntilVisibleElement(find(editProject));
+        waitForPageToLoad();
         waitUntilVisibleElement(find(ClickView));
-        click(find(ClickView));
-        find(SearchFilter).clear();
-        find(SearchFilter).sendKeys(viewName);
-        waitUntilVisibleElement(selectView(viewName));
-        click(selectView(viewName));
-        waitUntilVisibleElement(find(ApplyFilter));
-        scrollToElement(find(ApplyFilter));
-        click(find(ApplyFilter));
+        String view = find(ClickView).getText();
+        if(!view.equals(viewName)) {
+            click(find(ClickView));
+            find(SearchFilter).clear();
+            find(SearchFilter).sendKeys(viewName);
+            waitUntilVisibleElement(selectView(viewName));
+            click(selectView(viewName));
+            waitUntilVisibleElement(find(ApplyFilter));
+            scrollToElement(find(ApplyFilter));
+            click(find(ApplyFilter));
+            waitForPageToLoad();
+        }
+        waitForPageToLoad();
         waitUntilVisibleElement(find(editProject));
 
     }
@@ -897,7 +958,7 @@ public class ProjectTrackerPage extends BasePage {
         selectSearchType(type);
         click(find(searchButton));
         waitUntilVisibleElement(find(SiteCode));
-        sleep(10);
+        sleep(5);
     }
     public WebElement statusGrid(int index) throws Exception{
         return findAll(StatusFind).get(index);
@@ -938,4 +999,548 @@ public class ProjectTrackerPage extends BasePage {
         switchToSpecificWindow(parent1);
         return StructuralModificationValue;
     }
+
+    public String validateProjectCompletionObjective() throws Exception {
+        sleep(5);
+        String parent =  switchToChildWindows();
+        fullScreenChildWindow();
+        String objectiveValues = find(textArea).getText();
+        System.out.println("Project Objective Values are - " + objectiveValues);
+        System.out.println("Project Objective Values are - " + objectiveValues.isEmpty());
+        return objectiveValues;
+    }
+
+    public ProjectTrackerPage goToTasksPage() throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        sleep(1);
+        click(find(tasksButton));
+        sleep(6);
+        return new ProjectTrackerPage(driver);
+    }
+
+    public boolean verifyTasksActualized_UnAct(String projectCompletionObjectiveValues) throws Exception {
+        String parent =  switchToChildWindows();
+        fullScreenChildWindow();
+        String subStringTask = projectCompletionObjectiveValues.substring(24,30);
+        System.out.println("Task SubString is - " + subStringTask);
+        searchForValue(subStringTask,"T:Task");
+//        sleep(3);
+//        WebElement checkBox = find(checkBox1);
+//        isCheckboxSelected("cb-0-10300762277-6");
+//        System.out.println("N/A Checkbox - " + checkBox.isSelected());
+
+        sleep(6);
+        String date = MiscHelpers.currentDateTime("MM/dd/yyyy");
+        WebElement T_Actual = find(tactual);
+        if (T_Actual.getText().contains(date)){
+            System.out.println("Task is Actualized");
+            switchToSpecificWindow(parent);
+            sleep(3);
+            return true;
+        }
+        System.out.println("Task is not Actualized");
+        switchToSpecificWindow(parent);
+        return false;
+    }
+
+    public String validateRemainingTasksCount() throws Exception {
+        sleep(5);
+        String TasksRemaining = inputBoxDataBySname("PJ:Project Completion Objective Task Remaining").getAttribute("origval");
+        System.out.println("No of Remaining Tasks - " + TasksRemaining);
+        return TasksRemaining;
+    }
+
+    public String getPJSectorsTotalCount() throws Exception {
+        sleep(3);
+        click(find(DASTab));
+        sleep(2);
+        dropDownDotsClick("PJ:Sector IDs");
+        sleep(4);
+        String parent = switchToChildWindows();
+        fullScreen();
+        click(find(checkAll));
+        // click(find(checkAll));
+        click(find(okButton1));
+        switchToSpecificWindow(parent);
+        String total_sectors = inputBoxDataBySname("PJ:Total Sectors").getAttribute("origval");
+        System.out.println("PJ:Sectors total count is : " + total_sectors);
+        return total_sectors;
+    }
+    public void switchToTracker(String parentWindow) throws Exception {
+        // waitUntilVisibleElement(find(okButton));
+        sleep(8);
+        click(find(okButton));
+        sleep(5);
+        switchToSpecificWindow(parentWindow);
+    }
+
+    public String getPJSectorsRemainingCount() throws Exception {
+        sleep(3);
+        click(find(DASTab));
+        sleep(2);
+        dropDownDotsClick("PJ:Sector IDs");
+        sleep(4);
+        String parent = switchToChildWindows();
+        fullScreen();
+        click(find(checkAll));
+        // click(find(checkAll));
+        click(find(okButton1));
+        switchToSpecificWindow(parent);
+        String remaining_sectors = inputBoxDataBySname("PJ:Remaining Sectors").getAttribute("origval");
+        System.out.println("PJ:Sectors Remaining Count is : " + remaining_sectors);
+        return remaining_sectors;
+    }
+
+    public void getPJ_Sectors() throws Exception {
+        sleep(3);
+        WebElement element = inputBoxDataBySname("SEC:Pole Owner");
+        scrollToElement(element);
+        sleep(4);
+        dropDownDotsClick("SEC:Project ID");
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        sleep(4);
+        click(find(projectSearchTextBox));
+        setText(find(projectSearchTextBox),"00TESTOA-0002037960");
+        click(find(projectSearchButton));
+        radioButtonClick("PJ:Project ID", "00TESTOA-0002037960");
+        click(find(okButton1));
+        switchToSpecificWindow(parent);
+        sleep(3);
+        click(pencilIcon("SEC:Project ID").get(0));
+        String parent1 =  switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(PJSectorsTab));
+        searchForValue("00TESTOA-0002070764","SEC:Project ID");
+        searchForValue("00TESTOA_A1GPV","SEC:Sector ID");
+        switchToSpecificWindow(parent1);
+        sleep(2);
+    }
+
+    public String getUnSelectedTasks() throws Exception {
+//        switchToChildWindows();
+//        fullScreen();
+        sleep(10);
+        dropDownDotsClick("PJ:Project Completion Objective");
+        switchToChildWindows();
+        fullScreenChildWindow();
+        List<WebElement> element = findAll(checkBoxList);
+        String list = find(tableValues).getText();
+        System.out.println("Project Objective column values - " + list);
+        for (int i=0; i<list.length();i++){
+            String option = element.get(i).getAttribute("checked");
+            System.out.println("option Value - " + option);
+        }
+        return list;
+    }
+
+    public void checkTask() throws Exception {
+        sleep(3);
+        String objectiveValues = find(textArea).getText();
+        System.out.println("Project Objective Values are - " + objectiveValues);
+        String notSelectedTask = getUnSelectedTasks();
+        if (objectiveValues.contains(notSelectedTask)){
+            System.out.println("not Selected task is-  " + notSelectedTask);
+        }
+        else{
+            goToTasksPage();
+            searchForValue(notSelectedTask,"T:Task");
+            WebElement checkBox = find(NACheckBox);
+            boolean check = isCheckboxSelected("cb-0-10345003570-6");
+            System.out.println("check box is checked/unchecked" + check);
+            checkBox.isSelected();
+
+        }
+    }
+
+    public boolean isDocsCountAvailable(String fieldName) throws Exception {
+        WebElement docsTotalAndRemaining = inputBoxDataBySname(fieldName);
+        scrollToElement(docsTotalAndRemaining);
+        if (docsTotalAndRemaining.isDisplayed()) {
+            return true;
+        } else return false;
+    }
+
+    public String isDocsReadOnly(String fieldName) throws Exception {
+        waitForPageToLoad();
+        WebElement docsField = inputBoxDataBySname(fieldName);
+        scrollToElement(docsField);
+        String readOnly = docsField.getAttribute("readonly");
+        System.out.println(readOnly);
+        return readOnly;
+    }
+    public void selectDdtDeliverables(String fieldName, String ddtName, String ddtName1) throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(applyButton));
+        scrollToElement(inputBoxDataBySname("PJ:Planned Start Date"));
+        dropDownDotsClick(fieldName);
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        checkBoxSelection("DDT:Deliverable Name", ddtName);
+        checkBoxSelection("DDT:Deliverable Name", ddtName1);
+        click(find(okButton1));
+        switchToSpecificWindow(parent1);
+        sleep(5);
+        click(find(applyButton));
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(okButton));
+    }
+    public void updateStatus(String statusName,String visibleText ) throws Exception{
+        //click(find(applyButton));
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(okButton));
+        WebElement status = selectionBoxBySname(statusName).get(1);
+        scrollToElement(status);
+        selectDropdownOption(status, visibleText);
+        waitUntilVisibleElement(status);
+        sleep(2);
+        click(find(applyButton));
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(okButton));
+    }
+
+    public int docsCount(String docsTotal) throws Exception {
+        waitForPageToLoad();
+        WebElement LeasingDocTotalCount = inputBoxDataBySname(docsTotal);
+        scrollToElement(LeasingDocTotalCount);
+        int docCount =  Integer.parseInt(LeasingDocTotalCount.getAttribute("origval"));
+        System.out.println("DocCount_" + docCount);
+        return docCount;
+    }
+    public boolean validateLockIsEnabled(String secInfo) throws Exception {
+        waitForPageToLoad();
+        WebElement lock = lockByLabel(secInfo);
+        scrollToElement(lock);
+        System.out.println(lock.getAttribute("class"));
+        if (lock.getAttribute("class").contains("lock-icon locked")) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    public boolean btsFieldVerification(String fieldName) throws Exception {
+        waitForPageToLoad();
+        WebElement cellName = inputBoxDataBySname(fieldName);
+        scrollToElement(cellName);
+        if(cellName.isEnabled()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean eventRuleCheckbox() throws Exception {
+        parentWindow =switchToChildWindows();
+        fullScreen();
+        WebElement checkBox = checkBoxByLabel("PJ:Run Event Rule");
+        scrollToElement(checkBox);
+        boolean checkBoxSelected = isCheckboxSelected("idx297");
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        return checkBoxSelected  ;
+    }
+    public AddProjectPage selectRowEditor() throws Exception {
+        waitUntilVisibleElement(find(rowEditorProject));
+        waitForPageToLoad();
+        click(find(rowEditorProject));
+        return new AddProjectPage(driver);
+    }
+    public void backToTrackerPage() throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+    }
+
+    public void btsField(String status) throws Exception{
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        WebElement bts = selectionBoxBySname("PJ:Build to Suit (BTS) Project").get(0);
+        selectDropdownOption(bts,status);
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(5);
+        waitUntilVisibleElement(find(applyButton));
+    }
+    public void goToLeasingTab() throws Exception{
+        waitUntilVisibleElement(find(applyButton));
+        scrollToElement(find(label_PjLeasing));
+        click(find(label_PjLeasing));
+        sleep(3);
+    }
+
+    public boolean taskCheckBoxValidation() throws Exception {
+        parentWindow1 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        WebElement checkBox = find(checkBox1);
+        System.out.println("N/A Checkbox - " + checkBox.isSelected());
+        return checkBox.isSelected();
+    }
+    public void backToProjectTracker() throws Exception{
+
+        click(find(closeButton));
+        switchToSpecificWindow(parentWindow1);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+
+    }
+
+    public int ProjectCompletionObjectiveCount() throws Exception {
+        sleep(5);
+        parentWindow = switchToChildWindows();
+        fullScreen();
+        waitUntilVisibleElement(find(okButton));
+        click(find(projectCompletionObjectiveDots));
+        parentWindow1 = switchToChildWindows();
+        waitUntilVisibleElement(find(okButton1));
+        sleep(5);
+        click(find(selectedCeckBox));
+        sleep(5);
+        waitUntilVisibleElement(find(okButton1));
+        if(!getText(find(projectCompletionCount)).contains("No Data")){
+            waitUntilVisibleElement(find(projectCompltionSeletedCount));
+            hoverOver(find(projectCompltionSeletedCount));
+            String projectSelectedCount=find(projectCompltionSeletedCount).getText();
+            System.out.println(projectSelectedCount);
+            String splitText = projectSelectedCount.split(" ")[2];
+            sleep(5);
+            return  Integer.parseInt(splitText);
+        }
+        return 0;
+
+    }
+    public int projectCompletionObjectiveTaskTotalCount() throws Exception {
+        sleep(2);
+        click(find(okButton1));
+        switchToSpecificWindow(parentWindow1);
+        WebElement projectCompletionObjectiveTaskTotal = inputBoxDataBySname("PJ:Project Completion Objective Task Total");
+        String totalTasks = projectCompletionObjectiveTaskTotal.getAttribute("origval");
+        return Integer.parseInt(totalTasks);
+    }
+    public  void goToProjectTrackerParentWindow() throws Exception{
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        sleep(5);
+
+    }
+
+    public String verifyCurrentValueInTextField(String sname) throws Exception {
+        String inputBox = inputBoxXpathBySname(sname);
+        String inputText = getDocumentTextByXpathJs(inputBox);
+//        WebElement inputBox = inputBoxDataBySname(sname);
+//        String inputText = getText(inputBox);
+        System.out.println(inputText);
+        return inputText;
+    }
+    public String verifyCurrentValueInDropDownField(String sname) throws Exception {
+        WebElement selectionBox = selectionBoxBySname(sname).get(0);
+        scrollToElement(selectionBox);
+        String one = getFirstSelectedOptionInDropdown(selectionBox);
+        System.out.println(one);
+        return one;
+    }
+
+    public ProjectTrackerPage returnToProjectTracker() throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        waitUntilVisibleElement(find(editProject));
+        return new ProjectTrackerPage(driver);
+    }
+    public void actualiseTaskManually() throws Exception{
+        waitForPageToLoad();
+        String currentDate= MiscHelpers.currentDateTime("MM/dd/yyyy");
+        WebElement docsField = inputBoxDataBySname("PJ(A 3500) All Regulatory Complete");
+        scrollToElement(docsField);
+        setText(docsField,currentDate);
+    }
+    public void set5175DateLessThan4225Date() throws Exception{
+        waitForPageToLoad();
+        WebElement task4225 = inputBoxDataBySname("PJ(P 4225) Construction Start");
+        scrollToElement(task4225);
+        String task4225Value = task4225.getAttribute("value");
+        System.out.println("PJ(P 4225) Construction Start is:" + task4225Value);
+        String currentDate= MiscHelpers.currentDateTime("MM/dd/yyyy");
+        setText(inputBoxDataBySname("PJ(P 5175) Construction Complete"),currentDate);
+    }
+    public void goToTransportTab() throws Exception {
+        waitUntilVisibleElement(find(okButton));
+        scrollToElement(find(label_TransportTab));
+        click(find(label_TransportTab));
+        waitUntilVisibleElement(find(okButton));
+    }
+    public void goToZoningAndPermittingTab() throws Exception{
+        waitUntilVisibleElement(find(applyButton));
+        scrollToElement(find(label_PjZoningAndPermitting));
+        click(find(label_PjZoningAndPermitting));
+        waitUntilVisibleElement(find(okButton));
+    }
+    public boolean getBackHaulTaskSelection(String fieldValue) throws Exception{
+        waitForPageToLoad();
+        WebElement backHaulTask = selectionBoxBySname("PJ:Backhaul Task Selection").get(0);
+        scrollToElement(backHaulTask);
+        String getBackHaulValue=getFirstSelectedOptionInDropdown(backHaulTask);
+        System.out.println("BackHaul Task Selection Value is: "+getBackHaulValue);
+        boolean value = getBackHaulValue.equalsIgnoreCase(fieldValue);
+        return value;
+    }
+    public void setDarkFiber() throws Exception{
+        waitForPageToLoad();
+        WebElement backHaulTask = selectionBoxBySname("PJ:Backhaul Task Selection").get(0);
+        scrollToElement(backHaulTask);
+        selectDropdownOption(backHaulTask,"Dark Fiber");
+        click(find(applyButton));
+        waitUntilVisibleElement(find(okButton));
+    }
+    public boolean validateTaskField(String taskField) throws Exception{
+        waitForPageToLoad();
+        WebElement task = clipButtonBySname(taskField);
+        scrollToElement(task);
+        boolean isTask = task.isEnabled();
+        return isTask;
+    }
+    public int uploadScipImage() throws Exception {
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(okButton));
+        scrollToElement(find(documentsTab));
+        int docCount = Integer.parseInt(getText(find(documentsTabCounter)));
+        waitUntilVisibleElement(find(applyButton));
+        parentWindowHolder = parent1;
+        return docCount;
+    }
+    public int getDocumentIDCount() throws Exception {
+        applyChanges();
+        sleep(5);
+        click(find(documentsTab));
+        sleep(5);
+        waitUntilVisibleElement(find(documentCountNav));
+        if(!getText(find(documentCountNav)).contains("No Data")){
+            waitUntilVisibleElement(find(totalDocumentCount));
+            hoverOver(find(totalDocumentCount));
+            String documentIDCount=find(totalDocumentCount).getText();
+            System.out.println(documentIDCount);
+            scrollToElement(find(generalInfoPage));
+            click(find(generalInfoPage));
+            sleep(5);
+            return  Integer.parseInt(documentIDCount);
+        }
+        return 0;
+    }
+    public void deleteAddedDocument() throws Exception {
+        if(getDocumentIDCount()>0){
+            fullScreenChildWindow();
+            click(find(documentsTab));
+            waitUntilVisibleElement(find(documentOptions));
+            click(find(documentOptions));
+            clickCancelAndAlert(find(documentDeleteOption),"accept");
+            sleep(5);
+            // waitUntilVisibleElement(find(optionsMenu));
+            acceptAlert();
+            fullScreenChildWindow();
+            waitUntilVisibleElement(find(documentOptions));
+        }
+
+    }
+
+    public boolean siteScopeCompleteValidation() throws Exception{
+        sleep(5);
+        scrollToElement(selectionBoxBySname("PJ:Site Scope Complete [Status]").get(0));
+        String value = getFirstSelectedOptionInDropdown(selectionBoxBySname("PJ:Site Scope Complete [Status]").get(0));
+        if(value.equals("Pending Review")){
+            return true;
+        }
+        return false;
+    }
+    public void acceptAndGoToProjectTracker() throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindowHolder);
+        sleep(5);
+    }
+    public void goToGeneralInfo() throws Exception{
+        scrollToElement(find(generalInfoPage));
+        click(find(generalInfoPage));
+        waitUntilVisibleElement(find(okButton));
+    }
+    public void goToDocumentsTab() throws Exception{
+        click(find(applyButton));
+        waitUntilVisibleElement(find(okButton));
+        scrollToElement(find(documentsTab));
+        click(find(documentsTab));
+        waitUntilVisibleElement(find(documentOptions));
+    }
+
+    public boolean currentVersionVerification() throws Exception{
+        sleep(5);
+        WebElement checkBox = find(currentVersionCheckBox);
+        if(checkBox.isSelected()) {
+            return true;
+        }
+        return false;
+    }
+    public boolean getOffAirObjectiveValues() throws Exception {
+        sleep(3);
+        String offAirTechValues = inputBoxDataBySname("PJ:Project <B>Off-Air</B> Objective").getText();
+        System.out.println("Off Air Technologies are - " + offAirTechValues);
+        click(find(onAiroffAirTab));
+        WebElement N600 = inputBoxDataBySname("PJ(P 7500) N600 OffAir");
+        scrollToElement(N600);
+        String PJ_PN600 = N600.getAttribute("value");
+        System.out.println("PJ(P 7500) N600 OffAir Field Value is - " + PJ_PN600);
+
+//        String futureDate = MiscHelpers.specificFutureDateTime("MM/dd/yyyy", 378);
+//        System.out.println("PJ_PN600 Date is - " + futureDate);
+//        boolean checkDate = PJ_PN600.equalsIgnoreCase(futureDate);
+//        System.out.println("PJ_PN600 Date is - " + checkDate);
+
+        WebElement L600 = inputBoxDataBySname("PJ(P 7475) L600 OffAir");
+        String PJL600 = L600.getAttribute("value");
+        System.out.println("PJ(P 7475) L600 OffAir Field Value is - " + PJL600);
+
+        WebElement U1900 = inputBoxDataBySname("PJ(P 7350) U1900 OffAir");
+        String PJU1900 = U1900.getAttribute("value");
+        System.out.println("PJ(P 7350) U1900 OffAir Field Value is - " + PJU1900);
+
+        // if (PJ_PN600.equalsIgnoreCase(futureDate) && (PJL600.equalsIgnoreCase(futureDate) && (PJ_PU1900.equalsIgnoreCase(futureDate)))){
+        if (N600.isEnabled() && L600.isEnabled() && U1900.isEnabled()){
+            System.out.println("Fields are Actualized");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public String getOffAirObjectiveRemaining() throws Exception {
+        String offAirRemaining = inputBoxDataBySname("PJ:Project Off Air Objective Remaining").getAttribute("origval");
+        System.out.println("Project Off Air Objective Remaining Values - " +offAirRemaining);
+        return offAirRemaining;
+    }
+
+    public String getOffAirObjectiveTotal() throws Exception {
+        String offAirTotal = inputBoxDataBySname("PJ:Project Off Air Objective Total").getAttribute("origval");
+        System.out.println("Project Off Air Objective Total Values - " +offAirTotal);
+        return offAirTotal;
+    }
+    public boolean getOnAirTechnologiesTo_OffAirField() throws Exception {
+        sleep(3);
+        String onAirTechValues = inputBoxDataBySname("S:On Air Technologies").getText();
+        System.out.println("On Air Technologies are - " + onAirTechValues);
+        sleep(3);
+        WebElement element = inputBoxDataBySname("PJ:POR Count");
+        scrollToElement(element);
+        String offAirTechValues = inputBoxDataBySname("PJ:Project <B>Off-Air</B> Objective").getText();
+        System.out.println("Off Air Technologies are - " + offAirTechValues);
+        if (onAirTechValues.contains(offAirTechValues)){
+            System.out.println("On Air Technologies are Copied to OffAirTechnologies Field");
+            return true;
+        }
+        else {
+            System.out.println("On Air Technologies are not Copied to OffAirTechnologies Field");
+        }
+        return false;
+    }
+
+
 }

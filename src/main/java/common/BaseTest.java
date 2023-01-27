@@ -124,10 +124,13 @@ public abstract class BaseTest extends TestListenerAdapter{
 							@Optional("Windows 7") String os,
 							@Optional("chrome") String browserName,
 							@Optional("http://www.t-mobile.com") String url,
-							@Optional("C:\\driver\\chromedriver.exe") String localDriverPath) throws IOException, InterruptedException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
+							@Optional("C:/driver/chromedriver.exe") String localDriverPath) throws IOException, InterruptedException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 		//BasicConfigurator.configure();
 		//this.driver.manage().window().maximize();
-
+		System.out.println("Sel grid "+selGrid);
+		System.out.println("nodeURL "+nodeURL);
+		System.out.println("os "+os);
+		System.out.println("browserName "+browserName);
 		if (selGrid == true) {
 			//run in Selenium Grid/Remote
 			getRemoteDriver(nodeURL, os, browserName, "");
@@ -180,7 +183,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 	@BeforeMethod(alwaysRun = true)
 	public void beforeMethod(@Optional("false") boolean selGrid, @Optional("tanvirahmmed") String userName, @Optional("http://10.154.94.65:5557/wd/hub")
 	String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName, @Optional("")
-							 String browserVersion, @Optional("http://www.t-mobile.com") String url, @Optional("C:\\Report\\test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:\\chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
+							 String browserVersion, @Optional("http://www.t-mobile.com") String url, @Optional("C:/Report/test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:/chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
 
 		if(envURL!=null)
 		{
@@ -245,7 +248,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 				testResultData.put("created_by", "Automation Framework");
 				testResultData.put("create_date", dateFormatMonitoring.format(testStartDate));
 				testResultData.put("json_File_Path",txtLog[2].toString());
-				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
+				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
 				testResultData.put("test_result_url", prop.getProperty("App.reportPublishUrl") + "" + txtLog[0].toString()+"/");
 
 			}
@@ -286,10 +289,10 @@ public abstract class BaseTest extends TestListenerAdapter{
 			currentDate = currentDate.toString().replace(" ", "_");
 			currentDate = currentDate.toString().replace(":", "_");
 			String methodName = "SC_error__"+currentDate;*/
-			fileName = System.getProperty("user.dir")+"\\reports\\failure_screenshots\\"+methodName+".png";
+			fileName = System.getProperty("user.dir")+"/reports/failure_screenshots/"+methodName+".png";
 			try{
 				takeSnapShot(driver,fileName);
-				ExtentTestManager.getTest().log(LogStatus.FAIL, "Error Screenshort"+ ExtentTestManager.getTest().addScreenCapture("failure_screenshots\\"+methodName+".png"));
+				ExtentTestManager.getTest().log(LogStatus.FAIL, "Error Screenshort"+ ExtentTestManager.getTest().addScreenCapture("failure_screenshots/"+methodName+".png"));
 			}
 			catch (Exception e){
 				ExtentTestManager.getTest().log(LogStatus.FAIL, "Unable to get screenshot::"+e.getMessage());
@@ -552,6 +555,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 		{
 			ChromeOptions options = new ChromeOptions();
 			DesiredCapabilities capability = new DesiredCapabilities();
+			options.addArguments("--disable-dev-shm-usage");
 			capability.setBrowserName(browserName);
 			//capability.setCapability(CapabilityType.UNEXPECTED_ALERT_BEHAVIOUR, true);
 			capability.setPlatform(Platform.extractFromSysProperty(os));
@@ -593,7 +597,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 	@BeforeSuite(alwaysRun = true)
 	protected void createJiraTestCycle(@Optional("false") boolean updateOnJira, @Optional("") String jiraPropertiesFile,@Optional("false") boolean jsonReports,@Optional("http://t-mobile.com") String url) throws IOException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 		// LOG4J Configuration
-		//PropertyConfigurator.configure(System.getProperty("user.dir") + "\\src\\main\\resources\\Log4j.properties");
+		//PropertyConfigurator.configure(System.getProperty("user.dir") + "/src/main/resources/Log4j.properties");
 		//	DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		// Create the session Name.
@@ -603,10 +607,10 @@ public abstract class BaseTest extends TestListenerAdapter{
 //////////////////////// Write to Log Files
 
 		if(jsonReports) {
-			Properties prop2 = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
+			Properties prop2 = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
 			String jsonReportPath = prop2.getProperty("App.jsonOutputPath");
 			String jsonFileNamePrefix = prop2.getProperty("App.jsonFileNamePrefix");
-			String jsonFiles = jsonReportPath + "\\" + jsonFileNamePrefix + "" + testSessionName + ".json";   //System.getProperty("user.dir")+"\\Reports.zip";
+			String jsonFiles = jsonReportPath + "/" + jsonFileNamePrefix + "" + testSessionName + ".json";   //System.getProperty("user.dir")+"/Reports.zip";
 			TextDataWriterReader.logCurrentSession(testSessionName, dateFormatMonitoring.format(date), jsonFiles);
 			File file = new File(jsonFiles);
 			file.createNewFile();
@@ -641,7 +645,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 			url = 	envURL;
 		}
 
-		Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\JiraZephyr.properties");
+		Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/JiraZephyr.properties");
 		//ServiceURI = prop.getProperty("AUT.ServiceURI");
 		if(jiraIntregration)
 		{
@@ -714,9 +718,9 @@ public abstract class BaseTest extends TestListenerAdapter{
 				//DateFormat dateFormatFolder = new SimpleDateFormat("yyyy-MM-dd_HH_mm_ss_SSS");
 				String[] txtLog = TextDataWriterReader.getSessionLog();
 				Date dateRpt = new Date();
-				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
-				File sourceLocation = new File(System.getProperty("user.dir") + "\\reports");
-				File targetLocation = new File(prop.getProperty("App.reportPublishDir") + "\\" + txtLog[0].toString());
+				Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
+				File sourceLocation = new File(System.getProperty("user.dir") + "/reports");
+				File targetLocation = new File(prop.getProperty("App.reportPublishDir") + "/" + txtLog[0].toString());
 				zip.copyDirectory(sourceLocation, targetLocation);
 
 				System.out.println("REPORTS LINK : "+prop.getProperty("App.reportPublishUrl") + "" + txtLog[0].toString());

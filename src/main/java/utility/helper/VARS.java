@@ -9,7 +9,7 @@ public final class VARS {
     static Properties prop;
     static {
         try {
-            prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\vars.properties");
+            prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/vars.properties");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

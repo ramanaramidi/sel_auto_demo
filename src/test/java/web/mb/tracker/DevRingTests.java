@@ -50,15 +50,22 @@ public class DevRingTests extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
         }
-          generateCommonData();
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
+        }
+        generateCommonData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
 
     }
+
     private void generateCommonData() {
         importRing  = new Ring("Active", ringCode, "Macro");
         String ringId = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
@@ -84,8 +91,6 @@ public class DevRingTests extends BaseTest {
         softAssert.assertTrue(oldDocCount < newDocCount, "The doc is added");
         softAssert.closeAssert();
     }
-
-
     @Test(groups = {"Integration"},description = "Create New Ring And verify BTA Fields",priority = 2)
     public void createNewRingAndVerifyBtaFields_Ring(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -127,7 +132,6 @@ public class DevRingTests extends BaseTest {
         ringTracker = addNewRing.acceptAndGoToSiteTracker();
         softAssert.closeAssert();
     }
-/*
     @Test(groups = {"Integration"},description = "New Ring Creation By Import And Fields Validation",priority = 3)
     public void createRingAndValidations_Import() throws Exception {
         HashMap<String,String> params = new HashMap<>();
@@ -151,7 +155,18 @@ public class DevRingTests extends BaseTest {
         ringTracker = addNewRing.acceptAndGoToSiteTracker();
         softAssert.closeAssert();
     }
-
- */
-
+    @Test(groups = {"Integration"},description = "verifyIncorrectMarket_Ring",priority = 2)
+    public void verifyIncorrectMarket_Ring(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        Ring ring = ringHelper.createNewRingWithOutGeoLocation();
+        ringTracker = mainSideMenu.goToRingTracker();
+        ringTracker.searchForValue(ring.ringId, "R:Ring Code");
+        addNewRing = ringTracker.selectEditOption();
+        addNewRing.switchToRingPage();
+        addNewRing.addGeoLocation();
+        boolean market =  addNewRing.verifyMarketField();
+        softAssert.assertTrue(market,"Market value is changed based upon the Latitude and Longitude Values");
+        addNewRing.backToTrackerPage();
+        softAssert.closeAssert();
+    }
 }

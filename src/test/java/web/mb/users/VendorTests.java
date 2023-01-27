@@ -42,14 +42,22 @@ public class VendorTests extends BaseTest {
     @Test(groups = {"Integration"}, description = "login", priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if (url != null) {
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         generateTestData();
         mainSideMenu = loginPage.LoginAsUser(nonSuper);
+
     }
+
     private void generateTestData() {
         String ringIdActiveProjectBundleSingle = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
         Ring ringActiveProjectBundleSingle = new Ring("Active", ringIdActiveProjectBundleSingle, "Indoor Node");
@@ -128,11 +136,11 @@ public class VendorTests extends BaseTest {
         projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_1000_SITE_SCOPE_CPT", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png");
         projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_1050_TITLE_APPROVED", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png");
         projectTrackerPage = mainSideMenu.goToVendorProjectTracker();
-        projectTrackerPage.goToView("Vendor Doc Upload");
+        projectTrackerPage.goToView("G:Vendor Doc Upload");
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         softAssert.assertTrue(projectTrackerPage.searchForImgInGrid("PJ:Site Scope Complete (1000) [Doc]","PJ:Project ID",PROJECT_ACTIVE.projectId).contains("thumbnail"),"Check File Upload");
         softAssert.assertTrue(projectTrackerPage.searchForImgInGrid("PJ:Title Approved (1050) [Doc]","PJ:Project ID",PROJECT_ACTIVE.projectId).contains("thumbnail"),"Check File Upload");
-        //projectTrackerPage.goToView("General Info");
+        projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "Re-Upload of Revised Document", priority = 7)
@@ -146,7 +154,7 @@ public class VendorTests extends BaseTest {
     public void reviewStatusVendorUser() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToVendorProjectTracker();
-        //projectTrackerPage.goToView("Vendor Doc Upload");
+        projectTrackerPage.goToView("G:Vendor Doc Upload");
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parent = projectTrackerPage.switchToChildWindows();
@@ -155,7 +163,7 @@ public class VendorTests extends BaseTest {
         projectTrackerPage.changeStatus("PJ:Site Scope Complete [Status]","Approved",0);
         softAssert.assertTrue(projectTrackerPage.isPopALert(parent),"Update Status Pop-up Verified Successfully");
         projectTrackerPage.switchToSpecificWindow(parent);
-        projectTrackerPage.goToView("General Info");
+        projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
         mainSideMenu.userLogoff();
         mainSideMenu.userLogin();
@@ -166,12 +174,12 @@ public class VendorTests extends BaseTest {
         mainSideMenu = loginPage.LoginAsUser(superUser);
         sleepFor(5);
         projectTrackerPage = mainSideMenu.goToVendorProjectTracker();
-        projectTrackerPage.goToView("Vendor Doc Upload");
+        projectTrackerPage.goToView("G:Vendor Doc Upload");
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.modifyStatusFromGrid("Approved",2);
         String response = projectTrackerPage.searchForValueInGrid("PJ:Site Scope Complete [Status]","PJ:Project ID",PROJECT_ACTIVE.projectId);
         softAssert.assertTrue(response.equals("Approved"),"Check Approval Status");
-        projectTrackerPage.goToView("General Info");
+        projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
     }
 }

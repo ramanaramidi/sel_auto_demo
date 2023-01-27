@@ -82,7 +82,7 @@ public class RFSectorPage extends BasePage
     public By applyButton  = By.xpath("//input[@id='btnApply']");
     public By siteID = By.xpath("//*[@id='idx12_disp']");
     public By addButton = By.xpath("//*[@id='btnAdd0']");
-    public By cancelButton = By.xpath("//*[@id='btnCancel']");
+    public By cancel_Button = By.xpath("//*[@id='btnCancel']");
     public By LAC_TACTab = By.xpath("//*[@id='tabName2']");
     public By add_Button = By.xpath("//*[@id='btnAdd2']");
     public By RAC_Tab = By.xpath("//*[@id='tabLabel3']");
@@ -100,6 +100,13 @@ public class RFSectorPage extends BasePage
     public By selectedOption_RAC = By.xpath("//div[@id='qsField3']//div[@class='l_items']//div[@class='component item_select selected']");
     public String topDivSearchTypeDropdown_RAC = "//div[contains(@class,'component item_select')][normalize-space()='textName']";
     public By RACID = By.xpath("//*[@id='gridbox3']/div[2]/table/tbody/tr[2]/td[2]");
+    public By servingSectorsTab = By.xpath("//*[@id='tabName7']");
+    public By check = By.xpath("//*[@id='lblcb1001860524']");
+    public By check1 = By.xpath("//*[@id='lblcb1001888634']");
+    public By siteLink = By.xpath("//*[@id='gridbox0']/div[2]/table/tbody/tr[2]/td[3]");
+    public By DASTab = By.xpath("//div[@id='tabName15']");
+    public By projectSearchButton = By.xpath("//input[@id='btnSearch0']");
+    public By projectSearchTextBox = By.xpath("//input[@id='qsValue0']");
     String parentWindow;
     String parentWindow1;
     String parentWindow2;
@@ -275,6 +282,7 @@ public class RFSectorPage extends BasePage
         switchToSpecificWindow(parent1);
         waitUntilVisibleElement(find(EditButton));
     }
+
     public void validateAddNewRFSector(String RFSectorID, String SiteCode) throws Exception {
         sleep(10);
         inputBoxDataBySname("SEC:Sector ID", RFSectorID);
@@ -292,7 +300,7 @@ public class RFSectorPage extends BasePage
         click(find(okButton1));
         switchToSpecificWindow(parent2);
         sleep(4);
-       // String site_ID = inputBoxDataBySname("S:Site Code").getText();
+        // String site_ID = inputBoxDataBySname("S:Site Code").getText();
         waitUntilVisibleElement(find(ApplyButton));
         dropDownValueSelection("SEC:Sector Type", "Macro");
         click(find(ApplyButton));
@@ -320,7 +328,9 @@ public class RFSectorPage extends BasePage
         switchToSpecificWindow(parent2);
         waitUntilVisibleElement(find(ApplyButton));
         dropDownValueSelection("SEC:Sector Type", "Macro");
+        sleep(2);
         click(find(ApplyButton));
+        sleep(2);
         if (!isAlertPresent()) {
             sleep(5);
             click(find(CancelButton));
@@ -364,11 +374,13 @@ public class RFSectorPage extends BasePage
     }
 
     public String getSectorTechnologyField() throws Exception {
-        waitForPageToLoad();
-        parentWindow = switchToChildWindows();
-        fullScreen();
-        scrollToElement(find(technologyField));
-        String technology_Field = find(technologyField).getAttribute("value");
+        //  waitForPageToLoad();
+       /* parentWindow = switchToChildWindows();
+        fullScreen();*/
+        sleep(5);
+        WebElement element = inputBoxDataBySname("SEC:Technology");
+        scrollToElement(element);
+        String technology_Field = find(technologyField).getAttribute("origval");
         return technology_Field;
     }
 
@@ -796,16 +808,16 @@ public class RFSectorPage extends BasePage
         click(find(ApplyButton));
         waitUntilVisibleElement(find(ApplyButton));
         sleep(5);
-       // racIdValue();
+        // racIdValue();
         //String racId = inputBoxDataBySname("RAC:RAC ID").getAttribute("origval");
         //click(find(okButton));
-       // switchToSpecificWindow(parent2);
-       // sleep(3);
+        // switchToSpecificWindow(parent2);
+        // sleep(3);
     }
     public String racIdValue() throws Exception{
         String racId = inputBoxDataBySname("RAC:RAC ID").getAttribute("origval");
-            return racId;
-        }
+        return racId;
+    }
 
     public boolean racIdValidation() throws Exception{
         String racId = inputBoxDataBySname("RAC:RAC ID").getAttribute("origval");
@@ -816,12 +828,19 @@ public class RFSectorPage extends BasePage
 
     }
 
-   public void goToSearchInTable() throws Exception{
+    public void goToSearchInTable() throws Exception{
         click(find(okButton));
         sleep(5);
         switchToSpecificWindow(parentWindow2);
-         sleep(3);
-     }
+        sleep(3);
+    }
+
+    public String getTableList() throws Exception{
+        String tableList = tableDataList(2);
+        List<String> switchList = getDocumentTextListByXpathJs(tableList);
+        String racList = switchList.toString();
+        return racList;
+    }
     public void backToRfSectorPage() throws Exception {
         click(find(cancleButton));
         switchToSpecificWindow(parentWindow1);
@@ -927,6 +946,7 @@ public class RFSectorPage extends BasePage
     }
 
     public boolean acsInfoVerification() throws Exception {
+        sleep(2);
         click(find(ApplyButton));
         if (!isAlertPresent()) {
             sleep(2);
@@ -937,8 +957,6 @@ public class RFSectorPage extends BasePage
         sleep(3);
         click(find(okButton));
         switchToSpecificWindow(parentWindow);
-
-
     }
 
     public void addBsc() throws Exception {
@@ -946,13 +964,16 @@ public class RFSectorPage extends BasePage
         parentWindow = switchToChildWindows();
         fullScreen();
         waitUntilVisibleElement(find(okButton));
+        click(find(applyButton));
+        waitUntilVisibleElement(find(okButton));
+        sleep(10);
         scrollToElement(find(bscField));
         click(find(bscAndRncPlannedDots));
         parentWindow1 = switchToChildWindows();
         fullScreenChildWindow();
         waitUntilVisibleElement(find(okButton1));
         click(find(AddButton));
-         parentWindow2 = switchToChildWindows();
+        parentWindow2 = switchToChildWindows();
         fullScreenChildWindow();
         waitUntilVisibleElement(find(ApplyButton));
         WebElement record = selectionBoxBySname("MSM:Record Type").get(0);
@@ -980,7 +1001,7 @@ public class RFSectorPage extends BasePage
     public boolean bscVerification() throws Exception {
         String msmId = inputBoxDataBySname("MSM:MSM ID").getAttribute("origval");
         if(msmId.contains(RNC)){
-           return true;
+            return true;
         } else return false;
     }
     public String msmIdValue() throws Exception{
@@ -1001,36 +1022,6 @@ public class RFSectorPage extends BasePage
         switchToSpecificWindow(parentWindow);
     }
 
-    public List<String> getTableValues1(String fieldName, int index,String addString) throws Exception{
-        String tableList = "//div[contains(@class,'customscroll')]//child::td["+ index +"]";
-        String parent = switchToChildWindows();
-        fullScreenChildWindow();
-        scrollToElement(selectionBoxBySname("SEC:Vendor - Planned").get(0));
-        sleep(2);
-        dropDownDotsClick(fieldName);
-        String parent1 = switchToChildWindows();
-        fullScreenChildWindow();
-        waitUntilVisibleElement(find(okButton1));
-        sleep(4);
-        List<String> switchList = getDocumentTextListByXpathJs(tableList);
-//        List<WebElement> msmList = findAll(tableList);
-//        System.out.println(msmList.size());
-//        for (int i = 0; i < msmList.size(); i++) {
-//            scrollToElement(msmList.get(i));
-//            switchList.add(addString+msmList.get(i).getText());
-//            System.out.println(msmList.get(i).getText());
-//        }
-        System.out.println("++++"+switchList.size());
-        System.out.println("++++"+switchList.get(2));
-        sleep(2);
-        click(find(okButton1));
-        switchToSpecificWindow(parent1);
-        fullScreenChildWindow();
-        click(find(okButton));
-        sleep(10);
-        switchToSpecificWindow(parent);
-        return switchList;
-    }
     public boolean getCoverageTypeField(String fieldName) throws Exception {
         waitForPageToLoad();
         WebElement element = inputBoxDataBySname(fieldName);
@@ -1582,4 +1573,121 @@ public class RFSectorPage extends BasePage
             return false;
         }
     }
+    public String getTechnologyField() throws Exception {
+        waitForPageToLoad();
+        parentWindow = switchToChildWindows();
+        fullScreen();
+        scrollToElement(find(technologyField));
+        String technology_Field = find(technologyField).getAttribute("value");
+        return technology_Field;
+    }
+
+    public void displayNodeSectors() throws Exception {
+        sleep(4);
+        WebElement element = inputBoxDataBySname("SEC:Pole Owner");
+        scrollToElement(element);
+        sleep(4);
+        dropDownDotsClick("SEC:Node ID(s)");
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        sleep(4);
+//        click(find(SiteCodeSearchTextbox));
+//        setText(find(SiteCodeSearchTextbox),"00TESTOA");
+//        click(find(SiteCodeTextboxSearchButton));
+//        click(find(check));
+//        sleep(2);
+        click(find(SiteCodeSearchTextbox));
+        setText(find(SiteCodeSearchTextbox),"5TC1903A");
+        click(find(SiteCodeTextboxSearchButton));
+        click(find(check1));
+        sleep(2);
+        quickClick(find(okButton1));
+        switchToSpecificWindow(parent);
+        click(find(applyButton));
+        sleep(10);
+        click(pencilIcon("SEC:Node ID(s)").get(0));
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement element1 = inputBoxDataBySname("S:DAS OEM");
+        scrollToElement(element1);
+        sleep(4);
+        WebElement siteCategory = selectionBoxBySname("S:Site Category").get(0);
+        String selectedOption = getFirstSelectedOptionInDropdown(siteCategory);
+        System.out.println("Selected Option in drop down is -" + selectedOption);
+        if (selectedOption.equalsIgnoreCase("Node")){
+            click(find(servingSectorsTab));
+            sleep(3);
+        }
+        else {
+            switchToSpecificWindow(parent1);
+        }
+    }
+
+    public String displaySector_ProjectLink() throws Exception {
+        sleep(3);
+        WebElement element = inputBoxDataBySname("SEC:Pole Owner");
+        scrollToElement(element);
+        sleep(4);
+        dropDownDotsClick("SEC:Project ID");
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        sleep(4);
+        click(find(projectSearchTextBox));
+        setText(find(projectSearchTextBox),"00TESTOA-0002037960");
+        click(find(projectSearchButton));
+        radioButtonClick("PJ:Project ID", "00TESTOA-0002037960");
+        click(find(okButton1));
+        switchToSpecificWindow(parent);
+        sleep(3);
+        click(pencilIcon("SEC:Project ID").get(0));
+        String parent1 =  switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(DASTab));
+        String sectorIds = textAreaBySname("PJ:Sector IDs").getAttribute("value");
+        System.out.println("For this Project the SectorIDs are - " + sectorIds);
+        switchToSpecificWindow(parent1);
+        return sectorIds;
+    }
+    public boolean sectorIdValidations() throws Exception{
+        sleep(5);
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(okButton));
+        WebElement sectorId = inputBoxDataBySname("SEC:Sector ID");
+        String value = sectorId.getAttribute("origval");
+        String splitValue = value.split("_")[1];
+        if(splitValue.length()==5) {
+            return true;
+        }
+        return false;
+    }
+    public boolean sectorIdValidationsForSiteId(String siteId) throws Exception{
+        WebElement sectorId = inputBoxDataBySname("SEC:Sector ID");
+        String value = sectorId.getAttribute("origval");
+        String splitText = value.split("_")[0];
+        if(splitText.contains(siteId)){
+            return true;
+        } else return false;
+
+    }
+
+    public boolean sectorIndetifierVerification() throws Exception {
+
+        WebElement sectorIdentifier = inputBoxDataBySname("SEC:Sector Identifier");
+        String value = sectorIdentifier.getAttribute("origval");
+        if (!value.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+    public boolean enterPriseSmallCellVerification() throws Exception {
+
+        WebElement sectorIdentifier = inputBoxDataBySname("SEC:Enterprise Small Cell Radio Node #");
+        String value = sectorIdentifier.getAttribute("origval");
+        if (!value.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
 }

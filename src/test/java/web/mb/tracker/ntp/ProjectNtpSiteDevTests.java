@@ -28,6 +28,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     Project PROJECT_ACTIVE_SITE_DEV;
     Project PROJECT_ACTIVE_REJECTION;
     Project PROJECT_DECOM;
+    Project PROJECT_BAVV;
     ProjectTrackerPage projectTrackerPage;
     ProjectNTPPage projectNTPPage;
     ProjectHelper projectHelper = new ProjectHelper();
@@ -38,26 +39,33 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
         if(testSuite == null) {testSuite = 	"TestRunner.xml";}
-        //  Site_Dev = UserData.getSite_DevUserDetails(Site_Dev);
+        Site_Dev = UserData.getSite_DevUserDetails(Site_Dev);
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
-    public void login_SiteDev(Method method) throws Exception {
+    public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         generateTestData();
-        //mainSideMenu = loginPage.LoginAsUser(Site_Dev);
-        mainSideMenu = loginPage.LoginAsUser(superUser);
+        mainSideMenu = loginPage.LoginAsUser(Site_Dev);
+
     }
+
+
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 2)
     public void createNewProjectForNtpConstructiontab_SiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -67,8 +75,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 3)
     public void createNewProjectForNtpApprovaltab_SiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -78,25 +85,24 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
     public void createNewProjectAndSearchForBavv_SiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("B-AAV","PJ:Project Type");
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
+        projectTrackerPage.searchForValue(PROJECT_BAVV.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         softAssert.assertFalse(projectTrackerPage.isNtpApprovalTabPresent(),"ntp approval tab is not displayed");
         softAssert.assertFalse(projectTrackerPage.isNtpConstructionTabPresent(),"ntp construction tab is not displayed");
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 5)
-    public void createNewProjectAndSearchForDecom_SiteDev(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        //  projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("D-Decom","PJ:Project Type");
-        projectTrackerPage.selectEditOption();
-        softAssert.assertFalse(projectTrackerPage.isNtpApprovalTabPresent(),"ntp approval tab is not displayed");
-        softAssert.assertFalse(projectTrackerPage.isNtpConstructionTabPresent(),"ntp construction tab is not displayed");
-        softAssert.closeAssert();
-    }
+    /* @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 5)
+     public void createNewProjectAndSearchForDecom_SiteDev(Method method) throws Exception {
+         AssertionsUtil softAssert = new AssertionsUtil();
+         //  projectTrackerPage = mainSideMenu.goToSiteDevelopment();
+         projectTrackerPage = mainSideMenu.goToProjectTracker();
+         projectTrackerPage.searchForValue("D-Decom","PJ:Project Type");
+         projectTrackerPage.selectEditOption();
+         softAssert.assertFalse(projectTrackerPage.isNtpApprovalTabPresent(),"ntp approval tab is not displayed");
+         softAssert.assertFalse(projectTrackerPage.isNtpConstructionTabPresent(),"ntp construction tab is not displayed");
+         softAssert.closeAssert();
+     }*/
     @Test(groups = {"Integration"},description = "uploadRegulatoryAndConstructionDoc",priority = 6)
     public void uploadRegulatoryAndConstructionDocSiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -134,8 +140,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 7)
     public void preNtpCreationSiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -147,8 +152,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "verifyCXNTPCheckbox",priority = 8)
     public void verifyCXNTPCheckboxSiteDev(Method method) throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -162,8 +166,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "verifySetVendorStatus",priority = 9)
     public void verifySetVendorStatusSiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        //projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -179,8 +182,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "verifyApprovedStatus",priority=10)
     public void verifyApprovedStatusSiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -199,8 +201,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "verifyNTPSubmittedField",priority=11)
     public void verifyNTPSubmittedFieldSiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -221,17 +222,15 @@ public class ProjectNtpSiteDevTests extends BaseTest {
         projectNTPPage.navigateToNTPTabs();
         boolean file = projectNTPPage.verifyPDF();
         softAssert.assertNotNull(file,"PDF merged document should be available in NTP Submitted by GC (4075)");
-        projectNTPPage.switchToTracker(parentWindow);
+        projectNTPPage.switchToTrackerOnException(parentWindow);
         softAssert.closeAssert();
     }
 
     @Test(groups={"Integration"},description="Verify PJ:Construction NTP Documents(4075)",priority=12)
     public void verifyFiles4075SiteDev() throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId, "PJ:Project ID");
-        //projectTrackerPage.searchForValue("SAU08LWJ-0002248259","PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -245,8 +244,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "SelectDevelopmentRejectionStatus",priority = 13)
     public void selectDevelopmentRejection_SiteDev() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_REJECTION.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -269,10 +267,8 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"}, description = "Verify PJ:Construction NTP Submitted to GC (4100)", priority=14)
     public void VerifyNtpConstructionLockSiteDev() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId, "PJ:Project ID");
-        //projectTrackerPage.searchForValue("SAU08LWJ-0002248259","PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -284,8 +280,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups={"Integration"},description="Verify PJ:Construction NTP Documents(4100)",priority=15)
     public void verifyFiles4100SiteDev() throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
@@ -301,10 +296,8 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 16)
     public void unActulizationOfTask4075Andverification_SiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
-        // projectTrackerPage.searchForValue("SAUCWFFG-0002247648","PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -318,8 +311,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 17)
     public void unActulizationOfTask4100AndVerification_SiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        // projectTrackerPage = mainSideMenu.goToSiteDevelopment();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
+        projectTrackerPage = mainSideMenu.goToSiteDevelopment();
         projectTrackerPage.searchForValue(PROJECT_ACTIVE_SITE_DEV.projectId,"PJ:Project ID");
         projectTrackerPage.searchForValue("SAU08LWJ-0002248259","PJ:Project ID");
         projectTrackerPage.selectEditOption();
@@ -354,12 +346,12 @@ public class ProjectNtpSiteDevTests extends BaseTest {
         PROJECT_ACTIVE_REJECTION = projectHelper.getActiveProject(false,ringForRejection,siteForRejection,porForRejection);
         System.out.println("Project __"+PROJECT_ACTIVE_REJECTION.projectId);
 
-//        ringIdActiveProjectBundleSingle = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
-//        ringActiveProjectBundleSingle = new Ring("Active", ringIdActiveProjectBundleSingle, "Indoor Node");
-//        siteActiveProjectBundleSingle = new Site(ringIdActiveProjectBundleSingle,"Primary","Active Site");
-//        porDataBundleSingle = new Por("Backhaul Upgrade_ATT 10G Upgrade_Site Mod", ringIdActiveProjectBundleSingle);
-//        PROJECT_BAVV = projectHelper.getActiveProject(false,ringActiveProjectBundleSingle,siteActiveProjectBundleSingle,porDataBundleSingle);
-//        System.out.println("Project __BAVV"+PROJECT_BAVV.projectId);
+        ringIdActiveProjectBundleSingle = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        ringActiveProjectBundleSingle = new Ring("Active", ringIdActiveProjectBundleSingle, "Indoor Node");
+        siteActiveProjectBundleSingle = new Site(ringIdActiveProjectBundleSingle,"Primary","Active Site");
+        porDataBundleSingle = new Por("Backhaul Upgrade_ATT 10G Upgrade_Site Mod", ringIdActiveProjectBundleSingle);
+        PROJECT_BAVV = projectHelper.getActiveProject(false,ringActiveProjectBundleSingle,siteActiveProjectBundleSingle,porDataBundleSingle);
+        System.out.println("Project __BAVV"+PROJECT_BAVV.projectId);
 
 //        ringIdActiveProjectBundleSingle = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
 //        ringActiveProjectBundleSingle = new Ring("Active", ringIdActiveProjectBundleSingle, "Indoor Node");

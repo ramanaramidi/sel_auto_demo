@@ -14,7 +14,7 @@ import java.util.zip.ZipOutputStream;
 public class ZipUtils {
 
 
-    Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\main\\resources\\reportsPathSettings.properties");
+    Properties prop = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/main/resources/reportsPathSettings.properties");
     String reportPath = prop.getProperty("App.reportsPath");
     String fileNamePrefix = prop.getProperty("App.reportsNamePrefix");  //"AppMonitor
     //String webServerReportPublishDirectory = ;

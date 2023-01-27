@@ -47,7 +47,7 @@ public class AddRingPage extends BasePage {
     public By projectCountNav = By.xpath("//div[@id='navPager4']");
     public By totalProjectIDCount= By.xpath("//span[@id='gridStat4']");
     public By marketField= By.xpath("(//label[text()='M:Market']/../following-sibling::td/div/div/input)[1]");
-
+    String parentWindow;
     public RingTrackerPage addingNewRingTracker(Ring ring) throws Exception {
         addNewRingTracker(ring);
         return new RingTrackerPage(driver);
@@ -145,9 +145,11 @@ public class AddRingPage extends BasePage {
         find(ringLatitudeGmapButton).click();
         setText(find(ringNewCoordinateLatVal), ring.latitude);
         setText(find(ringNewCoordinateLongVal),ring.longitude);
-        inputTextBox("R:Desired RAD Center (in feet)", "30");
+        // inputTextBox("R:Desired RAD Center (in feet)", "30");
         buttonClick("OK", 4);
         click(find(applyButton));
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(okButton));
         sleep(5);
         click(find(okButton));
         switchToSpecificWindow(parent1);
@@ -458,16 +460,16 @@ public class AddRingPage extends BasePage {
         //switchToSpecificWindow(parent1);
     }
     //public int getDocumentsCount() throws Exception {
-       // fullScreenChildWindow();
-      //  applyChanges();
-       // sleep(5);
-       // click(find(documentsTab));
-       // sleep(5);
-      //  waitUntilVisibleElement(find(applyButton));
-      //  click(find(generalInfoPage));
-       // sleep(5);
-       // return Integer.parseInt(getText(find(documentsTabCounter)));
-   // }
+    // fullScreenChildWindow();
+    //  applyChanges();
+    // sleep(5);
+    // click(find(documentsTab));
+    // sleep(5);
+    //  waitUntilVisibleElement(find(applyButton));
+    //  click(find(generalInfoPage));
+    // sleep(5);
+    // return Integer.parseInt(getText(find(documentsTabCounter)));
+    // }
     public int getDocumentIDCount() throws Exception {
         applyChanges();
         sleep(5);
@@ -488,19 +490,19 @@ public class AddRingPage extends BasePage {
         return 0;
     }
     public void deleteAddedDocument() throws Exception {
-       if(getDocumentIDCount()>0){
+        if(getDocumentIDCount()>0){
             fullScreenChildWindow();
             click(find(documentsTab));
             waitUntilVisibleElement(find(documentOptions));
             click(find(documentOptions));
             clickCancelAndAlert(find(documentDeleteOption),"accept");
             sleep(5);
-           // waitUntilVisibleElement(find(optionsMenu));
+            // waitUntilVisibleElement(find(optionsMenu));
             acceptAlert();
             fullScreenChildWindow();
             waitUntilVisibleElement(find(documentOptions));
-       }
-   }
+        }
+    }
     public RingTrackerPage acceptAndGoToSiteTracker() throws Exception {
         click(find(okButton));
         switchToSpecificWindow(parentWindowHolder);
@@ -522,8 +524,8 @@ public class AddRingPage extends BasePage {
         fullScreen();
         waitUntilVisibleElement(find(okButton));
         sleep(5);
-      String value =  getDocumentTextByIdJs(find(marketField).getAttribute("id"));
-       // String value=find(marketField).getAttribute("id");
+        String value =  getDocumentTextByIdJs(find(marketField).getAttribute("id"));
+        // String value=find(marketField).getAttribute("id");
         if(!value.isEmpty()){
             return true;
         }
@@ -560,10 +562,40 @@ public class AddRingPage extends BasePage {
     public boolean finalBuildSiteFieldValidation() throws Exception{
         sleep(5);
         String value = getFirstSelectedOptionInDropdown(selectionBoxBySname("R:Ring has Active/Primary or Active/Final Build Site?").get(0));
-       // String value = selectionBoxBySname("R:Ring has Active/Primary or Active/Final Build Site?").get(0).getText();
+        // String value = selectionBoxBySname("R:Ring has Active/Primary or Active/Final Build Site?").get(0).getText();
         if(value.equals("No")){
             return true;
         }
         return false;
+    }
+
+    public int getCounterCountForTab(String tabName) throws Exception {
+        String parent1 = switchToChildWindows();
+        waitUntilVisibleElement(find(applyButton));
+        fullScreenChildWindow();
+        List<WebElement> counters = tabCounterByTabName(tabName);
+        int count = Integer.parseInt(counters.get(0).getText());
+        click(find(cancelButton));
+        switchToSpecificWindow(parent1);
+        return count;
+    }
+    public boolean verifyMarketField() throws Exception {
+        String marketValue = getDocumentTextByIdJs(find(marketField).getAttribute("id"));
+        System.out.println("Market Field Value - " + marketValue);
+        if (marketValue.equalsIgnoreCase("TEST - LAB MARKET")){
+            return true;
+        }
+        return false;
+    }
+    public String switchToRingPage(){
+        parentWindow = switchToChildWindows();
+        fullScreen();
+        sleep(3);
+        return parentWindow;
+    }
+    public void backToTrackerPage() throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
     }
 }

@@ -26,8 +26,8 @@ public class ProjectNTPPage extends BasePage {
     public By cancel  = By.xpath("//input[@id='btnCancel']");
     public By okButton1 =By.xpath("//input[@id='btnOK0']");
     public By applyButton  = By.xpath("//input[@id='btnApply']");
-    public By ntpTabs = By.xpath("//*[@id='tabName25']");
-    public By ntpApprovals =By.xpath("//*[@id='tabName26']");
+    public By ntpTabs = By.xpath("//div[@title='PJ:NTP Construction']");
+    public By ntpApprovals =By.xpath("//div[@title='PJ:NTP Approvals']");
     public By coversheetpdffile4075 = By.xpath("//input[@sname='PJ:Cover Sheet PDF File(4075)']");
     public By checklistpdffile4075 = By.xpath("//input[@sname='PJ:Check List PDF FIle(4075)']");
     public By textboxNTPConstruction4100 = By.xpath("//input[@sname='PJ:Construction NTP Accepted by GC (4100) [Doc]']");
@@ -77,7 +77,7 @@ public class ProjectNTPPage extends BasePage {
     public void navigateToNTPTabs() throws Exception {
         waitUntilVisibleElement(find(applyButton));
         scrollToElement(find(label_NTPConstruction));
-        wait(2);
+        sleep(5);
         click(find(label_NTPConstruction));
     }
 
@@ -94,7 +94,6 @@ public class ProjectNTPPage extends BasePage {
         waitUntilVisibleElement(find(applyButton));
         scrollToElement(find(label_NTPApproval));
         click(find(label_NTPApproval));
-        //click(textAreaByTitle("PJ:NTP Approvals"));
         sleep(3);
         boolean one = checkBoxByLabel("PJ:Construction Approval").isSelected();
         boolean two = checkBoxByLabel("PJ:Operations Approval").isSelected();
@@ -111,16 +110,14 @@ public class ProjectNTPPage extends BasePage {
         sleep(5);
         if(isAlertPresent()){
             acceptAlert();
-           // click(find(okButton));
             sleep(2);
             switchToSpecificWindow(parentWindow);
             return true;
         }
         else {
-           // acceptAlert();
             click(find(cancel));
             if (isAlertPresent()){
-            acceptAlert();
+                acceptAlert();
             }
             switchToSpecificWindow(parentWindow);
             return false;
@@ -130,7 +127,6 @@ public class ProjectNTPPage extends BasePage {
 
     public void checkApprovalsCheckboxes() throws Exception {
         wait(3);
-       // waitUntilVisibleElement(find(applyButton));
         WebElement check1 = inputBoxDataBySname("PJ:Construction Approval");
         checkBoxCheckByJS(check1);
 
@@ -147,14 +143,14 @@ public class ProjectNTPPage extends BasePage {
     public void selectDevelopmentApprovalStatus() throws Exception {
         WebElement commentsBox = textAreaBySname("PJ:Development Comments");
         scrollToElement(commentsBox);
-        wait(3);
+        sleep(3);
         dropDownValueSelection("PJ:Development Approval Status","Approved");
         WebElement check = inputBoxDataBySname("PJ:CX NTP Start");
         checkBoxCheckByJS(check);
-        wait(2);
-        if(!(check.isSelected())) {
+        sleep(6);
+        /*if(!(isCheckboxSelected("idx470"))) {
          checkBoxCheckByJS(check);
-    }
+    }*/
         click(find(applyButton));
         sleep(3);
     }
@@ -211,7 +207,7 @@ public class ProjectNTPPage extends BasePage {
         dropDownValueSelection("PJ:RF Approval Status","Approved");
         dropDownValueSelection("PJ:Market Manager Approval Status","Approved");
         click(find(applyButton));
-       // sleep(3);
+        // sleep(3);
     }
 
     public Boolean verifyVendorApprovalsStatus(String status) throws Exception {
@@ -247,8 +243,6 @@ public class ProjectNTPPage extends BasePage {
         String pdfFile = inputBoxDataBySname("PJ:Construction NTP Submitted to GC (4075) [Doc]").getAttribute("id");
         String filename = getDocumentTextByIdJs(pdfFile);
         if(filename.contains("pdf")){
-            // click(find(okButton));
-            // sleep(2);
             return true;
         }
         else {
@@ -257,7 +251,7 @@ public class ProjectNTPPage extends BasePage {
     }
 
     public boolean createPreNtp(String parentWindow) throws Exception {
-        sleep(2);
+        sleep(5);
         click(checkBoxByLabel("PJ:Create Pre-NTP"));
         if(lockByLabelText("PJ:Pre-NTP Issued (3800)  [Doc]").get(0).getAttribute("class").contains("locked"))
             click(lockByLabelText("PJ:Pre-NTP Issued (3800)  [Doc]").get(0));
@@ -338,6 +332,7 @@ public class ProjectNTPPage extends BasePage {
     public void unActualizationOf4075() throws Exception {
         waitUntilVisibleElement(find(applyButton));
         WebElement NTPSubmittedBox = inputBoxDataBySname("PJ(A 4075) Construction NTP Submitted to GC");
+        sleep(5);
         clearInputBoxByElementAndSendKeys(NTPSubmittedBox);
         sleep(5);
         click(find(applyButton));
@@ -365,10 +360,8 @@ public class ProjectNTPPage extends BasePage {
         sleep(2);
         String coversheetValue = getText(findAll(checklistpdffile4075).get(0));
         if (coversheetValue.isEmpty()) {
-            //switchToSpecificWindow(parentWindow);
             return true;
         } else {
-            //switchToSpecificWindow(parentWindow);
             return false;
         }
     }
@@ -433,7 +426,6 @@ public class ProjectNTPPage extends BasePage {
         textAreaBySname("PJ:Market Manager Comments").sendKeys("Notes for Rejection");
         click(find(applyButton));
         sleep(3);
-        // waitForPageToLoad();
     }
 
     public void wait(int time){

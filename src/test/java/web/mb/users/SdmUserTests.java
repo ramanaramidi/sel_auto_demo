@@ -36,18 +36,22 @@ public class SdmUserTests extends BaseTest {
         SBA_AMaldonado = UserData.getSBAUserDetail(SBA_AMaldonado);
     }
 
-    @Test(groups = {"Integration","healthCheck"},description = "login",priority = 1)
-    public void login(Method method) throws Exception {
+    @Test(groups = {"Integration"}, description = "login", priority = 1)
+    public void login_Sdm(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
         }
-         mainSideMenu = loginPage.LoginAsUser(Dan_SDM);
-        //mainSideMenu = loginPage.LoginAsUser(ATC_AGonzal);
-         //mainSideMenu = loginPage.LoginAsUser(SBA_AMaldonado);
-         sleepFor(20);
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
+        }
+        mainSideMenu = loginPage.LoginAsUser(Dan_SDM);
+
     }
 
 

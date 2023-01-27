@@ -41,21 +41,29 @@ public class ProjectNtpTests extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
         }
-       // generateTestData();
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
+        }
+        generateTestData();
+        sleepFor(25);
         mainSideMenu = loginPage.LoginAsUser(superUser);
+
     }
 
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 2)
     public void createNewProjectForNtpConstructiontab(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-       // projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        // projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         softAssert.assertTrue(projectTrackerPage.ntpConstruction_Validations(parentWindow),"ntp construction tab is displayed");
@@ -65,14 +73,14 @@ public class ProjectNtpTests extends BaseTest {
     public void createNewProjectForNtpApprovaltab(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-      //  projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        // projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         softAssert.assertTrue(projectTrackerPage.ntpApproval_Validations(parentWindow),"ntp approval tab is displayed");
         softAssert.closeAssert();
     }
-  /*  @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
+    @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
     public void createNewProjectAndSearchForBavv(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
@@ -83,19 +91,18 @@ public class ProjectNtpTests extends BaseTest {
         softAssert.assertFalse(projectTrackerPage.isNtpApprovalTabPresent(),"ntp approval tab is not displayed");
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 5)
-    public void createNewProjectAndSearchForDecom(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        projectTrackerPage = mainSideMenu.goToProjectTracker();
-        // projectTrackerPage.searchForValue("D-Decom","PJ:Project Type");
-        projectTrackerPage.searchForValue(PROJECT_DECOM.projectId,"PJ:Project ID" );
-        projectTrackerPage.selectEditOption();
-        softAssert.assertFalse(projectTrackerPage.isNtpConstructionTabPresent(),"ntp construction tab is not displayed");
-        softAssert.assertFalse(projectTrackerPage.isNtpApprovalTabPresent(),"ntp approval tab is not displayed");
-        softAssert.closeAssert();
-    }
-*/
-  /*  @Test(groups = {"Integration"},description = "uploadRegulatoryAndConstructionDoc",priority = 6)
+    /*  @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 5)
+      public void createNewProjectAndSearchForDecom(Method method) throws Exception {
+          AssertionsUtil softAssert = new AssertionsUtil();
+          projectTrackerPage = mainSideMenu.goToProjectTracker();
+          // projectTrackerPage.searchForValue("D-Decom","PJ:Project Type");
+          projectTrackerPage.searchForValue(PROJECT_DECOM.projectId,"PJ:Project ID" );
+          projectTrackerPage.selectEditOption();
+          softAssert.assertFalse(projectTrackerPage.isNtpConstructionTabPresent(),"ntp construction tab is not displayed");
+          softAssert.assertFalse(projectTrackerPage.isNtpApprovalTabPresent(),"ntp approval tab is not displayed");
+          softAssert.closeAssert();
+      }*/
+    @Test(groups = {"Integration"},description = "uploadRegulatoryAndConstructionDoc",priority = 6)
     public void uploadRegulatoryAndConstructionDoc(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_3800_PRE_NTP", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png"),"PJ_3800_PRE_NTP Document should be uploaded");
@@ -129,13 +136,13 @@ public class ProjectNtpTests extends BaseTest {
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_3475_REG_CERT", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png"),"PJ_3475_REG_CERT Document should be uploaded");
         softAssert.closeAssert();
     }
-*/
+
     @Test(groups = {"Integration"},description = "login",priority = 7)
     public void preNtpCreation(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-       // projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        // projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -148,8 +155,8 @@ public class ProjectNtpTests extends BaseTest {
     public void verifyCXNTPCheckbox(Method method) throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-      //  projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        //  projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -164,8 +171,8 @@ public class ProjectNtpTests extends BaseTest {
     public void verifySetVendorStatus(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-     //   projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        //   projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToApprovalsTab();
@@ -181,8 +188,8 @@ public class ProjectNtpTests extends BaseTest {
     public void verifyApprovedStatus(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-       // projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        //projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToApprovalsTab();
@@ -198,8 +205,8 @@ public class ProjectNtpTests extends BaseTest {
     public void verifyNTPSubmittedField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-       // projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        // projectTrackerPage.searchForValue("MAG0811A-0000086997","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToApprovalsTab();
@@ -211,15 +218,15 @@ public class ProjectNtpTests extends BaseTest {
         softAssert.assertTrue(projectNTPPage.verifyVendorApprovalsStatus("Approved"),"Vendor Approval Status Should be displayed as Approved ");
         projectNTPPage.navigateToNTPTabs();
         projectNTPPage.selectDevelopmentApprovalStatus();
-        projectNTPPage = projectTrackerPage.goToApprovalsTab();
-        projectNTPPage.selectAllApprovalsStatus();
+//        projectNTPPage = projectTrackerPage.goToApprovalsTab();
+//        projectNTPPage.selectAllApprovalsStatus();
         projectNTPPage.navigateToNTPTabs();
         // softAssert.assertContains(projectNTPPage.verifyDevelopmentApprovalName(),"Prasanna Yedrami","Development Approval Name should be displayed");
         softAssert.assertNotNull(projectNTPPage.verifyDevelopmentApprovalDate(),"Approval Date Should be displayed ");
         projectNTPPage.navigateToNTPTabs();
         boolean file = projectNTPPage.verifyPDF();
         softAssert.assertNotNull(file,"PDF merged document should be available");
-        projectNTPPage.switchToTracker(parentWindow);
+        projectNTPPage.switchToTrackerOnException(parentWindow);
         softAssert.closeAssert();
     }
 
@@ -227,8 +234,8 @@ public class ProjectNtpTests extends BaseTest {
     public void verifyFiles4075() throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-        //projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
+        //projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -243,8 +250,8 @@ public class ProjectNtpTests extends BaseTest {
     public void selectDevelopmentRejection() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002246699","PJ:Project ID");
-      //  projectTrackerPage.searchForValue(PROJECT_ACTIVE_REJECTION.projectId, "PJ:Project ID");
+        //projectTrackerPage.searchForValue("00TESTOA-0002246699","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE_REJECTION.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToApprovalsTab();
@@ -265,8 +272,8 @@ public class ProjectNtpTests extends BaseTest {
     public void VerifyNtpConstructionLock() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-      //  projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
+        //projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -279,8 +286,8 @@ public class ProjectNtpTests extends BaseTest {
     public void verifyFiles4100() throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-       // projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
+        // projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -296,8 +303,8 @@ public class ProjectNtpTests extends BaseTest {
     public void unActulizationOfTask4075Andverification(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-     //   projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        //   projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -312,8 +319,8 @@ public class ProjectNtpTests extends BaseTest {
     public void unActulizationOfTask4100AndVerification(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
-        projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
-       // projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
+        // projectTrackerPage.searchForValue("00TESTOA-0002249088","PJ:Project ID");
+        projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parentWindow = projectTrackerPage.switchToProjectPage();
         projectNTPPage = projectTrackerPage.goToNTPTabs();
@@ -353,12 +360,12 @@ public class ProjectNtpTests extends BaseTest {
         PROJECT_BAVV = projectHelper.getActiveProject(false,ringActiveProjectBundleSingle,siteActiveProjectBundleSingle,porDataBundleSingle);
         System.out.println("Project __BAVV"+PROJECT_BAVV.projectId);
 
-        ringIdActiveProjectBundleSingle = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        ringActiveProjectBundleSingle = new Ring("Active", ringIdActiveProjectBundleSingle, "Indoor Node");
-        siteActiveProjectBundleSingle = new Site(ringIdActiveProjectBundleSingle,"Primary","Active Site");
-        porDataBundleSingle = new Por("Decom_ECX01_Decom", ringIdActiveProjectBundleSingle);
-        PROJECT_DECOM = projectHelper.getActiveProject(false,ringActiveProjectBundleSingle,siteActiveProjectBundleSingle,porDataBundleSingle);
-        System.out.println("Project __DECOM"+PROJECT_DECOM.projectId);
+//        ringIdActiveProjectBundleSingle = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
+//        ringActiveProjectBundleSingle = new Ring("Active", ringIdActiveProjectBundleSingle, "Indoor Node");
+//        siteActiveProjectBundleSingle = new Site(ringIdActiveProjectBundleSingle,"Primary","Active Site");
+//        porDataBundleSingle = new Por("Decom_ECX01_Decom", ringIdActiveProjectBundleSingle);
+//        PROJECT_DECOM = projectHelper.getActiveProject(false,ringActiveProjectBundleSingle,siteActiveProjectBundleSingle,porDataBundleSingle);
+//        System.out.println("Project __DECOM"+PROJECT_DECOM.projectId);
 
     }
 

@@ -2,10 +2,16 @@ package pages.web.Tracker.site;
 
 import commons.constants.Constants;
 import commons.objects.Site;
+import commons.objects.Users;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import pages.BasePage;
 import pages.web.Tracker.site.SiteTrackerPage;
+import rest.sector.SectorRequestBuilder;
+import utility.helper.MiscHelpers;
+
+import java.util.List;
 
 public class AddSitePage extends BasePage {
     public WebDriver driver;
@@ -14,9 +20,11 @@ public class AddSitePage extends BasePage {
         this.driver = driver;
     }
     String parentWindowHolder = "";
+    String parentWindow;
     public By applyButton = By.xpath("//input[@id='btnApply']");
     public By okButton = By.xpath("//input[@id='btnOK']");
     public By cancelButton = By.xpath("//input[@id='btnCancel']");
+    public By cancelButton1 = By.xpath("//input[@id='btnClose0']");
     public By siteCodeInput = By.xpath("//input[@id='idx5']");
     public By ringCodeSelectionOKButton = By.xpath("//input[@id='btnOK0']");
     public By siteLatitudeGmapButton = By.xpath("//input[@sname='S:Site Latitude']//parent::*//following-sibling::div[@class = 'newFieldBtn']");
@@ -33,6 +41,14 @@ public class AddSitePage extends BasePage {
     public By documentDeleteOption = By.id("itemDelete5");
     public By documentsTab = By.id("tabName5");
     public By documentsTabCounter = By.id("tabCounter5");
+    public By firstOption = By.xpath("//tr[@class=' ev_dhx_skyblue rowselected']//input");
+    public By okButton1 = By.xpath("//input[@id='btnOK0']");
+    public By onAirOffAirTab = By.xpath("//span[@id='tabLabel2']");
+    public By bbuBtsTab = By.xpath("//span[@id='tabLabel6']");
+    public By rfSectorTab = By.xpath("//span[@id='tabLabel7']");
+    public By  siteTrackerTableElement = By.xpath("//tr[contains(@class,'ev_dhx_skyblue rowselected')]//parent::*");
+
+    String parentWindow1;
 
     public SiteTrackerPage addNewSiteWith9CharactersSiteCode(String ringCode, String siteCode) throws Exception {
         addNewSiteTrackerWith9CharactersSiteCode(ringCode,siteCode);
@@ -62,7 +78,8 @@ public class AddSitePage extends BasePage {
         click(find(siteLatitudeGmapButton));
         inputBoxDataBySname("S:Site Latitude", Constants.VALID_LATITUDE);
         inputBoxDataBySname("S:Site Longitude", Constants.VALID_LONGITUDE);
-        buttonClick("OK",4);
+        sleep(5);
+        //buttonClick("OK",4);
         click(find(okButton));
         clickCancelAndAlert(find(cancelButton),"accept");
         acceptAlert();
@@ -93,7 +110,9 @@ public class AddSitePage extends BasePage {
         fullScreenChildWindow();
         waitUntilVisibleElement(find(intergationAdminSite));
         click(find(intergationAdminSite));
-        waitUntilVisibleElement(selectionBoxBySname("S:Do Not Use Spectrum Spatial API").get(0));
+        waitForPageToLoad();
+        scrollToElement(selectionBoxBySname("S:Do Not Use Spectrum Spatial API").get(0));
+        //waitUntilVisibleElement(selectionBoxBySname("S:Do Not Use Spectrum Spatial API").get(0));
         String currentValue = selectionBoxBySname("S:Do Not Use Spectrum Spatial API").get(0).getText();
         parentWindowHolder = parent1;
         return currentValue.contains(value);
@@ -130,7 +149,7 @@ public class AddSitePage extends BasePage {
         click(find(applyButton));
     }
 
-    public Boolean verifyGeoLocationDetailsIsPresent() throws Exception {
+    public Boolean verifyGeoLocationDetailsIsPresentWithAlert() throws Exception {
         click(find(generalInfoPage));
         scrollToElement(selectionBoxBySname("S:State").get(0));
         waitUntilVisibleElement(selectionBoxBySname("S:State").get(0));
@@ -141,6 +160,32 @@ public class AddSitePage extends BasePage {
         String zipInputText=inputBoxDataBySname("S:Zip").getAttribute("origval");
         System.out.println("zip"+zipInputText);
         click(find(okButton));
+        sleep(5);
+        if(isAlertPresent()){
+            acceptAlert();
+            click(find(cancelButton));
+            acceptAlert();
+        }
+        switchToSpecificWindow(parentWindowHolder);
+        sleep(5);
+        boolean response = true;
+        if(countyInputText.isEmpty() || zipInputText.isEmpty() || stateDropdownText.isEmpty())
+            response = false;
+        System.out.println("resp::: "+ response);
+        return response;
+    }
+    public Boolean verifyGeoLocationDetailsIsPresentWithoutAlert() throws Exception {
+        click(find(generalInfoPage));
+        scrollToElement(selectionBoxBySname("S:State").get(0));
+        waitUntilVisibleElement(selectionBoxBySname("S:State").get(0));
+        String stateDropdownText=getFirstSelectedOptionInDropdown(selectionBoxBySname("S:State").get(0));
+        System.out.println("state");
+        String countyInputText=inputBoxDataBySname("S:County").getAttribute("origval");
+        System.out.println("county"+countyInputText);
+        String zipInputText=inputBoxDataBySname("S:Zip").getAttribute("origval");
+        System.out.println("zip"+zipInputText);
+        click(find(okButton));
+        sleep(5);
         switchToSpecificWindow(parentWindowHolder);
         sleep(5);
         boolean response = true;
@@ -418,5 +463,447 @@ public class AddSitePage extends BasePage {
     public AcsPage goToAcsSection(){
         return new AcsPage(driver);
     }
+    public boolean zipCodeValidation() throws Exception{
+        switchToChildWindows();
+        fullScreen();
+        sleep(5);
+        WebElement zipCode = inputBoxDataBySname("S:Zip");
+        scrollToElement(zipCode);
+        String value=inputBoxDataBySname("S:Zip").getAttribute("origval");
+        if(!value.isEmpty()){
+            return true;
+        }
+        return false;
+    }
 
+    public boolean stateFieldValidation() throws Exception{
+        sleep(5);
+        scrollToElement(selectionBoxBySname("S:State").get(0));
+        String value = getFirstSelectedOptionInDropdown(selectionBoxBySname("S:State").get(0));
+        if(!value.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+    public boolean countryFieldValidation() throws Exception{
+        sleep(5);
+        String value = getFirstSelectedOptionInDropdown(selectionBoxBySname("S:Country").get(0));
+        if(!value.isEmpty()){
+            return true;
+        }
+        return false;
+    }
+
+    public void selectSiteCategoryBbuBts1() throws Exception{
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory, "BBU/BTS");
+        click(find(applyButton));
+        sleep(5);
+        dropDownDotsClick("S:Hub Site ID");
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(okButton1));
+        click(find(firstOption));
+        click(find(okButton1));
+        sleep(5);
+        switchToSpecificWindow(parent1);
+        click(find(applyButton));
+        sleep(10);
+
+    }
+    public void selectSiteCategoryNode() throws Exception{
+        String parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory, "Node");
+        click(find(applyButton));
+        sleep(5);
+        dropDownDotsClick("S:Hub Site ID");
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(okButton1));
+        click(find(firstOption));
+        click(find(okButton1));
+        sleep(5);
+        switchToSpecificWindow(parent1);
+        click(find(applyButton));
+        sleep(10);
+
+    }
+    public boolean hubClusterIdVerification() throws Exception {
+        WebElement hubClusterId = inputBoxDataBySname("S:Hub Cluster ID");
+        return hubClusterId.isEnabled();
+
+    }
+    public void goToOnAirOffAirTab() throws Exception{
+        switchToChildWindows();
+        fullScreen();
+        waitUntilVisibleElement(find(okButton));
+        click(find(onAirOffAirTab));
+        sleep(10);
+
+    }
+    public boolean L600TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            scrollToElement(find(By.xpath("//textarea[contains(text(),'" + fieldName + "')]")));
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean L700TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean L1900TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean L2100TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean L2100Aws3TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean L2500TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean N600TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean N2500TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean U1900TechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean gsmTechnologyValidation(String fieldName) throws Exception{
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - "+fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        if(!value.isEmpty()) {
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+        return false;
+    }
+    public boolean U2100TechnologyValidation(String fieldName) throws Exception {
+        scrollToElement(inputBoxDataBySname("S:On-Air Date - " + fieldName));
+        WebElement fieldObj = inputBoxDataBySname("S:On-Air Date - " + fieldName);
+        String value = getDocumentTextByIdJs(fieldObj.getAttribute("id"));
+        WebElement fieldObj1 = inputBoxDataBySname("S:Off-Air Date - " + fieldName);
+        String value1 = getDocumentTextByIdJs(fieldObj1.getAttribute("id"));
+        if (!value.isEmpty() && !value1.isEmpty()) {
+            return true;
+        } else {
+            scrollToElement(find(By.xpath("//textarea[contains(text(),'" + fieldName + "')]")));
+            return isDisplayed(By.xpath("//textarea[contains(text(),'" + fieldName + "')]"));
+        }
+    }
+
+    public void updateSiteName() throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement siteName = inputBoxDataBySname("S:Site Name");
+        scrollToElement(siteName);
+        clearInputBoxByElementAndSendKeys(siteName);
+        setText(siteName,"Test");
+        click(find(applyButton));
+        waitUntilVisibleElement(find(okButton));
+    }
+    public boolean verifySiteDetailsUpdate(Users userDetails) throws Exception {
+        waitForPageToLoad();
+        String owner = userDetails.getNtCode();
+        String currentDate = MiscHelpers.currentDateTime("MM/dd/yyyy");
+        WebElement lastUpdatedBy = inputBoxDataBySname("S:Last Updated By");
+        scrollToElement(lastUpdatedBy);
+        String updated = getDocumentTextByIdJs(lastUpdatedBy.getAttribute("id"));
+        System.out.println("Name::"+updated);
+        boolean updatedBy = updated.contains(owner);
+        System.out.println("boolean:: "+updatedBy);
+        WebElement lastUpdatedDate = inputBoxDataBySname("S:Last Updated Date");
+        scrollToElement(lastUpdatedDate);
+        String getDate = getDocumentTextByIdJs(lastUpdatedDate.getAttribute("id"));
+        System.out.println("Date::"+getDate);
+        boolean updatedDate = getDate.contains(currentDate);
+        System.out.println("boolean:: "+updatedDate);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        sleep(5);
+        return updatedBy && updatedDate ;
+    }
+    public int setSiteCategory(String category) throws Exception {
+        String parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement siteCategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(siteCategory);
+        selectDropdownOption(siteCategory, category);
+        click(find(applyButton));
+        sleep(5);
+        WebElement allSiteIds = inputBoxDataBySname("S:Count of BBU/BTS Sites Connected to Hub");
+        int count = Integer.parseInt(allSiteIds.getAttribute("origval"));
+        //int count = allSiteIds.getAttribute("origval").length();
+        System.out.println(count);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return count;
+    }
+    public void assignSiteWithHub(String siteId) throws Exception {
+        String parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement siteCategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(siteCategory);
+        selectDropdownOption(siteCategory, "BBU/BTS");
+        click(find(applyButton));
+        sleep(5);
+        dropDownDotsClick("S:Hub Site ID");
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(ringCodeSearch));
+        setText(find(ringCodeSearch),siteId);
+        click(find(ringCodeSearchButton));
+        radioButtonClick("S:Site Code", siteId);
+        quickClick(find(ringCodeSelectionOKButton));
+        switchToSpecificWindow(parent1);
+        click(find(applyButton));
+        sleep(5);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+    }
+    public int bbuCount() throws Exception{
+        String parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement allSiteIds = inputBoxDataBySname("S:Count of BBU/BTS Sites Connected to Hub");
+        int count = Integer.parseInt(allSiteIds.getAttribute("origval"));
+        System.out.println("BBU Count After::"+count);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return count;
+    }
+    public String assignSiteWithAggregateRouter(String siteId) throws Exception {
+        String parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement siteCategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(siteCategory);
+        selectDropdownOption(siteCategory, "BBU/BTS");
+        click(find(applyButton));
+        sleep(5);
+        dropDownDotsClick("S:Hub Site ID");
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(ringCodeSearch));
+        setText(find(ringCodeSearch),siteId);
+        click(find(ringCodeSearchButton));
+        String tableList = tableDataList(3);
+        List<String> siteCode = getDocumentTextListByXpathJs(tableList);
+        String siteCodeId = siteCode.toString();
+        System.out.println("Site Code is:: " + siteCodeId);
+        click(find(cancelButton1));
+        switchToSpecificWindow(parent1);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return siteCodeId;
+    }
+    public void selectSiteCategoryHub() throws Exception {
+        parentWindow = switchToChildWindows();
+        waitForPageToLoad();
+        fullScreenChildWindow();
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory, "Hub");
+        click(find(applyButton));
+        waitForPageToLoad();
+    }
+
+    public boolean hubClusterIdValidation() throws Exception {
+        sleep(5);
+        String value = inputBoxDataBySname("S:Hub Cluster ID").getAttribute("origval");
+        if (!value.isEmpty()) {
+            return true;
+        }
+        return false;
+
+    }
+
+    public boolean bbuBtsTabValidation() throws Exception {
+        if (findAll(bbuBtsTab).size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean rfSectorTabValidation() throws Exception {
+        if (findAll(rfSectorTab).size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public SiteTrackerPage goToSiteTracker() throws Exception {
+        waitForPageToLoad();
+        click(find(okButton));
+        sleep(5);
+        switchToSpecificWindow(parentWindow);
+        return new SiteTrackerPage(driver);
+    }
+
+    public void selectSiteCategoryAggregateRouter() throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory, "Aggregate Router");
+        click(find(applyButton));
+        sleep(3);
+    }
+
+    public void assignSiteWithHub1(String siteId) throws Exception {
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        dropDownDotsClick("S:Hub Site ID");
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(ringCodeSearch));
+        setText(find(ringCodeSearch), siteId);
+        click(find(ringCodeSearchButton));
+        radioButtonClick("S:Site Code", siteId);
+        quickClick(find(ringCodeSelectionOKButton));
+        switchToSpecificWindow(parent1);
+        click(find(applyButton));
+        waitForPageToLoad();
+    }
+
+    public boolean allSiteIdAtHubIdValidation(String siteId, String siteId1) throws Exception {
+        sleep(5);
+        String value = inputBoxDataBySname("S:All Site IDs at Hub").getAttribute("origval");
+        String value1 = siteId;
+        String value2 = siteId1;
+        if (value.contains(value1) && value.contains(value2)) {
+            return true;
+        } return false;
+    }
+    public void selectSiteCategoryBbuBts() throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory, "BBU/BTS");
+        click(find(applyButton));
+        waitForPageToLoad();
+    }
+    public int bbuBtsCount() throws Exception {
+        WebElement allSiteIds = inputBoxDataBySname("S:Count of BBU/BTS Sites Connected to Hub");
+        scrollToElement(allSiteIds);
+        int count = Integer.parseInt(allSiteIds.getAttribute("origval"));
+        System.out.println(count);
+        return count;
+    }
+    public void assignBbuBtsSiteWithHub(String siteId) throws Exception {
+        String parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory, "BBU/BTS");
+        click(find(applyButton));
+        sleep(5);
+        dropDownDotsClick("S:Hub Site ID");
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(ringCodeSearch));
+        setText(find(ringCodeSearch),siteId);
+        click(find(ringCodeSearchButton));
+        radioButtonClick("S:Site Code", siteId);
+        quickClick(find(ringCodeSelectionOKButton));
+        switchToSpecificWindow(parent1);
+        click(find(applyButton));
+        sleep(5);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+    }
+    public int finalBbuBtsCount() throws Exception{
+        waitForPageToLoad();
+        WebElement allSiteIds = inputBoxDataBySname("S:Count of BBU/BTS Sites Connected to Hub");
+        scrollToElement(allSiteIds);
+        int count = Integer.parseInt(allSiteIds.getAttribute("origval"));
+        System.out.println("BBU Count After::"+count);
+        return count;
+    }
+
+    public void assignSiteWithRouter(String siteId) throws Exception {
+        WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        dropDownDotsClick("S:Hub Site ID");
+        parentWindow1 = switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(ringCodeSearch));
+        setText(find(ringCodeSearch), siteId);
+        click(find(ringCodeSearchButton));
+        waitForPageToLoad();
+    }
+    public Boolean isDataPresentInTable() throws Exception {
+        waitUntilVisibleElement(find(siteTrackerTableElement));
+        WebElement ringTrackerTbElement = find(siteTrackerTableElement);
+        List<WebElement> rows = getTableRows(ringTrackerTbElement);
+        List<WebElement> cellData = getTableCellsByRow(rows.get(1));
+        System.out.println("Data" + cellData.get(1).getText());
+        //check if null check needed
+        return !cellData.get(1).getText().isEmpty() && !cellData.get(1).getText().equals(" ");
+    }
+    public SiteTrackerPage goToSiteTrackerPage() throws Exception {
+        click(find(ringCodeSelectionOKButton));
+        switchToSpecificWindow(parentWindow1);
+        click(find(applyButton));
+        sleep(5);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        return new SiteTrackerPage(driver);
+    }
 }

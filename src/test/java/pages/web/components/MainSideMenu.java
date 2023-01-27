@@ -29,6 +29,7 @@ public class MainSideMenu extends BasePage {
     public By mainLogo = By.xpath("//img[@id='clientLogo']");
     public By SiteTracker = By.xpath("//div[text()='Site Tracker']");
     public By porTracker = By.xpath("//div[text()='POR Tracker']");
+    public By porAdminTracker = By.xpath("//div[text()='POR Admin Tracker']");
     public By mainSideOverflow = By.xpath("//input[@id='btnOverflow']");
 
     public By RFSector = By.xpath("//div[text()='RF Sector/Cell Tracker']");
@@ -58,13 +59,23 @@ public class MainSideMenu extends BasePage {
     public By PORLink = By.linkText("POR Tracker");
     public By ProjectLink = By.linkText("Project Tracker");
     public By siteDevelopmentMainOption = By.xpath("//input[@title='Site Development']");
+    public By fieldsLocator = By.xpath("//div[text()='Fields']");
+    public By systemUsers = By.xpath("//div[text()='System Users']");
+    public By documentLocator = By.xpath("//div[text()='Document']");
+    public By processesLocator = By.xpath("//div[text()='Processes']");
+    public By userSettings = By.xpath("//div[text()='User Settings']");
+    public By reportsLocator = By.xpath("//div[text()='Reports']");
+    public By ACSIntakeTracker = By.xpath("//div[@title='ACS Intake Tracker']");
+    public By runReports = By.xpath("(//div[text()='Run Reports'])[1]");
+
 
     public void navigateToAppCenter() throws Exception {
         List<WebElement> adminOption = findAll(AdminMenu,2);
         if(adminOption.size()>0){
             waitUntilVisibleElement(find(AdminMenu));
-            find(AdminMenu).click();
-            sleep(2);
+            sleep(5);
+            click(find(AdminMenu));
+            sleep(5);
         }
         else {
             List<WebElement> overflowMenu = findAll(mainSideOverflow,2);
@@ -215,10 +226,20 @@ public class MainSideMenu extends BasePage {
         waitUntilVisibleElement(find(porTracker));
         find(porTracker).click();
     }
+    public void clickingPORAdminTracker() throws Exception {
+        waitUntilVisibleElement(find(porAdminTracker));
+        find(porAdminTracker).click();
+    }
 
     public PORTrackerPage goToPorTrackerPage() throws Exception {
         navigateToAppCenter();
         clickingPORTracker();
+        return new PORTrackerPage(driver);
+    }
+    public PORTrackerPage goToPorAdminTrackerPage() throws Exception {
+        fullScreen();
+        navigateToAppCenter();
+        clickingPORAdminTracker();
         return new PORTrackerPage(driver);
     }
 
@@ -261,13 +282,13 @@ public class MainSideMenu extends BasePage {
         System.out.println("allTrackers Size is - "+allTrackers.size());
 
         for (WebElement tracker : allTrackers) {
-                if(tracker.getText().equalsIgnoreCase("Ring Tracker")){
-                    System.out.println("Found Ring Tracker - " + tracker.getText());
-                    return true;
-                }
+            if(tracker.getText().equalsIgnoreCase("Ring Tracker")){
+                System.out.println("Found Ring Tracker - " + tracker.getText());
+                return true;
             }
-       System.out.println("Ring Tracker Not Found" );
-       return false;
+        }
+        System.out.println("Ring Tracker Not Found" );
+        return false;
     }
 
     public Boolean isSiteTrackerPresent() throws Exception {
@@ -298,6 +319,24 @@ public class MainSideMenu extends BasePage {
         }
         System.out.println("POR Tracker Not Found" );
         return false;
+    }
+    public Boolean isPORAdminTrackerPresent() throws Exception {
+        fullScreen();
+        sleep(10);
+        clickMainLogo1();
+        search("POR Admin Tracker");
+        sleep(5);
+        List<WebElement> allTrackers = findAll(By.tagName("a"));
+        for (WebElement tracker : allTrackers) {
+            String Tracker = tracker.getText();
+            if (Tracker.equals("POR Admin Tracker")) {
+                tracker.isDisplayed();
+                break;
+            }
+        }
+        click(find(porAdminTracker));
+        sleep(5);
+        return true;
     }
 
     public Boolean isProjectTrackerPresent() throws Exception {
@@ -382,17 +421,104 @@ public class MainSideMenu extends BasePage {
         if(!find(ringTrackerLocator).isDisplayed())
             find(AppCenter).click();
     }
-
     public MSMTrackerPage goToMSMTracker() throws Exception {
         sleep(10);
         clickMainLogo1();
         search("MS");
         sleep(10);
         click(find(MSCTracker));
-        sleep(5);
+        sleep(15);
         return new MSMTrackerPage(driver);
     }
     public void clickMainLogo1() throws Exception {
         find(mainLogo1).click();
+    }
+    public ESRTrackerPage goToFields() throws Exception {
+        waitForPageToLoad();
+        clickMainLogo1();
+        search("Fields");
+        waitUntilVisibleElement(find(fieldsLocator));
+        click(find(fieldsLocator));
+        sleep(5);
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage goToSystemUsers() throws Exception {
+        waitForPageToLoad();
+        clickMainLogo1();
+        search("System Users");
+        waitUntilVisibleElement(find(systemUsers));
+        click(find(systemUsers));
+        sleep(5);
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage goToDocument() throws Exception {
+        waitForPageToLoad();
+        clickMainLogo1();
+        search("Document");
+        waitUntilVisibleElement(find(documentLocator));
+        click(find(documentLocator));
+        sleep(5);
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage goToProcesses() throws Exception {
+        waitForPageToLoad();
+        clickMainLogo1();
+        search("Processes");
+        waitUntilVisibleElement(find(processesLocator));
+        click(find(processesLocator));
+        waitForPageToLoad();
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage clickMainSideLogo() throws Exception{
+        waitForPageToLoad();
+        click(find(mainLogo1));
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage goToProject() throws Exception {
+        navigateToAppCenter();
+        sleep(4);
+        clickingProjectTracker();
+        sleep(5);
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage userSettings() throws Exception {
+        waitForPageToLoad();
+        fullScreen();
+        click(find(userNameText));
+        sleep(2);
+        click(find(userSettings));
+        return new ESRTrackerPage(driver);
+    }
+    public ESRTrackerPage goToReports() throws Exception {
+        waitForPageToLoad();
+        clickMainLogo1();
+        search("Reports");
+        waitUntilVisibleElement(find(reportsLocator));
+        click(find(reportsLocator));
+        waitForPageToLoad();
+        return new ESRTrackerPage(driver);
+    }
+    public ACSIntakeTracker goToACSIntakeTracker() throws Exception {
+        clickMainLogo1();
+        search("ACS");
+        sleep(10);
+        click(find(ACSIntakeTracker));
+        sleep(5);
+        return new ACSIntakeTracker(driver);
+    }
+    public ProcessesPage goToProcessesPage() throws Exception {
+        navigateToAppCenter();
+        search("processes");
+        click(find(processesLocator));
+        sleep(5);
+        return new ProcessesPage(driver);
+    }
+
+    public RunReportsPage goToRunReportTracker() throws Exception {
+        navigateToAppCenter();
+        search("Run Reports");
+        click(find(runReports));
+        sleep(5);
+        return new RunReportsPage(driver);
     }
 }

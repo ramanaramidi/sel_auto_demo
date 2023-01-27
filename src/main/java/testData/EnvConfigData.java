@@ -12,7 +12,7 @@ public class EnvConfigData {
     static Properties envConfigProperties;
     static {
         try {
-            envConfigProperties = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "\\src\\test\\resources\\testData\\userData.properties");
+            envConfigProperties = LoadPropertiesFiles.loadProperties(System.getProperty("user.dir") + "/src/test/resources/testData/userData.properties");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

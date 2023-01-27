@@ -63,7 +63,7 @@ public class LoginPage extends BasePage {
         click(find(loginAsConfirmation));
         switchToSpecificWindow(parent1);
         sleep(10);
-        waitUntilVisibleElement(find(profileImage));
+        waitForPageToLoad();
         return new MainSideMenu(driver);
     }
 

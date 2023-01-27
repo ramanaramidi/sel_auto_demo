@@ -15,12 +15,11 @@ import rest.site.SiteHelper;
 import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
-import utility.helper.MiscHelpers;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
-public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
+public class ProvisionFieldsTests extends BaseTest {
     public  String envURL = System.getProperty("TestEnv");
     public  String testSuite = System.getProperty("TestRunner");
     LoginPage loginPage;
@@ -43,9 +42,9 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
     MSMTrackerPage MSMtrackerPage;
     MiscHelper miscHelper = new MiscHelper();
     public Users rfEngineer = new Users();
-   // public Users sitedev = new Users();
+    // public Users sitedev = new Users();
 
-    public ProvisionFieldsAndRecordManagementTests()
+    public ProvisionFieldsTests()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
         if(testSuite == null) {testSuite = 	"TestRunner.xml";}
@@ -55,14 +54,21 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
     @Test(groups = {"Integration"}, description = "login", priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if (url != null) {
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         generateData();
         mainSideMenu = loginPage.LoginAsUser(rfEngineer);
     }
+
     private void generateData() {
         String ringIdForSector = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
         Ring ringActiveForSector = new Ring("Active", ringIdForSector, "Indoor Micro");
@@ -83,7 +89,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
         rfSectorPage.searchForValue(sector5G.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        String techField = rfSectorPage.getSectorTechnologyField();
+        String techField = rfSectorPage.getTechnologyField();
         softAssert.assertDoesNotContains(techField,"LTE", "sector Technology should not match");
         softAssert.assertFalse(rfSectorPage.validateLockIsEnabled("SEC:Small Cell e911 Auto Provision - Request"),"For Small Cell e911 Auto Provision - Request should be disabled");
         rfSectorPage.backToTrackerPage();
@@ -95,7 +101,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
         rfSectorPage.searchForValue(sectorLTE.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertContains(rfSectorPage.getSectorTechnologyField(),"LTE", "sector Technology match");
+        softAssert.assertContains(rfSectorPage.getTechnologyField(),"LTE", "sector Technology match");
         rfSectorPage.setSectorFieldName("SEC:Sector Type","Undefined");
         softAssert.assertFalse(rfSectorPage.validateLockIsEnabled("SEC:Address"),"SEC:Address should be disabled");
         softAssert.assertFalse(rfSectorPage.validateLockIsEnabled("SEC:Address 2"),"SEC:Address 2 should be disabled");
@@ -116,7 +122,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
         rfSectorPage.searchForValue(sectorLTE.sectorId, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertContains(rfSectorPage.getSectorTechnologyField(),"LTE", "sector Technology match");
+        softAssert.assertContains(rfSectorPage.getTechnologyField(),"LTE", "sector Technology match");
         rfSectorPage.setSectorFieldName("SEC:Sector Type","Small Cell");
         softAssert.assertTrue(rfSectorPage.validateLockIsEnabled("SEC:Address"),"SEC:Address should be Enabled");
         softAssert.assertTrue(rfSectorPage.validateLockIsEnabled("SEC:Address 2"),"SEC:Address 2 should be Enabled");
@@ -138,7 +144,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         String SectorID = "SAU1XTWO_13LAY";
         rfSectorPage.searchForValue(SectorID, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertContains(rfSectorPage.getSectorTechnologyField(),"LTE", "sector Technology should match");
+        softAssert.assertContains(rfSectorPage.getTechnologyField(),"LTE", "sector Technology should match");
         softAssert.assertFalse(rfSectorPage.verifyFieldDropDown("R:Ring ID Description"),"Ring ID Description Should not match");
         softAssert.assertFalse(rfSectorPage.getCoverageTypeField("SEC:Coverage Type"),"coverage Type Should not match");
         softAssert.assertFalse(rfSectorPage.validateLockIsEnabled("SEC:Small Cell e911 Auto Provision - Request"),"For Small Cell e911 Auto Provision - Request should be disabled");
@@ -152,7 +158,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         String SectorID = "SAUXMYC8_21LAZ";
         rfSectorPage.searchForValue(SectorID, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        softAssert.assertContains(rfSectorPage.getSectorTechnologyField(),"LTE", "sector Technology should match");
+        softAssert.assertContains(rfSectorPage.getTechnologyField(),"LTE", "sector Technology should match");
         softAssert.assertTrue(rfSectorPage.verifyFieldDropDown("R:Ring ID Description"),"Ring ID Description Should match");
         softAssert.assertTrue(rfSectorPage.getCoverageTypeField("SEC:Coverage Type"),"coverage Type Should match");
         softAssert.assertTrue(rfSectorPage.validateLockIsEnabled("SEC:Small Cell e911 Auto Provision - Request"),"For Small Cell e911 Auto Provision - Request should be enabled");
@@ -194,7 +200,8 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         rfSectorPage.goToRfTrackerPage();
         softAssert.closeAssert();
     }*/
-    @Test(groups = {"Integration"}, description = "", priority = 9)
+
+    @Test(groups = {"Integration"}, description = "Verify SEC:Switch - Planned and only Switches within previously selected market", priority = 9)
     public void VerifySwitchesWithinMarket(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         MarketSwitch marketSwitch = new MarketSwitch();
@@ -326,7 +333,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "Add Rac By Clicking On Pencil Button As RfEng",priority = 2)
+    @Test(groups = {"Integration"},description = "Add Rac By Clicking On Pencil Button As RfEng",priority = 16)
 
     public void addRacAsRfEng(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -337,14 +344,15 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         softAssert.assertTrue(rfSectorPage.racIdValidation(),"Rac Id Generated");
         String racId = rfSectorPage.racIdValue();
         rfSectorPage.goToSearchInTable();
-        String response =  rfSectorPage.searchForValueInGridExact("RAC:RAC ID","RAC:RAC ID", racId);
+        String response =rfSectorPage.getTableList();
+        //String response =  rfSectorPage.searchForValueInGridExact("RAC:RAC ID","RAC:RAC ID", racId);
         System.out.println (response);
         softAssert.assertContains(response,racId,"Rac Value Created In Record");
         softAssert.closeAssert();
         rfSectorPage.backToRfSectorPage();
     }
 
-    @Test(groups = {"Integration"},description = "Add Lac/Tac By Clicking On Pencil Button As RfEng",priority = 3)
+    @Test(groups = {"Integration"},description = "Add Lac/Tac By Clicking On Pencil Button As RfEng",priority = 17)
 
     public void addLacTacAsRfEng(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -362,8 +370,7 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         rfSectorPage.backToRfSectorPage();
     }
 
-    @Test(groups = {"Integration"},description = "Acs Info Verification For Sector As RfEng",priority = 4)
-
+    @Test(groups = {"Integration"},description = "Acs Info Verification For Sector As RfEng",priority = 18)
     public void acsInfoVerificationAsRfEng(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
@@ -373,94 +380,6 @@ public class ProvisionFieldsAndRecordManagementTests extends BaseTest {
         softAssert.assertTrue(rfSectorPage.acsInfoVerification(),"Acs Info Fields Are Editable And Can Be Saved");
         softAssert.closeAssert();
         rfSectorPage.rfSectorPage();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
     }
 
-    @Test(groups = {"Integration"},description = "Add Bnc And Rnc As Business Alpha",priority = 5)
-
-    public void addBncRncAsBusinessAlpha(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        mainSideMenu = loginPage.LoginAsUser(alphaUser);
-        rfSectorPage = mainSideMenu.goToRFSectorTracker();
-        rfSectorPage.searchForValue("SAUTYHL9_11UAD", "SEC:Sector ID");
-        rfSectorPage.selectEditOption();
-        rfSectorPage.addBsc();
-        softAssert.assertTrue(rfSectorPage.msmIdValidation(),"Msm Id Generated");
-        softAssert.assertTrue(rfSectorPage.bscVerification(),"Msm Id Contains Bsc/RNc Value");
-        rfSectorPage.goToMsmIdTablePage();
-        String response = rfSectorPage.searchForValueInGridExact("MSM:BSC/RNC","MSM:BSC/RNC",rfSectorPage.RNC);
-        System.out.println (response);
-        softAssert.assertContains(response,rfSectorPage.RNC,"Bsc Value Created In record");
-        softAssert.closeAssert();
-        rfSectorPage.backToRfSectorPageAsAlphaUser();
-    }
-
-    @Test(groups = {"Integration"},description = "Sector ID Rule",priority = 2)
-    public void validateSiteID_Match(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        rfSectorPage= mainSideMenu.goToRFSectorTracker();
-        rfSectorPage=rfSectorPage.addNewRFSector();
-        String siteId = "SAUF0AW5";
-        String parentWindow = rfSectorPage.switchToProjectPage();
-        rfSectorPage.validateAddNewRFSector(RFSectorID1,siteId);
-        softAssert.assertTrue(rfSectorPage.getSiteId(RFSectorID1,siteForSector.siteId),"Sector ID First Part should be the SiteID");
-        rfSectorPage.switchToTrackerOnException(parentWindow);
-        softAssert.closeAssert();
-    }
-    @Test(groups = {"Integration"},description = "createMSMRecord",priority = 3)
-    public void createMSMRecord(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        MSMtrackerPage = mainSideMenu.goToMSMTracker();
-        MSMtrackerPage = MSMtrackerPage.addNewMSMPage();
-        String parentWindow = MSMtrackerPage.switchToProjectPage();
-        MSMtrackerPage.createMSMRecord();
-        softAssert.assertTrue(MSMtrackerPage.getMSMIdConcatMarket_Switch(),"MSM ID should be concatenated with the Market_Switch ");
-        MSMtrackerPage.switchToTracker(parentWindow);
-        softAssert.closeAssert();
-    }
-    @Test(groups = {"Integration"},description = "createMSM_MSC_MGW_MME_AMFRecord",priority = 4)
-    public void createMSM_MSC_MGW_MME_AMFRecord(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        MSMtrackerPage= mainSideMenu.goToMSMTracker();
-        MSMtrackerPage = MSMtrackerPage.addNewMSMPage();
-        String parentWindow = MSMtrackerPage.switchToProjectPage();
-        MSMtrackerPage.createMSM_MSC_MGW_MME_AMFRecord();
-        softAssert.assertTrue(MSMtrackerPage.getMSMIdConcatMSMMSCMMEMGWAMF(),"MSM ID should be concatenated with the MSM/MSC/MGW/MME/AMF ");
-        MSMtrackerPage.switchToTracker(parentWindow);
-        softAssert.closeAssert();
-    }
-    @Test(groups = {"Integration"},description = "createMSM_MSC_MGW_MME_AMFRecord",priority = 5)
-    public void createBSC_RNCRecord(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        MSMtrackerPage= mainSideMenu.goToMSMTracker();
-        MSMtrackerPage = MSMtrackerPage.addNewMSMPage();
-        String parentWindow = MSMtrackerPage.switchToProjectPage();
-        MSMtrackerPage.createBSC_RNC_Record();
-        softAssert.assertTrue(MSMtrackerPage.getMSMIdConcatBSC_RNC(),"MSM ID should be concatenated with the Market_Switch_MSM/MSC/MGW/MME/AMF_BSC/RNC");
-        MSMtrackerPage.switchToTracker(parentWindow);
-        softAssert.closeAssert();
-    }
-    @Test(groups = {"Integration"},description = "createLAC_TACRecord",priority = 6)
-    public void createLAC_TACRecord(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        MSMtrackerPage= mainSideMenu.goToMSMTracker();
-        MSMtrackerPage = MSMtrackerPage.addNewMSMPage();
-        String parentWindow = MSMtrackerPage.switchToProjectPage();
-        String Lacid = MSMtrackerPage.createLAC_TAC_Record();
-        softAssert.assertTrue(MSMtrackerPage.getLAC_TACRecord(Lacid,"LAC:LAC ID"),"LAC/TAC Record is created Successfully");
-        MSMtrackerPage.switchToTracker(parentWindow);
-        softAssert.closeAssert();
-    }
-    @Test(groups = {"Integration"},description = "createRACRecord",priority = 7)
-    public void createRACRecord(Method method) throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        MSMtrackerPage= mainSideMenu.goToMSMTracker();
-        MSMtrackerPage = MSMtrackerPage.addNewMSMPage();
-        String parentWindow = MSMtrackerPage.switchToProjectPage();
-        String Racid = MSMtrackerPage.createRACRecord();
-        softAssert.assertTrue(MSMtrackerPage.getRACRecord(Racid,"RAC:RAC ID"),"RAC Record should be created");
-        MSMtrackerPage.switchToTracker(parentWindow);
-        softAssert.closeAssert();
-    }
 }

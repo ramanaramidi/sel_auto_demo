@@ -89,6 +89,10 @@ public class BasePage {
         return webHelper.headerItemRootNotification(type,name);
     }
 
+    public List<WebElement> tabCounterByTabName(String name) throws Exception {
+        return webHelper.tabCounterByTabName(name);
+    }
+
     public List<WebElement> dataItemVerification(String date,String status,WebElement root) throws Exception {
         return webHelper.dataItemVerification(date,status,root);
     }

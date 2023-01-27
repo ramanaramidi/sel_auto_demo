@@ -37,7 +37,7 @@ public class NonSuperUserTests extends BaseTest {
     }
 
     @Test(groups = {"Integration","healthCheck"},description = "login",priority = 1)
-    public void login(Method method) throws Exception {
+    public void login_NonSuperUser(Method method) throws Exception {
         loginPage = new LoginPage(driver);
         if(alphaUser.getIsServiceAccount().equals("true")){
             loginPage.doLogin(LoginOptionEnum.UN_EMAIL);

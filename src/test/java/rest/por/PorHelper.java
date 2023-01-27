@@ -3,36 +3,52 @@ package rest.por;
 import com.jayway.jsonpath.JsonPath;
 import commons.objects.ApiResponse;
 import commons.objects.Por;
-
 import java.util.List;
 
 public class PorHelper {
 
-    public Por createAPor(Por por){
+    public Por createAPor(Por por) {
         PorService porService = new PorService();
         ApiResponse response = porService.createNewPor(por);
-        if(!response.isError) {
+        if (!response.isError && !response.responseBody.contains("POR cannot be created")) {
             por.porId = JsonPath.read(response.responseBody, "TRACKOR_KEY");
             return por;
         }
         return null;
     }
 
-    public Por updatePorWithQueueStatus(Por por){
+    public Por updatePorWithQueueStatus(Por por) {
         PorService porService = new PorService();
         ApiResponse response = porService.updatePorQueueStatus(por);
-        if(response.responseCode==200){
+        if (response.responseCode == 200) {
             return por;
-        }
-        else
-            return null;
+        } else return null;
     }
 
-    public String getPorTrackerIdsAndDelete(Por por){
+    public Por updatePorWithHcDate(Por por) {
+        PorService porService = new PorService();
+        ApiResponse response = porService.updatePorWithHcDate(por);
+        if (response.responseCode == 200) {
+            return por;
+        } else return null;
+    }
+
+    public Por updatePorWithUnBundling(Por por,String option) {
+        PorService porService = new PorService();
+        ApiResponse response = porService.unBundlePor(por,option);
+        if (response.responseCode == 200) {
+            return por;
+        } else return null;
+    }
+
+    public String getPorTrackerIdsAndDelete(Por por) {
         PorService porService = new PorService();
         ApiResponse response = porService.getPorTrackerIdById(por.porId);
-        if(response.responseCode == 200){
-            List<Integer> trackerKeys = JsonPath.read(response.responseBody,"[*].TRACKOR_ID");
+        if (response.responseCode == 200) {
+            List<Integer> trackerKeys = JsonPath.read(
+                    response.responseBody,
+                    "[*].TRACKOR_ID"
+            );
             for (Integer trackor : trackerKeys) {
                 System.out.println("DELETING TRACKER ID:: " + trackor);
                 porService.deletePorTracker(trackor.toString());
@@ -41,5 +57,4 @@ public class PorHelper {
         }
         return null;
     }
-
 }

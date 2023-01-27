@@ -755,6 +755,12 @@ public class WebHelper {
         return findAll(By.xpath(baseLocator),null,0);
     }
 
+    public List<WebElement> tabCounterByTabName(String name) throws Exception {
+        String baseLocator = "//div[@title='REPLACEWITHNAME']//span[@class='tab_counter']";
+        baseLocator = baseLocator.replace("REPLACEWITHNAME",name);
+        return findAll(By.xpath(baseLocator),null,0);
+    }
+
     public List<WebElement> dataItemVerification(String date, String status, WebElement root) throws Exception {
         String locator = "//span[contains(normalize-space(.), \"REPLACEWITHDATE\")]//following-sibling::span[contains(normalize-space(.), \"REPLACEWITHSTATUS\")]";
         locator = locator.replace("REPLACEWITHDATE",date);

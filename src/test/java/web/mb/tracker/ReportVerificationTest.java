@@ -27,12 +27,19 @@ public class ReportVerificationTest extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         mainSideMenu = loginPage.LoginAsUser(superUser);
+
     }
 
     @Test(groups = {"Integration"},description = "verify Report",priority = 2)

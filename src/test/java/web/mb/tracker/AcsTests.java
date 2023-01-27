@@ -40,16 +40,22 @@ public class AcsTests extends BaseTest {
 
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
-    public void login(Method method) throws Exception {
+    public void login_Acs(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
         }
-       //  commonDataGenerator();
-         mainSideMenu = loginPage.LoginAsUser(superUser);
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
+        }
+        mainSideMenu = loginPage.LoginAsUser(superUser);
     }
+
     @Test(groups = {"Integration"},description = "Acs Test For Small Cell Hub With Hub Site Id",priority = 2)
     public void smallCellHubActiveRingAndSiteAcsWithHubSiteId(Method method) throws Exception {
         //DATA CREATION

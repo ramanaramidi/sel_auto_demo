@@ -50,13 +50,19 @@ public class ProjectTests extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
         }
-        commonDataGenerator();
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
+        }
         mainSideMenu = loginPage.LoginAsUser(superUser);
+
     }
 
     @Test(groups = {"Integration"},description = "User should able to see all POR ID's",priority = 2)

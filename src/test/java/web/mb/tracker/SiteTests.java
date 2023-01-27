@@ -49,15 +49,23 @@ public class SiteTests extends BaseTest {
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         generateCommonData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
 
     }
+
+
     private void generateCommonData() {
         String ringId = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
         Ring ring = new Ring("Active", ringId, "Macro");
@@ -65,7 +73,7 @@ public class SiteTests extends BaseTest {
         site = siteHelper.createNewRingAndSite(ring,site);
     }
 
-     @Test(groups = {"Integration"},description = "login",priority = 2)
+    @Test(groups = {"Integration"},description = "login",priority = 2)
     public void addNewSiteMoreThan8Characters_Site(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteTracker = mainSideMenu.goToSiteTracker();
@@ -117,7 +125,7 @@ public class SiteTests extends BaseTest {
             else
                 softAssert.assertTrue(false,"Looks Like something went wrong with alerts");
         }
-                softAssert.closeAssert();
+        softAssert.closeAssert();
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 3)
@@ -131,15 +139,15 @@ public class SiteTests extends BaseTest {
             softAssert.assertTrue(siteTracker.isDataPresentInTable(),"The site should have been created");
             addNewSite = siteTracker.selectEditOption();
             softAssert.assertTrue(addNewSite.verifyDoNotUseSpectrumSpatialAPI(""),"should be null selected");
-            softAssert.assertTrue(addNewSite.verifyGeoLocationDetailsIsPresent(),"geo details should be present");
+            softAssert.assertTrue(addNewSite.verifyGeoLocationDetailsIsPresentWithoutAlert(),"geo details should be present");
             softAssert.assertTrue(siteTracker.checkForPageLoad(),"ring tracker page loaded");
         }
         else
             softAssert.assertTrue(false,"SITE GENERATION IS AN ISSUE");
-            softAssert.closeAssert();
+        softAssert.closeAssert();
     }
 
-    //@Test(groups = {"Integration"},description = "siteCreationWithoutSpectrumSpacialCall",priority = 3)
+    @Test(groups = {"Integration"},description = "siteCreationWithoutSpectrumSpacialCall",priority = 3)
     public void siteCreationWithoutSpectrumSpacialCall_Site(Method method) throws Exception {
         Site siteNew = new Site(site.ringId,"Candidate","New Site");
         siteNew = siteHelper.createNewSiteWithoutGeoLocation(siteNew);
@@ -150,7 +158,7 @@ public class SiteTests extends BaseTest {
         addNewSite = siteTracker.selectEditOption();
         addNewSite.setNoSpectrumCallTo("yes");
         addNewSite.addGeoLocation();
-        softAssert.assertFalse(addNewSite.verifyGeoLocationDetailsIsPresent(),"should not be present");
+        softAssert.assertFalse(addNewSite.verifyGeoLocationDetailsIsPresentWithAlert(),"should not be present");
         softAssert.closeAssert();
     }
 
@@ -170,10 +178,10 @@ public class SiteTests extends BaseTest {
             softAssert.assertContains(siteTracker.getCellValue(siteTracker.tableHandle("S:Site Status")),"Active", "Status should match");
             softAssert.assertContains(siteTracker.getCellValue(siteTracker.tableHandle("S:Build Status")),"Candidate", "Build Status should match");
         }
-            softAssert.closeAssert();
+        softAssert.closeAssert();
     }
-        @Test(groups = {"Integration"},description = "login",priority = 3)
-        public void addNewSiteButCancel_Site(Method method) throws Exception {
+    @Test(groups = {"Integration"},description = "login",priority = 3)
+    public void addNewSiteButCancel_Site(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteTracker = mainSideMenu.goToSiteTracker();
         addNewSite = siteTracker.selectAddNewSiteOption();
@@ -212,7 +220,6 @@ public class SiteTests extends BaseTest {
         softAssert.assertTrue(oldDocCount<newDocCount,"The doc is added");
         softAssert.closeAssert();
     }
-
     @Test(groups = {"Integration"},description = "When the Ring Status is Changed to ON-Hold,Dead",priority = 4)
     public void RingStatusONHold_Site(Method method) throws Exception
     {
@@ -283,6 +290,9 @@ public class SiteTests extends BaseTest {
     public void SiteStatusInactiveButRingStatusOnHold_Site(Method method) throws Exception
     {
         AssertionsUtil softAssert = new AssertionsUtil();
+
+
+
         siteTracker = mainSideMenu.goToSiteTracker();
         //Use Api to create ring and site
         String ringId = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
@@ -302,5 +312,6 @@ public class SiteTests extends BaseTest {
         softAssert.assertContains(siteTracker.getCellValue(siteTracker.tableHandle("S:Site Status")),"Inactive", "The Site should be in Inactive state");
         softAssert.closeAssert();
     }
+
 
 }

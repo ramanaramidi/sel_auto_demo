@@ -24,8 +24,6 @@ public class RFSectorTests extends BaseTest {
 
     public  String envURL = System.getProperty("TestEnv");
     public  String testSuite = System.getProperty("TestRunner");
-    public Users alphaUser = new Users();
-    public Users superUser = new Users();
     LoginPage loginPage;
     MainSideMenu mainSideMenu;
     RFSectorPage rfSectorPage;
@@ -34,6 +32,7 @@ public class RFSectorTests extends BaseTest {
     SectorHelper sectorHelper = new SectorHelper();
     SiteHelper siteHelper = new SiteHelper();
     String RFSectorID1;
+    String RFSectorID2;
     Sector sector5G;
     Sector sectorLTE;
     Sector sectorNBIOT;
@@ -43,8 +42,6 @@ public class RFSectorTests extends BaseTest {
 
     public RFSectorTests()
     {
-        alphaUser = UserData.getAlphaUserDetails(alphaUser);
-        superUser = UserData.getSuperUserDetails(superUser);
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
         if(testSuite == null) {testSuite = 	"TestRunner.xml";}
 
@@ -52,15 +49,22 @@ public class RFSectorTests extends BaseTest {
 
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
-    public void login(Method method) throws Exception {
+    public void login_RfSectorSet1(Method method) throws Exception {
         loginPage = new LoginPage(driver);
-        loginPage.doLogin(LoginOptionEnum.SAML);
-        String url = loginPage.getLoginUrl(alphaUser);
-        if(url!=null){
-            loginPage.launchUrl(url);
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
+            loginPage.login(alphaUser);
+        }
+        else{
+            loginPage.doLogin(LoginOptionEnum.SAML);
+            String url = loginPage.getLoginUrl(alphaUser);
+            if(url!=null){
+                loginPage.launchUrl(url);
+            }
         }
         generateData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
+
     }
 
     private void generateData(){
@@ -69,6 +73,7 @@ public class RFSectorTests extends BaseTest {
         siteForSector = new Site(ringIdForSector,"Primary","Active Site");
         siteForSector = siteHelper.createActiveRingAndSite(ringActiveForSector,siteForSector);
         RFSectorID1 = siteForSector.siteId+"_21LPW";
+        RFSectorID2 = siteForSector.siteId+"_22LPW";
         sector5G = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_12NEB"));
         sectorLTE = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_13LAA"));
         sectorNBIOT = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_23TEA"));
@@ -124,12 +129,12 @@ public class RFSectorTests extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage= mainSideMenu.goToRFSectorTracker();
         rfSectorPage=rfSectorPage.addNewRFSector();
-        rfSectorPage.verifyAddNewRFSector(RFSectorID1,siteForSector.siteId);
-        rfSectorPage.searchForValue(RFSectorID1,"SEC:Sector ID");
+        rfSectorPage.verifyAddNewRFSector(RFSectorID2,siteForSector.siteId);
+        rfSectorPage.searchForValue(RFSectorID2,"SEC:Sector ID");
         rfSectorPage=rfSectorPage.editRFSector();
         rfSectorPage.changeSectorTypeToSmallCell();
        // String  response = rfSectorPage.searchForValueInGrid("SEC:Sector Type","SEC:Sector ID",RFSectorID1);
-         rfSectorPage.searchForValue(RFSectorID1,"SEC:Sector ID");
+         rfSectorPage.searchForValue(RFSectorID2,"SEC:Sector ID");
          softAssert.assertContains(rfSectorPage.getCellValue(rfSectorPage.tableHandle("SEC:Sector Type")),"Small Cell", "Small Cell should be set");
        // softAssert.assertContains(response,siteForSector.siteId,"RF Sector created" );
         softAssert.closeAssert();
