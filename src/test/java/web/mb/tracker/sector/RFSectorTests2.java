@@ -41,7 +41,7 @@ public class RFSectorTests2 extends BaseTest {
     public RFSectorTests2()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
         rfEngineer = UserData.getRfEngUserDetails(rfEngineer);
         sitedev = UserData.getSite_DevUserDetails(sitedev);
     }

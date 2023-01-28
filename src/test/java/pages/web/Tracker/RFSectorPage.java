@@ -107,6 +107,9 @@ public class RFSectorPage extends BasePage
     public By DASTab = By.xpath("//div[@id='tabName15']");
     public By projectSearchButton = By.xpath("//input[@id='btnSearch0']");
     public By projectSearchTextBox = By.xpath("//input[@id='qsValue0']");
+    public By mainLogo1 = By.xpath("//*[@id='mainLogo']");
+    public By ProjectTracker = By.xpath("//div[text()='Project Tracker']");
+    public By PJSectorsTab = By.xpath("//div[@title='PJ:Sectors']");
     String parentWindow;
     String parentWindow1;
     String parentWindow2;
@@ -1690,4 +1693,44 @@ public class RFSectorPage extends BasePage
         return false;
     }
 
+    public void getPJ_Sectors() throws Exception {
+        String parent0 = switchToChildWindows();
+        fullScreenChildWindow();
+        sleep(3);
+        WebElement element = inputBoxDataBySname("SEC:Pole Owner");
+        scrollToElement(element);
+        sleep(4);
+        dropDownDotsClick("SEC:Project ID");
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        sleep(4);
+        click(find(projectSearchTextBox));
+        setText(find(projectSearchTextBox),"00TESTOA-0002037960");
+        click(find(projectSearchButton));
+        radioButtonClick("PJ:Project ID", "00TESTOA-0002037960");
+        click(find(okButton1));
+        switchToSpecificWindow(parent);
+        sleep(3);
+        click(pencilIcon("SEC:Project ID").get(0));
+        String parent1 =  switchToChildWindows();
+        fullScreenChildWindow();
+        click(find(PJSectorsTab));
+        // searchForValue("00TESTOA-0002070764","SEC:Project ID");
+        // searchForValue("00TESTOA_A1GPV","SEC:Sector ID");
+        click(find(okButton));
+        sleep(2);
+        switchToSpecificWindow(parent1);
+        click(find(okButton));
+        sleep(2);
+        switchToSpecificWindow(parent0);
+        sleep(2);
+    }
+    public void clickMainLogo() throws Exception {
+        click(find(mainLogo1));
+    }
+    public ProjectTrackerPage clickingProjectTracker() throws Exception {
+        waitUntilVisibleElement(find(ProjectTracker));
+        click(find(ProjectTracker));
+        return new ProjectTrackerPage(driver);
+    }
 }

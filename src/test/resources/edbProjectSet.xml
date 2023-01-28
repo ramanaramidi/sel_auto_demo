@@ -17,10 +17,15 @@
         <!--        <parameter name="deviceType" value=""/>-->
 
         <classes>
-            <!--users-->
-            <class name="web.mb.users.VendorTests"/>
-<!--            <class name="web.mb.users.SdmUserTests"/>-->
-<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
+            <!--tracker-ntp-->
+            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>
+            <class name="web.mb.tracker.ntp.ProjectNtpTests"/>
+            <!--tracker-sector-->
+            <class name="web.mb.tracker.sector.ProvisionFieldsTests"/>
+
+            <!--edb-->
+            <class name="web.mb.edb.EdbConsumerTest"/>
+            <class name="web.mb.edb.EdbProducerTest"/>
 
         </classes>
     </test>

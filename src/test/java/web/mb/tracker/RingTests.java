@@ -2,19 +2,13 @@ package web.mb.tracker;
 
 import common.BaseTest;
 import commons.enums.LoginOptionEnum;
-import commons.enums.MarketEnum;
-import commons.enums.SeedingDataTypeEnum;
 import commons.objects.Ring;
-import commons.objects.Trackers;
-import commons.objects.Users;
 import org.testng.annotations.Test;
 import pages.web.Tracker.AddRingPage;
 import pages.web.Tracker.RingTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
 import rest.ring.RingHelper;
-import testData.DataCollector;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -34,7 +28,7 @@ public class RingTests extends BaseTest {
     public RingTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)

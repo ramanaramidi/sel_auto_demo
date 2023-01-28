@@ -40,6 +40,7 @@ public class LoginPage extends BasePage {
     public By email = By.xpath("//input[@id='username']");
     public By password = By.xpath("//input[@id='password']");
     public By loginSubmit = By.xpath("//input[@type='submit']");
+    public By authNote = By.xpath("//div[@id='auth_message']");
 
 
     public MainSideMenu LoginAsUser(Users user) throws Exception {
@@ -62,8 +63,8 @@ public class LoginPage extends BasePage {
         waitUntilVisibleElement(find(loginAsConfirmation));
         click(find(loginAsConfirmation));
         switchToSpecificWindow(parent1);
-        sleep(10);
-        waitForPageToLoad();
+        sleep(20);
+        //waitForPageToLoad();
         return new MainSideMenu(driver);
     }
 
@@ -85,6 +86,15 @@ public class LoginPage extends BasePage {
             Users currentUser = userType;
             setEmailAddress(currentUser);
             submitEmailAddress();
+            sleep(1);
+            if(findAll(authNote).size()>0) {
+                if (getText(findAll(authNote).get(0)).equals("")) {
+                    System.out.println("Login was a success in first attempt");
+                } else {
+                    submitEmailAddress();
+                    System.out.println("Login second attempt");
+                }
+            }
             sleep(15);
             if(currentUser.getIsContractor().equals("false")){
                 return null;
@@ -131,6 +141,17 @@ public class LoginPage extends BasePage {
         setText(find(email),user.getUserName());
         setText(find(password),user.getPassword());
         find(loginSubmit).click();
+        sleep(1);
+        if(findAll(authNote).size()>0) {
+            if (getText(findAll(authNote).get(0)).equals("")) {
+                System.out.println("::" + "LOGIN WAS SUCCESSFUL IN FIRST ATTEMPT");
+            } else {
+                setText(find(email), user.getUserName());
+                setText(find(password), user.getPassword());
+                find(loginSubmit).click();
+                System.out.println("::" + "LOGIN WAS TRIED AGAIN");
+            }
+        }
     }
 
     public String getLoginPageTitle() {

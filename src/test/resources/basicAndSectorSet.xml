@@ -17,10 +17,21 @@
         <!--        <parameter name="deviceType" value=""/>-->
 
         <classes>
-            <!--users-->
-            <class name="web.mb.users.VendorTests"/>
-<!--            <class name="web.mb.users.SdmUserTests"/>-->
-<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
+            <!--tracker-sector-->
+
+            <class name="web.mb.tracker.sector.RFSectorTests"/>
+            <class name="web.mb.tracker.AcsTests"/>
+            <class name="web.mb.tracker.DevProjectTests"/>
+            <class name="web.mb.tracker.sector.StatusFlows"/>
+            <class name="web.mb.tracker.DevTests"/>
+
+            <class name="web.mb.tracker.DevPORTests"/>
+            <class name="web.mb.tracker.sector.DevSectorTests"/>
+            <class name="web.mb.tracker.sector.RecordManagementTests"/>
+            <class name="web.mb.tracker.sector.RFSectorTests2"/>
+
+            <class name="web.mb.tracker.DevRingTests"/>
+            <class name="web.mb.tracker.DevSiteTests"/>
 
         </classes>
     </test>

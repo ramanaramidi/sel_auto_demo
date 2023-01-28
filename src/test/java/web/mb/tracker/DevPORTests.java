@@ -29,7 +29,7 @@ public class DevPORTests  extends BaseTest {
             envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");
         }
         if (testSuite == null) {
-            testSuite = "TestRunner.xml";
+            testSuite = "sectorSet.xml";
         }
     }
 
@@ -61,7 +61,7 @@ public class DevPORTests  extends BaseTest {
         softAssert.assertTrue(porTrackerPage.getProgramConcat(),"Program Dropdown should be concatenated with the PlanType_ReleaseVersion_Category ");
         porTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
- }
+    }
     @Test(groups = {"Integration"},description = "Edit the Program with required fields",priority = 3)
     public void updateFieldsForProgram() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -90,7 +90,7 @@ public class DevPORTests  extends BaseTest {
         softAssert.assertFalse(porTrackerPage.verifyStats(),"Stats will be Displayed");
         porTrackerPage.switchToTrackerCancel(parentWindow);
         softAssert.closeAssert();
- }
+    }
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Admin Add Page and click on Apply",priority = 6)
     public void porAdminProgramNameByASC_Por(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();

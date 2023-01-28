@@ -2,17 +2,11 @@ package web.mb.users;
 
 import common.BaseTest;
 import commons.enums.LoginOptionEnum;
-import commons.enums.MarketEnum;
-import commons.enums.SeedingDataTypeEnum;
-import commons.objects.Trackers;
-import commons.objects.Users;
 import org.testng.annotations.Test;
 import pages.web.Tracker.AddRingPage;
 import pages.web.Tracker.RingTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
-import testData.DataCollector;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -32,7 +26,7 @@ public class NonSuperUserTests extends BaseTest {
     public NonSuperUserTests()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
 
     }
 

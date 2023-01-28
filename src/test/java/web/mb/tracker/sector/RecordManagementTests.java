@@ -14,7 +14,6 @@ import rest.misc.MiscHelper;
 import rest.project.ProjectHelper;
 import rest.sector.SectorHelper;
 import rest.site.SiteHelper;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -45,7 +44,7 @@ public class RecordManagementTests extends BaseTest {
     public RecordManagementTests()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
        // rfEngineer = UserData.getRfEngUserDetails(rfEngineer);
     }
 

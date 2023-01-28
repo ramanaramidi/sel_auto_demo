@@ -17,11 +17,12 @@
         <!--        <parameter name="deviceType" value=""/>-->
 
         <classes>
-            <!--users-->
-            <class name="web.mb.users.VendorTests"/>
-<!--            <class name="web.mb.users.SdmUserTests"/>-->
-<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
-
+            <!--feature-->
+            <class name="web.mb.feature.pier.PierCrTests"/>
+            <class name="web.mb.feature.MidCellAcsTests"/>
+            <class name="web.mb.feature.MidcellTests"/>
+            <!--reports-->
+            <class name="web.mb.reports.TaskVizionReportTests"/>
         </classes>
     </test>
 </suite>

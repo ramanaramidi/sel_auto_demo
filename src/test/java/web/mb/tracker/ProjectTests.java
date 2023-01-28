@@ -14,7 +14,6 @@ import pages.web.onboarding.LoginPage;
 import rest.por.PorHelper;
 import rest.project.ProjectHelper;
 import rest.site.SiteHelper;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -43,7 +42,7 @@ public class ProjectTests extends BaseTest {
     public ProjectTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
     }
 
 
@@ -61,6 +60,7 @@ public class ProjectTests extends BaseTest {
                 loginPage.launchUrl(url);
             }
         }
+        commonDataGenerator();
         mainSideMenu = loginPage.LoginAsUser(superUser);
 
     }

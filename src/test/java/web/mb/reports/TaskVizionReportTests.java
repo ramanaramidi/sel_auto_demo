@@ -24,7 +24,7 @@ public class TaskVizionReportTests extends BaseTest {
             envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");
         }
         if (testSuite == null) {
-            testSuite = "TestRunner.xml";
+            testSuite = "sectorSet.xml";
         }
     }
 

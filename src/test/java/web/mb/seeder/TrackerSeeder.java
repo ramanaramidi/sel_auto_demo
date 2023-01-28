@@ -54,7 +54,7 @@ public class TrackerSeeder extends BaseTest{
         superUser = UserData.getSuperUserDetails(superUser);
         dataObject = TrackerData.getInstance();
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
 
     }
 

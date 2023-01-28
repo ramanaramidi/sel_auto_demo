@@ -31,7 +31,7 @@ public class AcsTests extends BaseTest {
     AddRingPage addNewRing;
     AcsPage acsPage;
     SiteHelper siteHelper = new SiteHelper();
-   ;
+    ;
     public AcsTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
@@ -40,7 +40,7 @@ public class AcsTests extends BaseTest {
 
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
-    public void login_Acs(Method method) throws Exception {
+    public void login(Method method) throws Exception {
         loginPage = new LoginPage(driver);
         if(alphaUser.getIsServiceAccount().equals("true")){
             loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
@@ -72,12 +72,12 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveCandidate.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryHub();
         siteTracker = acsPage.goToSiteTracker();
         siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage= addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryHub();
+        acsPage.selectSiteCategoryAggregateRouter();
         acsPage.getSiteCode(siteActiveCandidate.siteId);
         softAssert.assertTrue(acsPage.hubClusterIdValidation(),"cluster id should display");
         acsPage.goToSiteTracker();
@@ -96,7 +96,7 @@ public class AcsTests extends BaseTest {
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
         acsPage.selectSiteCategoryHubForHubClusterId();
-        softAssert.assertFalse(acsPage.hubClusterIdValidation(), "cluster id should Not display");
+        softAssert.assertTrue(acsPage.hubClusterIdValidation(), "cluster id should display");
         acsPage.goToSiteTracker();
         softAssert.closeAssert();
     }
@@ -117,12 +117,12 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveCandidate.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryHub();
         siteTracker = acsPage.goToSiteTracker();
         siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage= addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryHub();
+        acsPage.selectSiteCategoryAggregateRouter();
         acsPage.getSiteCode(siteActiveCandidate.siteId);
         softAssert.assertTrue(acsPage.hubClusterIdValidation(),"cluster id should display");
         acsPage.goToSiteTracker();
@@ -143,18 +143,29 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveCandidate.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+
+        acsPage.selectSiteCategoryHub();
         siteTracker = acsPage.goToSiteTracker();
         siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
-        acsPage = addNewSite.goToAcsSection();
+        acsPage= addNewSite.goToAcsSection();
         acsPage.selectSiteCategoryBbu();
         acsPage.getSiteCode(siteActiveCandidate.siteId);
+
+
+
+        // acsPage.selectSiteCategoryAggregateRouter();
+        // siteTracker = acsPage.goToSiteTracker();
+        // siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
+        // addNewSite = siteTracker.selectEditOption();
+        // acsPage = addNewSite.goToAcsSection();
+        //acsPage.selectSiteCategoryBbu();
+        // acsPage.getSiteCode(siteActiveCandidate.siteId);
         acsPage.selectInstallationProject();
         softAssert.assertTrue(acsPage.hubClusterIdValidation(),"cluster id should display");
         acsPage.goToSiteTracker();
         softAssert.closeAssert();
-      }
+    }
     @Test(groups = {"Integration"},description = "Acs Test For Das Hub With Hub Site Id",priority = 6)
     public void dasHubActiveRingAndSiteAcsWithHubSiteId(Method method) throws Exception {
         //DATA CREATION
@@ -171,12 +182,12 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveCandidate.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryHub();
         siteTracker = acsPage.goToSiteTracker();
         siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage= addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryHub();
+        acsPage.selectSiteCategoryAggregateRouter();
         acsPage.getSiteCode(siteActiveCandidate.siteId);
         softAssert.assertTrue(acsPage.hubClusterIdValidation(),"cluster id should display");
         acsPage.goToSiteTracker();
@@ -197,7 +208,7 @@ public class AcsTests extends BaseTest {
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
         acsPage.selectSiteCategoryHubForHubClusterId();
-        softAssert.assertFalse(acsPage.hubClusterIdValidation(), "cluster id should Not display");
+        softAssert.assertTrue(acsPage.hubClusterIdValidation(), "cluster id should display");
         acsPage.goToSiteTracker();
         softAssert.closeAssert();
     }
@@ -225,12 +236,18 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveCandidate.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryHub();
         siteTracker = acsPage.goToSiteTracker();
         siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage= addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryHub();
+        acsPage.selectSiteCategoryAggregateRouter();
+        // acsPage.selectSiteCategoryAggregateRouter();
+        // siteTracker = acsPage.goToSiteTracker();
+        //siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
+        // addNewSite = siteTracker.selectEditOption();
+        // acsPage= addNewSite.goToAcsSection();
+        //// acsPage.selectSiteCategoryHub();
         acsPage.getSiteCode(siteActiveCandidate.siteId);
         softAssert.assertTrue(acsPage.hubClusterIdValidation(),"cluster id should display");
         acsPage.goToSiteTracker();
@@ -259,15 +276,17 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveCandidate.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryAggregateRouter1();
         siteTracker = acsPage.goToSiteTracker();
         siteTracker.searchForValue(siteActiveFinal.siteId,"S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
         acsPage.selectSiteCategoryBbu();
-        acsPage.getSiteCode(siteActiveCandidate.siteId);
+        acsPage.getSiteCode1(siteActiveCandidate.siteId);
+        softAssert.assertFalse(acsPage.isDataPresentInTable(), "Table Doesn't contains the Router SiteId's");
+        acsPage.goToAcsPage();
         acsPage.selectInstallationProject();
-        softAssert.assertTrue(acsPage.hubClusterIdValidation(),"cluster id should display");
+        softAssert.assertFalse(acsPage.hubClusterIdValidation(),"cluster id should not display");
         acsPage.goToSiteTracker();
         softAssert.closeAssert();
     }
@@ -285,10 +304,10 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveFinal.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryAggregateRouterForClusterIdValidation();
         acsPage.acsSiteFields();
         //acsPage.clickApply();
-        softAssert.assertTrue(acsPage.hubClusterIdValidation(), "cluster id should display");
+        softAssert.assertFalse(acsPage.hubClusterIdValidation(), "cluster id should not display");
         acsPage.goToSiteTracker();
         softAssert.closeAssert();
 
@@ -307,10 +326,10 @@ public class AcsTests extends BaseTest {
         siteTracker.searchForValue(siteActiveFinal.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryAggregateRouterForClusterIdValidation();
         acsPage.acsSiteFields();
-      //  acsPage.clickApply();
-        softAssert.assertTrue(acsPage.hubClusterIdValidation(), "cluster id should display");
+        //  acsPage.clickApply();
+        softAssert.assertFalse(acsPage.hubClusterIdValidation(), "cluster id should not display");
         acsPage.goToSiteTracker();
         softAssert.closeAssert();
 
@@ -325,7 +344,7 @@ public class AcsTests extends BaseTest {
         siteTracker.selectSiteWithRingStatusActive();
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryHub();
         acsPage.acsSiteFields();
         softAssert.assertTrue(acsPage.hubClusterIdValidation(), "cluster id should display");
         acsPage.goToSiteTracker();
@@ -340,7 +359,7 @@ public class AcsTests extends BaseTest {
         siteTracker.selectSiteWithRingStatusActive();
         addNewSite = siteTracker.selectEditOption();
         acsPage = addNewSite.goToAcsSection();
-        acsPage.selectSiteCategoryAggregateRouter();
+        acsPage.selectSiteCategoryHub();
         acsPage.acsSiteFields();
         softAssert.assertTrue(acsPage.hubClusterIdValidation(), "cluster id should display");
         acsPage.goToSiteTracker();

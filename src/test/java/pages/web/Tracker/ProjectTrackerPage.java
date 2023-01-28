@@ -86,6 +86,9 @@ public class ProjectTrackerPage extends BasePage {
     public By documentDeleteOption = By.xpath("//div[text()='Delete']");
     public By currentVersionCheckBox = By.xpath("(//div[@class='hdr_cell']//div[text()='D:Current Version?']/ancestor::table/../following-sibling::div//label/input)[1]");
     public By onAiroffAirTab = By.xpath("//div[@title='PJ:On Air / Off Air & Comp Obj']");
+    public By listItems = By.xpath("//*[@id='gridbox0']/div[2]/table/tbody/tr/td");
+    public By generalInfoTab = By.xpath("//div[@title='PJ:General Info']");
+    public By projectOffAirButton = By.xpath("(//td//label[contains(text(),'PJ:Project')]//b//following::td//following::div//input)[1]");
     String parentWindow;
     String parentWindow1;
     String parentWindowHolder;
@@ -1118,41 +1121,69 @@ public class ProjectTrackerPage extends BasePage {
         sleep(2);
     }
 
-    public String getUnSelectedTasks() throws Exception {
-//        switchToChildWindows();
-//        fullScreen();
-        sleep(10);
-        dropDownDotsClick("PJ:Project Completion Objective");
-        switchToChildWindows();
+    public boolean getUnSelectedTasks() throws Exception {
+        sleep(5);
+        click(find(generalInfoTab));
+        scrollToElement(inputBoxDataBySname("PJ:Project Off Air Objective Remaining"));
+        sleep(2);
+        click(find(projectOffAirButton));
+        String parent =  switchToChildWindows();
         fullScreenChildWindow();
-        List<WebElement> element = findAll(checkBoxList);
-        String list = find(tableValues).getText();
-        System.out.println("Project Objective column values - " + list);
-        for (int i=0; i<list.length();i++){
-            String option = element.get(i).getAttribute("checked");
-            System.out.println("option Value - " + option);
+        List<WebElement> elements = findAll(listItems);
+        for (int i = 0; i<elements.size(); i++){
+            if (elements.get(i).isSelected() == false) {
+                String text = elements.get(i).getText();
+                System.out.println("Un Selected option - " + text);
+            }
+            else {
+                System.out.println("Selected option - " + elements.get(i).getText());
+            }
         }
-        return list;
+        switchToSpecificWindow(parent);
+        sleep(4);
+
+        boolean L2100AWS3 = inputBoxDataBySname("PJ(P 7450) L2100 AWS3 OffAir").isEnabled();
+        System.out.println("L2100AWS3 Field is Enabled - " + L2100AWS3);
+        String L2100 = inputBoxDataBySname("PJ(P 7450) L2100 AWS3 OffAir").getAttribute("value");
+        System.out.println("L2100AWS3 Field Value is - " + L2100);
+        boolean a= L2100.equalsIgnoreCase("N/A");
+        System.out.println("L2100 is equal to N/A - " + a);
+
+        boolean L2500 = inputBoxDataBySname("PJ(P 7460) L2500 OffAir").isEnabled();
+        System.out.println("Project Objective Values are - " + L2500);
+        String l2500 = inputBoxDataBySname("PJ(P 7460) L2500 OffAir").getAttribute("value");
+        System.out.println("l2500 is equal to N/A - " + l2500);
+
+        boolean L700 = inputBoxDataBySname("PJ(P 7525) L700 OffAir").isEnabled();
+        System.out.println("Project Objective Values are - " + L700);
+        String l700 = inputBoxDataBySname("PJ(P 7525) L700 OffAir").getAttribute("value");
+        System.out.println("Project Objective Values are - " + l700);
+
+        if (L2100.equalsIgnoreCase("N/A") && (l2500.equalsIgnoreCase("N/A") && (l700.equalsIgnoreCase("N/A")))){
+            return true;
+        }
+        else
+            return false;
     }
 
-    public void checkTask() throws Exception {
-        sleep(3);
-        String objectiveValues = find(textArea).getText();
-        System.out.println("Project Objective Values are - " + objectiveValues);
-        String notSelectedTask = getUnSelectedTasks();
-        if (objectiveValues.contains(notSelectedTask)){
-            System.out.println("not Selected task is-  " + notSelectedTask);
-        }
-        else{
-            goToTasksPage();
-            searchForValue(notSelectedTask,"T:Task");
-            WebElement checkBox = find(NACheckBox);
-            boolean check = isCheckboxSelected("cb-0-10345003570-6");
-            System.out.println("check box is checked/unchecked" + check);
-            checkBox.isSelected();
-
-        }
-    }
+//    public void checkTask() throws Exception {
+//        sleep(3);
+//        String objectiveValues = find(textArea).getText();
+//        System.out.println("Project Objective Values are - " + objectiveValues);
+//        String notSelectedTask = getUnSelectedTasks();
+//        if (objectiveValues.contains(notSelectedTask)){
+//            System.out.println("not Selected task is-  " + notSelectedTask);
+//        }
+//        else{
+//            goToTasksPage();
+//            searchForValue(notSelectedTask,"T:Task");
+//            WebElement checkBox = find(NACheckBox);
+//            boolean check = isCheckboxSelected("cb-0-10345003570-6");
+//            System.out.println("check box is checked/unchecked" + check);
+//            checkBox.isSelected();
+//
+//        }
+//    }
 
     public boolean isDocsCountAvailable(String fieldName) throws Exception {
         WebElement docsTotalAndRemaining = inputBoxDataBySname(fieldName);

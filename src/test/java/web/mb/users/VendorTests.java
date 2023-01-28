@@ -4,9 +4,7 @@ import common.BaseTest;
 import commons.constants.Constants;
 import commons.enums.LoginOptionEnum;
 import commons.objects.*;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
 import pages.web.Tracker.ProjectTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
@@ -33,7 +31,7 @@ public class VendorTests extends BaseTest {
             envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");
         }
         if (testSuite == null) {
-            testSuite = "TestRunner.xml";
+            testSuite = "sectorSet.xml";
         }
         ATC_MViscon = UserData.getAtcUserDetails(ATC_MViscon);
     }

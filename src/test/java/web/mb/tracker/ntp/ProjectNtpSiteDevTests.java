@@ -16,8 +16,6 @@ import utility.helper.MiscHelpers;
 
 import java.lang.reflect.Method;
 
-import static commons.enums.LoginOptionEnum.*;
-
 public class ProjectNtpSiteDevTests extends BaseTest {
     LoginPage loginPage;
     MainSideMenu mainSideMenu;
@@ -38,7 +36,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
     public ProjectNtpSiteDevTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
         Site_Dev = UserData.getSite_DevUserDetails(Site_Dev);
     }
 

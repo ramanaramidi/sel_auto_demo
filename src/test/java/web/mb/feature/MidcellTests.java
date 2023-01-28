@@ -42,7 +42,7 @@ public class MidcellTests extends BaseTest {
     public MidcellTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)

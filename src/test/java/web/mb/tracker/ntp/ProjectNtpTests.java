@@ -10,7 +10,6 @@ import pages.web.Tracker.ProjectTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
 import rest.project.ProjectHelper;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -35,7 +34,7 @@ public class ProjectNtpTests extends BaseTest {
     public ProjectNtpTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)

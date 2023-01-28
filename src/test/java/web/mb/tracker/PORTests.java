@@ -1,12 +1,11 @@
 package web.mb.tracker;
 
 import common.BaseTest;
-import commons.constants.Constants;
 import commons.enums.LoginOptionEnum;
 import commons.objects.Por;
 import commons.objects.Ring;
 import commons.objects.Site;
-import commons.objects.Users;
+
 import java.lang.reflect.Method;
 import org.testng.annotations.Test;
 import pages.web.Tracker.AddPORPage;
@@ -16,7 +15,6 @@ import pages.web.onboarding.LoginPage;
 import rest.por.PorHelper;
 import rest.ring.RingHelper;
 import rest.site.SiteHelper;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -46,7 +44,7 @@ public class PORTests extends BaseTest {
             envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");
         }
         if (testSuite == null) {
-            testSuite = "TestRunner.xml";
+            testSuite = "sectorSet.xml";
         }
     }
 

@@ -47,7 +47,7 @@ public class ProvisionFieldsTests extends BaseTest {
     public ProvisionFieldsTests()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
         rfEngineer = UserData.getRfEngUserDetails(rfEngineer);
     }
 

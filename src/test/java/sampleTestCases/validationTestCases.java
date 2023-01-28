@@ -24,11 +24,11 @@ public class validationTestCases extends BaseTest {
     public validationTestCases()
     {
         if(envURL == null) {envURL = 	"http://t-mobile.com";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
 
     }
 
-//clean test -DTestRunner=regression.xml -DTestEnv=http://changerecord-site.stg.px-prd01.cf.t-mobile.com
+//clean test -DTestRunner=devSet.xml -DTestEnv=http://changerecord-site.stg.px-prd01.cf.t-mobile.com
 
     @Test(groups = {"Integration"},description = "SAMPLE-001: Verify Sample Integrations test Case - 1")
     public void verifyIntegrationsTestCase_1(Method method) throws InterruptedException {

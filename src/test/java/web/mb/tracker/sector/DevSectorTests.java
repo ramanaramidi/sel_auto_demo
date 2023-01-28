@@ -14,7 +14,6 @@ import rest.misc.MiscHelper;
 import rest.ring.RingHelper;
 import rest.sector.SectorHelper;
 import rest.site.SiteHelper;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -54,7 +53,7 @@ public class DevSectorTests extends BaseTest {
             envURL = "https://magentabuiltstg.t-mobile.com/Login.do";
         }
         if (testSuite == null) {
-            testSuite = "TestRunner.xml";
+            testSuite = "sectorSet.xml";
         }
 
     }

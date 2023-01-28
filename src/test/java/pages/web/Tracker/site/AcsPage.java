@@ -6,6 +6,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
 
+import java.util.List;
+
 public class AcsPage extends BasePage {
 
     public WebDriver driver;
@@ -26,10 +28,12 @@ public class AcsPage extends BasePage {
     public String topDivSearchTypeDropdown = "//div[@class='component item_select'][normalize-space()='textName']";
     public By hubroutersiteid = By.xpath("//label[text()='S:Hub/Router Site ID']");
     public By activering = By.xpath("//td[text()='Active']");
+    public By  siteTrackerTableElement = By.xpath("//tr[contains(@class,'ev_dhx_skyblue rowselected')]//parent::*");
     String parentWindow;
+    String parent2;
 
 
- public void selectSiteCategoryAggregateRouter() throws Exception{
+    public void selectSiteCategoryAggregateRouter() throws Exception{
         parentWindow = switchToChildWindows();
         fullScreenChildWindow();
         WebElement sitecategory =selectionBoxBySname("S:Site Category").get(0);
@@ -37,14 +41,35 @@ public class AcsPage extends BasePage {
         selectDropdownOption(sitecategory,"Aggregate Router");
         click(find(applyButton));
         sleep(3);
- }
+        dropDownDotsClick("S:Hub Site ID");
+    }
+    public void selectSiteCategoryAggregateRouterForClusterIdValidation() throws Exception{
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory =selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory,"Aggregate Router");
+        click(find(applyButton));
+        sleep(3);
+        //dropDownDotsClick("S:Hub Site ID");
+    }
+    public void selectSiteCategoryAggregateRouter1() throws Exception{
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        WebElement sitecategory =selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(sitecategory);
+        selectDropdownOption(sitecategory,"Aggregate Router");
+        click(find(applyButton));
+        sleep(3);
+        //dropDownDotsClick("S:Hub Site ID");
+    }
 
- public SiteTrackerPage goToSiteTracker() throws Exception {
-     click(find(okButton));
-     sleep(5);
-     switchToSpecificWindow(parentWindow);
-     return new SiteTrackerPage(driver);
- }
+    public SiteTrackerPage goToSiteTracker() throws Exception {
+        click(find(okButton));
+        sleep(5);
+        switchToSpecificWindow(parentWindow);
+        return new SiteTrackerPage(driver);
+    }
 
     public void selectSiteCategoryHub() throws Exception {
         parentWindow = switchToChildWindows();
@@ -54,11 +79,11 @@ public class AcsPage extends BasePage {
         selectDropdownOption(sitecategory, "Hub");
         click(find(applyButton));
         sleep(5);
-       // click(find(okButton));
-       // sleep(10);
-        dropDownDotsClick("S:Hub/Router Site ID");
+        //click(find(okButton));
+        // sleep(10);
+        // dropDownDotsClick("S:Hub Site ID");
         //click(find(dotsclick));
-       // switchToSpecificWindow(parent1);
+        // switchToSpecificWindow(parentWindow);
 
 
     }
@@ -75,8 +100,8 @@ public class AcsPage extends BasePage {
         WebElement hubrouter = find(hubroutersiteid);
         scrollToElement(hubrouter);
         dropDownDotsClick("S:Hub/Router Site ID");
-       // click(find(dotsclick));
-       // click( lockByLabelText("S:Hub/Router Site ID").get(0));
+        // click(find(dotsclick));
+        // click( lockByLabelText("S:Hub/Router Site ID").get(0));
 
     }
     public void selectSiteCategoryBbu() throws Exception {
@@ -87,8 +112,8 @@ public class AcsPage extends BasePage {
         selectDropdownOption(sitecategory, "BBU/BTS");
         click(find(applyButton));
         sleep(5);
-        dropDownDotsClick("S:Hub/Router Site ID");
-       // click(find(dotsclick));
+        dropDownDotsClick("S:Hub Site ID");
+        // click(find(dotsclick));
     }
 
     public void getSiteCode(String data) throws Exception {
@@ -106,13 +131,36 @@ public class AcsPage extends BasePage {
         switchToSpecificWindow(parent2);
         acsSiteFields();
     }
+    public void getSiteCode1(String data) throws Exception {
+        parent2 = switchToChildWindows();
+        fullScreen();
+        sleep(5);
+        waitUntilVisibleElement(find(searchOption));
+        setText(find(searchOption), data);
+        click(find(searchButton));
+        waitUntilVisibleElement(find(searchOption));
+        fullScreen();
+        sleep(5);
+        //click(find(okButtonforchildwindow));
+        //sleep(3);
+        //switchToSpecificWindow(parent2);
+        //acsSiteFields();
+    }
+    public void goToAcsPage() throws Exception{
+        click(find(okButtonforchildwindow));
+        sleep(3);
+        switchToSpecificWindow(parent2);
+        acsSiteFields();
+
+
+    }
 
     public void selectInstallationProject() throws Exception{
-     //sleep(5);
+        //sleep(5);
         dropDownDotsClick("S:BBU/BTS Installation Project");
         String parent2 = switchToChildWindows();
         fullScreen();
-       // sleep(5);
+        // sleep(5);
         waitUntilVisibleElement(find(searchOption));
         click(find(searchOption));
         setText(find(searchOption),"00TESTOA-0002037960");
@@ -125,46 +173,55 @@ public class AcsPage extends BasePage {
         click(find(applyButton));
         sleep(5);
     }
-     public void addVenueCategoryAndNameToTheRing() throws Exception{
-     parentWindow = switchToChildWindows();
-     waitUntilVisibleElement(find(applyButton));
-     fullScreenChildWindow();
-     inputBoxDataBySname("R:Ring or Venue Name","DAS Venue");
-     WebElement venuecategory =selectionBoxBySname("R:Venue Category").get(0);
-     selectDropdownOption(venuecategory,"Arena - NBA");
-     click(find(applyButton));
-     sleep(5);
-   //  click(find(okButton));
-     //sleep(5);
-     //switchToSpecificWindow(parentWindow);
-      }
+    public void addVenueCategoryAndNameToTheRing() throws Exception{
+        parentWindow = switchToChildWindows();
+        waitUntilVisibleElement(find(applyButton));
+        fullScreenChildWindow();
+        inputBoxDataBySname("R:Ring or Venue Name","DAS Venue");
+        WebElement venuecategory =selectionBoxBySname("R:Venue Category").get(0);
+        selectDropdownOption(venuecategory,"Arena - NBA");
+        click(find(applyButton));
+        sleep(5);
+        //  click(find(okButton));
+        //sleep(5);
+        //switchToSpecificWindow(parentWindow);
+    }
 
-      public void acsSiteFields() throws Exception{
+    public void acsSiteFields() throws Exception{
 
-      WebElement acsumts =  selectionBoxBySname("S:ACS UMTS").get(0);
-      scrollToElement(acsumts);
-      selectDropdownOption(acsumts,"Site passes UMTS coverage criteria for Small Cells");
-      WebElement acsmaintenance =  selectionBoxBySname("S:ACS Maintenance").get(0);
-      selectDropdownOption(acsmaintenance,"Self Perform");
-      inputBoxDataBySname("S:BBU/BTS Head End Address","1234 West Street");
-      WebElement acsowner =  selectionBoxBySname("S:ACS Owner").get(0);
-      scrollToElement(acsowner);
-      selectDropdownOption(acsowner,"ATC");
-      inputBoxDataBySname("S:ACS Management Company","company A");
-      WebElement systembuildyear =  selectionBoxBySname("S:System Build Year").get(0);
-      selectDropdownOption(systembuildyear,"2023");
-      waitUntilVisibleElement(find(applyButton));
-      click(find(applyButton));
-      sleep(5);
-      }
+        WebElement acsumts =  selectionBoxBySname("S:ACS UMTS").get(0);
+        scrollToElement(acsumts);
+        selectDropdownOption(acsumts,"Site passes UMTS coverage criteria for Small Cells");
+        WebElement acsmaintenance =  selectionBoxBySname("S:ACS Maintenance").get(0);
+        selectDropdownOption(acsmaintenance,"Self Perform");
+        inputBoxDataBySname("S:BBU/BTS Head End Address","1234 West Street");
+        WebElement acsowner =  selectionBoxBySname("S:ACS Owner").get(0);
+        scrollToElement(acsowner);
+        selectDropdownOption(acsowner,"ATC");
+        inputBoxDataBySname("S:ACS Management Company","company A");
+        WebElement systembuildyear =  selectionBoxBySname("S:System Build Year").get(0);
+        selectDropdownOption(systembuildyear,"2023");
+        waitUntilVisibleElement(find(applyButton));
+        click(find(applyButton));
+        sleep(5);
+    }
 
     public boolean hubClusterIdValidation() throws Exception{
-     sleep(5);
-     String value=inputBoxDataBySname("S:Hub Cluster ID").getAttribute("origval");
-     if(!value.isEmpty()){
-         return true;
-     }
-     return false;
+        sleep(5);
+        String value=inputBoxDataBySname("S:Hub Cluster ID").getAttribute("origval");
+        if(!value.isEmpty()){
+            return true;
+        }
+        return false;
 
+    }
+    public Boolean isDataPresentInTable() throws Exception {
+        waitUntilVisibleElement(find(siteTrackerTableElement));
+        WebElement ringTrackerTbElement = find(siteTrackerTableElement);
+        List<WebElement> rows = getTableRows(ringTrackerTbElement);
+        List<WebElement> cellData = getTableCellsByRow(rows.get(1));
+        System.out.println("Data" + cellData.get(1).getText());
+        //check if null check needed
+        return !cellData.get(1).getText().isEmpty() && !cellData.get(1).getText().equals(" ");
     }
 }

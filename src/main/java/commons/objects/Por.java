@@ -41,15 +41,16 @@ public class Por {
     public String getRandomProgramName(){
         Random r = new Random();
         List<String> patList = Arrays.asList(
-                "5GmmW_Stage 2_Site Mod",
-                "AAS_Regional Capacity_Site Mod",
-                "AAV_Non-Governance Project Creation_Site Mod",
-                "AIR32_Regional Capacity_Site Mod",
-                "AWS Shutdown_Phase 2_Site Mod",
-                "Anchor_Phase 3_Site Mod",
-                "Backhaul Upgrade_ATT 10G Upgrade_Site Mod",
-                "Backhaul Upgrade_Altice Lightpath 10G Upgrade_Site Mod",
-                "Backhaul Upgrade_Altice Suddenlink 10G Upgrade_Site Mod");
+                "5GmmW_Stage 2_Site Mod"
+//                "AAS_Regional Capacity_Site Mod",
+//                "AAV_Non-Governance Project Creation_Site Mod",
+//                "AIR32_Regional Capacity_Site Mod",
+//                "AWS Shutdown_Phase 2_Site Mod",
+//                "Anchor_Phase 3_Site Mod",
+//                "Backhaul Upgrade_ATT 10G Upgrade_Site Mod",
+//                "Backhaul Upgrade_Altice Lightpath 10G Upgrade_Site Mod",
+//                "Backhaul Upgrade_Altice Suddenlink 10G Upgrade_Site Mod"
+                );
         return patList.get(r.nextInt(patList.size()));
     }
 

@@ -27,7 +27,8 @@ public class EdbConsumerTrackerPage extends BasePage {
         selectSearchType(type);
         click(find(searchButton));
         waitUntilVisibleElement(find(editButton));
-        sleep(10);
+        waitForPageToLoad();
+        sleep(20);
     }
 
     public void selectSearchType(String type) throws Exception {

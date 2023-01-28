@@ -30,7 +30,7 @@ public class SdmUserTests extends BaseTest {
     public SdmUserTests()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
         Dan_SDM = UserData.getSdm_CrownCastleUserDetail(Dan_SDM);
         ATC_AGonzal = UserData.getAtcUserDetail(ATC_AGonzal);
         SBA_AMaldonado = UserData.getSBAUserDetail(SBA_AMaldonado);

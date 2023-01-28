@@ -43,7 +43,7 @@ public class SiteTrackerPage extends BasePage {
     public By totalSiteCount =By.xpath("//span[@id='gridStat0']");
     public By tableHeader = By.xpath("//div[@id='gridbox0']//child::div[@class = 'xhdr']//tr[2]");
     public By tableHeader1 = By.xpath("//div[contains(@class,'customscroll')]//child::td[11]//div//a");
-    public By tableData = By.xpath("//table[@class='obj']//tr");
+    public By tableData = By.xpath("//table[@class='obj overlap']//tr");
     public By singleRowValueSearch = By.xpath("//div[contains(@class,'objbox customscroll')]//table[contains(@class,'obj')]//tr//td");
     public By activering = By.xpath("//td[text()='Active']");
     public By siteCodeSearchButton = By.xpath("//*[@id='btnSearch0']");

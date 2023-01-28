@@ -62,7 +62,7 @@ public class PierCrTests extends BaseTest {
       envURL = "https://magentabuiltstg.t-mobile.com/Login.do";
     }
     if (testSuite == null) {
-      testSuite = "TestRunner.xml";
+      testSuite = "sectorSet.xml";
     }
   }
 
@@ -145,11 +145,11 @@ public class PierCrTests extends BaseTest {
     System.out.println("PROJECT_New " + PROJECT_NEW.projectId);
   }
 
-//  @Test(
-//    groups = { "Integration" },
-//    description = "verifyDecomProjectCreation",
-//    priority = 2
-//  )
+  @Test(
+    groups = { "Integration" },
+    description = "verifyDecomProjectCreation",
+    priority = 2
+  )
   public void verifyDecomNewProjectCreation(Method method) throws Exception {
     AssertionsUtil softAssert = new AssertionsUtil();
     edbProducerTrackerPage = mainSideMenu.goToEdbProducerPage();

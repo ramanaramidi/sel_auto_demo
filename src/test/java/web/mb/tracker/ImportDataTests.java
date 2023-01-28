@@ -5,29 +5,16 @@ import commons.constants.Constants;
 import commons.enums.LoginOptionEnum;
 import commons.objects.ImportFile;
 import commons.objects.Ring;
-import commons.objects.Sector;
 import commons.objects.Site;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+
 import java.lang.reflect.Method;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+
 import org.testng.annotations.Test;
 import pages.web.Tracker.*;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
-import pages.web.reports.ImportPage;
 import rest.misc.MiscHelper;
-import rest.por.PorHelper;
-import rest.ring.RingHelper;
-import rest.sector.SectorHelper;
 import rest.site.SiteHelper;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
@@ -59,7 +46,7 @@ public class ImportDataTests extends BaseTest {
             envURL = "https://magentabuiltstg.t-mobile.com/Login.do";
         }
         if (testSuite == null) {
-            testSuite = "TestRunner.xml";
+            testSuite = "sectorSet.xml";
         }
     }
 

@@ -17,11 +17,13 @@
         <!--        <parameter name="deviceType" value=""/>-->
 
         <classes>
-            <!--users-->
-            <class name="web.mb.users.VendorTests"/>
-<!--            <class name="web.mb.users.SdmUserTests"/>-->
-<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
-
+            <!--tracker-->
+                        <class name="web.mb.tracker.AcsTests"/>
+                        <class name="web.mb.tracker.DevPORTests"/>
+                        <class name="web.mb.tracker.DevProjectTests"/>
+                        <class name="web.mb.tracker.DevRingTests"/>
+                        <class name="web.mb.tracker.DevSiteTests"/>
+                        <class name="web.mb.tracker.DevTests"/>
         </classes>
     </test>
 </suite>

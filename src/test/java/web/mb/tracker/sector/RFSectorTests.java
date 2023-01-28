@@ -5,15 +5,12 @@ import commons.enums.LoginOptionEnum;
 import commons.objects.Ring;
 import commons.objects.Sector;
 import commons.objects.Site;
-import commons.objects.Users;
 import org.testng.annotations.Test;
 import pages.web.Tracker.*;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
-import rest.por.PorHelper;
 import rest.sector.SectorHelper;
 import rest.site.SiteHelper;
-import testData.UserData;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -43,7 +40,7 @@ public class RFSectorTests extends BaseTest {
     public RFSectorTests()
     {
         if(envURL == null) {envURL = 	"https://magentabuiltstg.t-mobile.com/Login.do";}
-        if(testSuite == null) {testSuite = 	"TestRunner.xml";}
+        if(testSuite == null) {testSuite = "sectorSet.xml";}
 
     }
 
