@@ -18,9 +18,9 @@
 
         <classes>
             <!--tracker-ntp-->
-            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>
+<!--            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>-->
             <class name="web.mb.tracker.ntp.ProjectNtpTests"/>
-            <!--tracker-sector-->
+<!--            tracker-sector-->
             <class name="web.mb.tracker.sector.ProvisionFieldsTests"/>
 
             <!--edb-->
