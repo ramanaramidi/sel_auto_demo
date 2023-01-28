@@ -79,8 +79,8 @@ public class VendorTests extends BaseTest {
         projectTrackerPage.vendorCancel();
         projectTrackerPage.switchToSpecificWindow(parent);
         softAssert.closeAssert();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
     }
     @Test(groups = {"Integration"}, description = "Assigning Vendor To A Project Super User", priority = 3)
     public void assigningVendorSuperUser() throws Exception {
@@ -123,8 +123,8 @@ public class VendorTests extends BaseTest {
         projectTrackerPage.viewOk();
         projectTrackerPage.switchToSpecificWindow(parent);
         softAssert.closeAssert();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
     }
     @Test(groups = {"Integration"}, description = "Upload the Required Documents", priority = 6)
     public void docUploadVendor() throws Exception {
@@ -163,8 +163,8 @@ public class VendorTests extends BaseTest {
         projectTrackerPage.switchToSpecificWindow(parent);
         projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
     }
     @Test(groups = {"Integration"}, description = "Review Status Of the Documents Super User", priority = 9)
     public void reviewStatusFromGridSuperUser() throws Exception {

@@ -41,6 +41,7 @@ public class LoginPage extends BasePage {
     public By password = By.xpath("//input[@id='password']");
     public By loginSubmit = By.xpath("//input[@type='submit']");
     public By authNote = By.xpath("//div[@id='auth_message']");
+    public By loginButton = By.xpath("//*[@id='btn_11033']");
 
 
     public MainSideMenu LoginAsUser(Users user) throws Exception {
@@ -63,8 +64,8 @@ public class LoginPage extends BasePage {
         waitUntilVisibleElement(find(loginAsConfirmation));
         click(find(loginAsConfirmation));
         switchToSpecificWindow(parent1);
-        sleep(20);
-        //waitForPageToLoad();
+        sleep(10);
+        waitForPageToLoad();
         return new MainSideMenu(driver);
     }
 
@@ -177,5 +178,17 @@ public class LoginPage extends BasePage {
 
     public void clearEmailAddressBox() throws Exception {
         clearInputBoxByElementAndSendKeys(find(emailAddressInputBox));
+    }
+
+    public void userLogin(Users alphaUser) throws Exception{
+        if(alphaUser.getIsServiceAccount().equals("true")){
+            doLogin(LoginOptionEnum.UN_EMAIL);
+            login(alphaUser);
+        }
+        else{
+            waitUntilVisibleElement(find(loginButton));
+            click(find(loginButton));
+            sleep(5);
+        }
     }
 }

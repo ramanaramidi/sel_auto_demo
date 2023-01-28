@@ -134,8 +134,8 @@ public class ESRTests extends BaseTest {
     @Test(groups = {"Integration"}, description = "Verify Sticky Menu", priority = 20)
     public void verifyStickyMainMenu(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
         mainSideMenu = loginPage.LoginAsUser(nonSuper);
         esrTrackerPage = mainSideMenu.userSettings();
         esrTrackerPage.setStickyMainMenu("Yes");

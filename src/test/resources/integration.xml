@@ -19,8 +19,8 @@
         <classes>
             <!--users-->
             <class name="web.mb.users.VendorTests"/>
-<!--            <class name="web.mb.users.SdmUserTests"/>-->
-<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
+            <class name="web.mb.users.SdmUserTests"/>
+            <class name="web.mb.users.NonSuperUserTests"/>
 
         </classes>
     </test>

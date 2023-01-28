@@ -1,11 +1,14 @@
 package pages.web.components;
 
+import commons.enums.LoginOptionEnum;
+import commons.objects.Users;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
 import pages.web.Tracker.*;
 import pages.web.Tracker.site.SiteTrackerPage;
+import pages.web.onboarding.LoginPage;
 import pages.web.reports.ImportPage;
 import pages.web.reports.RunReportsPage;
 
@@ -48,7 +51,6 @@ public class MainSideMenu extends BasePage {
     public By mainLogo1 = By.xpath("//*[@id='mainLogo']");
     public By userLogoff = By.xpath("//*[@id='itemLogoff']/div");
     public By userNameText = By.xpath("//*[@id='topPanelUserName']");
-    public By loginButton = By.xpath("//*[@id='btn_11033']");
     public By siteDevButton = By.xpath("//*[@id='10017374']");
     public By appCenter = By.xpath("//*[@id='itemMenu_10017374_10018560']/div[1]/div[1]/div/input");
     public By rfEngineeringMainOption = By.xpath("//input[@title='RF Engineering']");
@@ -369,7 +371,7 @@ public class MainSideMenu extends BasePage {
         return false;
     }
 
-    public void userLogoff() throws Exception {
+    public LoginPage userLogoff() throws Exception {
         sleep(6);
         // WebElement userName = textAreaByTitle("topPanelUserName");
         waitUntilVisibleElement(find(userNameText));
@@ -379,13 +381,9 @@ public class MainSideMenu extends BasePage {
         click(find(userLogoff));
         acceptAlert();
         sleep(5);
+        return new LoginPage(driver);
     }
 
-    public void userLogin() throws Exception{
-        waitUntilVisibleElement(find(loginButton));
-        click(find(loginButton));
-        sleep(5);
-    }
 
     public ProjectTrackerPage goToSiteDevelopment() throws Exception {
         waitUntilVisibleElement(find(siteDevButton));

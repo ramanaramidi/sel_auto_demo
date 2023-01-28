@@ -113,8 +113,8 @@ public class RFSectorTests2 extends BaseTest {
         softAssert.assertTrue(rfSectorPage.racPlannedTacVerification(),"Rac Planned Field Is Unlocked And Able To Edit");
         rfSectorPage.goToRfSector();
         softAssert.closeAssert();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
     }
 
     @Test(groups = {"Integration"},description = "Sector Record Update By Site Dev User",priority =5 )
@@ -136,8 +136,8 @@ public class RFSectorTests2 extends BaseTest {
         softAssert.assertFalse(!(rfSectorPage.lacTacPlannedVerification()), "LacTac Field is Disable");
         rfSectorPage.goToRfSectorAsSiteDev();
         softAssert.closeAssert();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
     }
 
 }

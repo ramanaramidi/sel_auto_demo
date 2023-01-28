@@ -68,8 +68,8 @@ public class SdmUserTests extends BaseTest {
         softAssert.assertFalse(mainSideMenu.isSiteTrackerPresent(),"Site Tracker should not be displayed");
         softAssert.assertFalse(mainSideMenu.isPORTrackerPresent(),"POR Tracker should not be displayed");
         mainSideMenu.clickMainLogo();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+        loginPage = mainSideMenu.userLogoff();
+        loginPage.userLogin(alphaUser);
         softAssert.closeAssert();
     }
 
@@ -88,8 +88,8 @@ public class SdmUserTests extends BaseTest {
         softAssert.assertFalse(mainSideMenu.importDataPresent(),"import Data should not be displayed");
         softAssert.closeAssert();
         mainSideMenu.clickMainLogo();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+       loginPage = mainSideMenu.userLogoff();
+       loginPage.userLogin(alphaUser);
     }
 
      @Test(groups = {"Integration"},description = "User should able to see only Project Tracker and import Data",priority = 4)
@@ -107,7 +107,7 @@ public class SdmUserTests extends BaseTest {
         softAssert.assertFalse(mainSideMenu.importDataPresent(),"import Data should not be displayed");
         softAssert.closeAssert();
         mainSideMenu.clickMainLogo();
-        mainSideMenu.userLogoff();
-        mainSideMenu.userLogin();
+         loginPage = mainSideMenu.userLogoff();
+         loginPage.userLogin(alphaUser);
     }
 }
