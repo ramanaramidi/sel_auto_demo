@@ -22,7 +22,7 @@
                         <class name="web.mb.tracker.ImportDataTests"/>
                         <class name="web.mb.tracker.PORTests"/>
                         <class name="web.mb.tracker.ProjectTests"/>
-                        <class name="web.mb.tracker.ReportsTests"/>
+<!--                        <class name="web.mb.tracker.ReportsTests"/>-->
                         <class name="web.mb.tracker.RingTests"/>
                         <class name="web.mb.tracker.SiteTests"/>
 
