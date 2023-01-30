@@ -24,7 +24,7 @@ public class TaskVizionReportTests extends BaseTest {
             envConfig.setWebUrl("https://magentabuiltstg.t-mobile.com/Login.do");
         }
         if (testSuite == null) {
-            testSuite = "sectorSet.xml";
+            testSuite = "TestRunner.xml";
         }
     }
 
@@ -44,8 +44,19 @@ public class TaskVizionReportTests extends BaseTest {
         }
         mainSideMenu = loginPage.LoginAsUser(superUser);
     }
-
-    @Test(groups = {"Integration"}, description = "generation of taskvizion report with mandatory fields", priority = 2)
+    @Test(groups = {"Integration"}, description = "generate the report without mandatory fields", priority = 2)
+    public void generateReportWthoutMandatoryFields() throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        runReportsPage = mainSideMenu.goToRunReportTracker();
+        runReportsPage.searchForValue(" TaskVizion Report", "Report Name");
+        runReportsPage.goToTaskVizionReportsPage();
+        runReportsPage.removeMandatoryFields();
+        runReportsPage.goToHistoryField();
+        softAssert.assertFalse(runReportsPage.isDataPresentInTable(),"Report Is Not Created");
+        runReportsPage.backToRunReportpage();
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"Integration"}, description = "generation of taskvizion report with mandatory fields", priority = 3)
     public void generatedReportWithMandatoryFields() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         runReportsPage = mainSideMenu.goToRunReportTracker();
@@ -69,7 +80,7 @@ public class TaskVizionReportTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "generation of taskvizion report with mandatory and optional fields", priority = 3)
+    @Test(groups = {"Integration"}, description = "generation of taskvizion report with mandatory and optional fields", priority = 4)
     public void generatedReportWithMandatoryAndOptionalFields() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         runReportsPage = mainSideMenu.goToRunReportTracker();
@@ -100,7 +111,7 @@ public class TaskVizionReportTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "verification of project id based on market ", priority = 4)
+    @Test(groups = {"Integration"}, description = "verification of project id based on market ", priority = 5)
     public void projectIdVerificationBasedOnMarket() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         runReportsPage = mainSideMenu.goToRunReportTracker();
@@ -115,7 +126,7 @@ public class TaskVizionReportTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "generate the Report On ScheduleTime", priority = 5)
+    @Test(groups = {"Integration"}, description = "generate the Report On ScheduleTime", priority = 6)
     public void generateReportOnScheduleTime() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         runReportsPage = mainSideMenu.goToRunReportTracker();
@@ -132,18 +143,6 @@ public class TaskVizionReportTests extends BaseTest {
 
     }
 
-    @Test(groups = {"Integration"}, description = "generate the report without mandatory fields", priority = 6)
-    public void generateReportWthoutMandatoryFields() throws Exception {
-        AssertionsUtil softAssert = new AssertionsUtil();
-        runReportsPage = mainSideMenu.goToRunReportTracker();
-        runReportsPage.searchForValue(" TaskVizion Report", "Report Name");
-        runReportsPage.goToTaskVizionReportsPage();
-        runReportsPage.removeMandatoryFields();
-        runReportsPage.goToHistoryField();
-        softAssert.assertFalse(runReportsPage.isDataPresentInTable(),"Report Is Not Created");
-        runReportsPage.backToRunReportpage();
-        softAssert.closeAssert();
-    }
 
     @Test(groups = {"Integration"}, description = "generate the report ans verify finished date", priority = 7)
     public void generatedReportVerifyFinishedDate() throws Exception {
@@ -181,7 +180,4 @@ public class TaskVizionReportTests extends BaseTest {
         runReportsPage.backToRunReportpage();
         softAssert.closeAssert();
     }
-
-
-
 }

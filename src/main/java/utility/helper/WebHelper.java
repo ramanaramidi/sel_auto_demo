@@ -804,7 +804,7 @@ public class WebHelper {
             driver.navigate().refresh();
             sleep(maxTimeOut());
         }
- }
+    }
     public void checkBoxCheckByJS(WebElement value) {
         WebDriver driver1 = this.driver;
         if (driver1 == null) {
@@ -820,7 +820,9 @@ public class WebHelper {
             throw new NullPointerException("null cannot be cast to non-null type org.openqa.selenium.JavascriptExecutor");
         } else {
             JavascriptExecutor js = (JavascriptExecutor) driver1;
-            Object value = js.executeScript("document.getElementsById('" + id + "').checked;");
+            String method ="return document.getElementById('" + id + "').checked;";
+            Object value = js.executeScript(method);
+            System.out.println((boolean)value);
             return (boolean) value;
         }
     }

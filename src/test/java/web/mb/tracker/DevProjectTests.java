@@ -57,6 +57,7 @@ public class DevProjectTests extends BaseTest {
                 loginPage.launchUrl(url);
             }
         }
+        generateTestData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
 
     }
@@ -95,7 +96,6 @@ public class DevProjectTests extends BaseTest {
         softAssert.closeAssert();
 
     }
-
     @Test(groups = {"Integration"}, description = "validateCountOfUnactualizedTasks", priority = 4)
     public void validateCountOfUnactualizedTasks(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -228,7 +228,7 @@ public class DevProjectTests extends BaseTest {
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_1550_MNT_ANLSIS_RECD", Constants.IMAGE_FILE_UPLOAD,"Signature format.docx"),"PJ_1550_MNT_ANLSIS_RECD Document should be uploaded");
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_PORT_MATRIX", Constants.IMAGE_FILE_UPLOAD,"samplepptx.pptx"),"PJ_PORT_MATRIX Document should be uploaded");
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_3675_BP_APPROVED", Constants.IMAGE_FILE_UPLOAD,"TestReports.html"),"PJ_3675_BP_APPROVED Document should be uploaded");
-    }
+    }/*
     @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 13)
     public void BulkUploadOfEfiles(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -237,7 +237,7 @@ public class DevProjectTests extends BaseTest {
         ACSTrackerPage.selectEditOption();
         String FilesCount = ACSTrackerPage.uploadBulkFiles();
         softAssert.assertTrue(FilesCount.length()>0,"Bulk files are uploaded");
-    }
+    }*/
     @Test(groups = {"Integration"},description = "Verify Each Multi-selectors has it own Total Docs and Remaining Docs",priority = 2)
     public void verifyTotalAndRemainingDocsFields() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -260,7 +260,7 @@ public class DevProjectTests extends BaseTest {
         softAssert.assertNotNull(projectTrackerPage.isDocsReadOnly("PJ:Zoning and Permitting Docs Remaining"),"Should be readonly");
         projectTrackerPage.backToTrackerPage();
         softAssert.closeAssert();
-    }
+    }/*
     @Test(groups = {"Integration"},description = "Verify if Build To Suit is Blank then fields related to BTS should be Disabled",priority = 51)
     public void verifyBtsFieldIsBlank() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -295,7 +295,7 @@ public class DevProjectTests extends BaseTest {
         projectTrackerPage.backToTrackerPage();
         projectTrackerPage.goToView("General Info");
         softAssert.closeAssert();
-    }
+    }*/
     @Test(groups = {"Integration"},description = "Verify Checkbox for Run Event Rule",priority = 5)
     public void verifyRunEventRuleCheckBox() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();

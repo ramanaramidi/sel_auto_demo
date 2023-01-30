@@ -156,7 +156,7 @@ public class RunReportsPage extends BasePage {
     public String searchForValueInGrid(String columnName,int row) throws Exception {
         fullScreen();
         waitForPageToLoad();
-        sleep(5);
+        sleep(15);
         int columnToFind = getTableData(columnName);
         //int columnValueToMatch = getTableData(searchByColumn);
         List<WebElement> tableContents = findAll(tableData);

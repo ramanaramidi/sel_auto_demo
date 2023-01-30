@@ -108,10 +108,10 @@ public class ESRTrackerPage extends BasePage {
         return "ERROR OCCURRED";
     }
     public ESRTrackerPage selectEditOption() throws Exception {
-        waitForPageToLoad();
         waitUntilVisibleElement(find(EditButton));
-        sleep(5);
-        buttonClick("Edit", 3);
+        waitForPageToLoad();
+        click(find(EditButton));
+        waitForPageToLoad();
         return new ESRTrackerPage(driver);
     }
     public ESRTrackerPage selectAddOption() throws Exception {

@@ -30,12 +30,12 @@ public class ProjectTrackerPage extends BasePage {
     public By tableHeader = By.xpath("//table[@class='hdr']//tr//td");
     public By tableData = By.xpath("//table[@class='obj overlap']//tr");
     public By okButton  = By.xpath("//input[@id='btnOK']");
-    public By projectIDClick  = By.xpath("//div[@class='objbox customscroll']//table//tbody//tr[2]//td[3]//a");
+    public By projectIDClick  = By.xpath("//div[@class='objbox customscroll']//table//tbody//tr[2]//td[4]//a");
     public By okButton1 =By.xpath("//input[@id='btnOK0']");
     public By applyButton  = By.xpath("//input[@id='btnApply']");
     public By cancelButton = By.xpath("//input[@id='btnCancel']");
     public By AETab = By.xpath("//span[text()='A and E']");
-    public By WorkPlanCreationLocked = By.xpath("//div[@id='idx27_imglock']");
+    public By WorkPlanCreationLocked = By.xpath("//label//b[text()='Workplan Creation Kickoff']//following::div[1]");
     public By BundlingDespositionUnlock = By.xpath("//div[@id='idx91_imglock']");
     public By ntpConstruction = By.xpath("//span[normalize-space()='NTP Construction']");
     public By label_NTPConstruction = By.xpath("//span[text()='NTP Construction']");
@@ -55,7 +55,7 @@ public class ProjectTrackerPage extends BasePage {
     public By ClickStructuralModification = By.xpath("//label[text()='PJ(P 1375) Structural Modification Design Complete']");
     public By SelectNaTask = By.xpath("//div[text()='Un-N/A Task']");
     public By tasksButton = By.xpath("//*[@id='btnTasks']");
-    public By textArea = By.xpath("//*[@id='idx13_disp']");
+    public By textArea = By.xpath("(//td//label[contains(text(),'PJ:Project Completion Objective')]//following::td//following::textarea)[1]");
     public By checkBox1 = By.xpath("//*[@id='gridbox0']/div[2]/div[2]/table/tbody/tr[3]/td[7]");
     public By tactual = By.xpath("//*[@id='gridbox0']/div[2]/div[2]/table/tbody/tr[3]/td[6]");
     public By DASTab = By.xpath("//div[@id='tabName15']");
@@ -103,7 +103,7 @@ public class ProjectTrackerPage extends BasePage {
         selectSearchType(type);
         click(find(searchButton));
         waitForPageToLoad();
-         sleep(10);
+        sleep(10);
         //waitUntilVisibleElement(find(editProject));
         // sleep(20);
     }
@@ -933,10 +933,10 @@ public class ProjectTrackerPage extends BasePage {
             scrollToElement(find(ApplyFilter));
             click(find(ApplyFilter));
             waitForPageToLoad();
+            waitUntilVisibleElement(find(SiteCode));
         }
         waitForPageToLoad();
-        waitUntilVisibleElement(find(editProject));
-
+        waitUntilVisibleElement(find(SiteCode));
     }
     public WebElement selectView(String viewName) throws Exception{
         By View = By.xpath("//div[contains(text(),'"+viewName+"')]");
@@ -1004,19 +1004,19 @@ public class ProjectTrackerPage extends BasePage {
     }
 
     public String validateProjectCompletionObjective() throws Exception {
-        sleep(5);
+        sleep(3);
         String parent =  switchToChildWindows();
         fullScreenChildWindow();
-        String objectiveValues = find(textArea).getText();
+        String objectiveValues = find(textArea).getAttribute("value");
         System.out.println("Project Objective Values are - " + objectiveValues);
         System.out.println("Project Objective Values are - " + objectiveValues.isEmpty());
+        sleep(5);
+        // switchToSpecificWindow(parent);
         return objectiveValues;
     }
 
     public ProjectTrackerPage goToTasksPage() throws Exception {
-        parentWindow = switchToChildWindows();
-        fullScreenChildWindow();
-        sleep(1);
+        sleep(2);
         click(find(tasksButton));
         sleep(6);
         return new ProjectTrackerPage(driver);
@@ -1038,11 +1038,13 @@ public class ProjectTrackerPage extends BasePage {
         WebElement T_Actual = find(tactual);
         if (T_Actual.getText().contains(date)){
             System.out.println("Task is Actualized");
+            click(find(closeButton));
             switchToSpecificWindow(parent);
             sleep(3);
             return true;
         }
         System.out.println("Task is not Actualized");
+        click(find(closeButton));
         switchToSpecificWindow(parent);
         return false;
     }

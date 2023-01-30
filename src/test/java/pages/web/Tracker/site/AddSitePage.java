@@ -121,8 +121,9 @@ public class AddSitePage extends BasePage {
     public void setNoSpectrumCallTo(String value) throws Exception {
         String parent1 = switchToChildWindows();
         fullScreenChildWindow();
-        sleep(10);
+        waitForPageToLoad();
         click(find(intergationAdminSite));
+        waitForPageToLoad();
         scrollToElement(lockByLabelText("S:Do Not Use Spectrum Spatial API").get(1));
         click(lockByLabelText("S:Do Not Use Spectrum Spatial API").get(1));
         click(selectionBoxBySname("S:Do Not Use Spectrum Spatial API").get(1));
@@ -141,7 +142,7 @@ public class AddSitePage extends BasePage {
         click(find(generalInfoPage));
         scrollToElement(lockByLabelText("S:Site Latitude").get(0));
         click(lockByLabelText("S:Site Latitude").get(0));
-        click(lockByLabelText("S:S:Site Longitude").get(0));
+        click(lockByLabelText("S:Site Longitude").get(0));
         click(find(siteLatitudeGmapButton));
         setText(find(siteNewCoordinateLatVal),Constants.VALID_LATITUDE);
         setText(find(siteNewCoordinateLongVal),Constants.VALID_LONGITUDE);

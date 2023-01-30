@@ -99,4 +99,16 @@ public class MiscService {
         logReport.info(" End of ----getBncDetailsForSwitch");
         return responseDetails;
     }
+
+    public ApiResponse getProcessIDForReport(String reportID){
+        logReport.info(" Start of ----getProcessIDForReport");
+        MiscRequestBuilder miscRequestBuilder = new MiscRequestBuilder();
+        String url = MiscConstants.REPORT_DETAILS
+                .replace("REPLACEWITHREPORTID",reportID);
+        Map<String,String> headers = miscRequestBuilder.getHeader();
+        ApiRequest requestDetails = new ApiRequest(baseUrl+ url,null,headers, null);
+        ApiResponse responseDetails = RestClientLib.get(requestDetails);
+        logReport.info(" End of ----getProcessIDForReport");
+        return responseDetails;
+    }
 }

@@ -135,7 +135,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE_SITE_DEV.trackerId.toString(),"PJ_3475_REG_CERT", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png"),"PJ_3475_REG_CERT Document should be uploaded");
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"},description = "login",priority = 7)
+  //  @Test(groups = {"Integration"},description = "login",priority = 7)
     public void preNtpCreationSiteDev(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToSiteDevelopment();

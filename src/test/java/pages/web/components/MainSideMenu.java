@@ -437,7 +437,7 @@ public class MainSideMenu extends BasePage {
         search("Fields");
         waitUntilVisibleElement(find(fieldsLocator));
         click(find(fieldsLocator));
-        sleep(5);
+        waitForPageToLoad();
         return new ESRTrackerPage(driver);
     }
     public ESRTrackerPage goToSystemUsers() throws Exception {
@@ -446,7 +446,7 @@ public class MainSideMenu extends BasePage {
         search("System Users");
         waitUntilVisibleElement(find(systemUsers));
         click(find(systemUsers));
-        sleep(5);
+        waitForPageToLoad();
         return new ESRTrackerPage(driver);
     }
     public ESRTrackerPage goToDocument() throws Exception {
@@ -455,7 +455,7 @@ public class MainSideMenu extends BasePage {
         search("Document");
         waitUntilVisibleElement(find(documentLocator));
         click(find(documentLocator));
-        sleep(5);
+        waitForPageToLoad();
         return new ESRTrackerPage(driver);
     }
     public ESRTrackerPage goToProcesses() throws Exception {

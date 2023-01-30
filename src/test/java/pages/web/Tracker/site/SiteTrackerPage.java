@@ -138,6 +138,7 @@ public class SiteTrackerPage extends BasePage {
 
     public String getCellValue(int columnCount) throws Exception {
         waitForPageToLoad();
+        sleep(5);
         List<WebElement> singleRowCellValues= findAll(singleRowValueSearch);
         scrollToElement(singleRowCellValues.get(columnCount-1));
         String cellData = getText(singleRowCellValues.get(columnCount));

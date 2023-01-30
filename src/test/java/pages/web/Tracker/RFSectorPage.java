@@ -110,6 +110,7 @@ public class RFSectorPage extends BasePage
     public By mainLogo1 = By.xpath("//*[@id='mainLogo']");
     public By ProjectTracker = By.xpath("//div[text()='Project Tracker']");
     public By PJSectorsTab = By.xpath("//div[@title='PJ:Sectors']");
+    public By sectorIdTextArea = By.xpath("(//td//label[contains(text(),'PJ:Sector IDs')]//following::td//following::textarea)[1]");
     String parentWindow;
     String parentWindow1;
     String parentWindow2;
@@ -1646,8 +1647,10 @@ public class RFSectorPage extends BasePage
         String parent1 =  switchToChildWindows();
         fullScreenChildWindow();
         click(find(DASTab));
-        String sectorIds = textAreaBySname("PJ:Sector IDs").getAttribute("value");
+        waitForPageToLoad();
+        String sectorIds = find(sectorIdTextArea).getAttribute("value");
         System.out.println("For this Project the SectorIDs are - " + sectorIds);
+        click(find(okButton));
         switchToSpecificWindow(parent1);
         return sectorIds;
     }

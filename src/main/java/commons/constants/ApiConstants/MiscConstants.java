@@ -9,4 +9,6 @@ public class MiscConstants {
 
     public static final String MARKET_SWITCH_TRACKER =
             "/v3/trackor_types/MarketSwitchMSCTracker/trackors";
+
+    public static final String REPORT_DETAILS = "/v3/reports/REPLACEWITHREPORTID/runs"; // same URL to be used with Put for
 }

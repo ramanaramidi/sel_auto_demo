@@ -77,7 +77,7 @@ public class ESRTests extends BaseTest {
         softAssert.assertTrue(esrTrackerPage.isLinkClickable(),"Hash link next to Description is Clickable");
         softAssert.closeAssert();
     }
-    //@Test(groups = {"Integration"}, description = "Update Phone Number for Current User", priority = 3)
+    @Test(groups = {"Integration"}, description = "Update Phone Number for Current User", priority = 3)
     public void updatePhoneNumber(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         esrTrackerPage = mainSideMenu.userSettings();

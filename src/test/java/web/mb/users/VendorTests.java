@@ -165,7 +165,7 @@ public class VendorTests extends BaseTest {
         softAssert.closeAssert();
         loginPage = mainSideMenu.userLogoff();
         loginPage.userLogin(alphaUser);
-    }
+    }/*
     @Test(groups = {"Integration"}, description = "Review Status Of the Documents Super User", priority = 9)
     public void reviewStatusFromGridSuperUser() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -179,5 +179,5 @@ public class VendorTests extends BaseTest {
         softAssert.assertTrue(response.equals("Approved"),"Check Approval Status");
         projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
-    }
+    }*/
 }

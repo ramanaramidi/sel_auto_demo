@@ -5,6 +5,7 @@ import commons.objects.ApiResponse;
 import commons.objects.ImportFile;
 import commons.objects.MarketSwitch;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -80,5 +81,13 @@ public class MiscHelper {
         return null;
     }
 
-
+    public LinkedList<String> getReportProcessIds(String reportId){
+        MiscService miscService = new MiscService();
+        ApiResponse response = miscService.getProcessIDForReport(reportId);
+        if(response.responseCode == 200){
+            LinkedList<String> processList = JsonPath.read(response.responseBody,"$.[*].process_id");
+            return processList;
+        }
+        return null;
+    }
 }
