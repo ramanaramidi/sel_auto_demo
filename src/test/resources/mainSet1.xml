@@ -1,0 +1,66 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Demo Parallel test suite" parallel="classes" thread-count="6">
+    <parameter name="isDataSeeding" value="false"/>
+    <test name="Demo Test Runner " preserve-order="true">
+        <parameter name="url" value="https://magentabuiltstg.t-mobile.com/Login.do"/>
+        <!--        <parameter name="isDataSeeding" value="false"/>-->
+        <!--        <parameter name="updateOnJira" value="false"/>-->
+        <!--        <parameter name="monitoringDB" value="false"/>-->
+        <!--        <parameter name="jsonReports" value="false"/>-->
+        <!--        <parameter name="ZipReports" value="false"/>-->
+        <!--        <parameter name="webPublish" value="false"/>-->
+        <parameter name="selGrid" value="true"/>
+        <parameter name="nodeURL" value="http://stgpwsele0012:4444/wd/hub/"/>
+        <!-- <parameter name="nodeURL" value="https://selenium-grid4-demo.px-prd1103.pks.t-mobile.com/"/> -->
+        <!--        <parameter name="browserName" value="chrome"/>-->
+        <!--        <parameter name="localDriverPath" value="C:\driver\chromedriver.exe"/>-->
+        <!--        <parameter name="deviceType" value=""/>-->
+        <classes>
+            <!--tracker-sector-->
+
+            <class name="web.mb.tracker.sector.RFSectorTests"/>
+            <class name="web.mb.tracker.AcsTests"/>
+            <class name="web.mb.tracker.DevProjectTests"/>
+<!--            <class name="web.mb.tracker.sector.StatusFlows"/>-->
+            <class name="web.mb.tracker.DevTests"/>
+
+            <class name="web.mb.tracker.DevPORTests"/>
+            <class name="web.mb.tracker.sector.DevSectorTests"/>
+            <class name="web.mb.tracker.sector.RecordManagementTests"/>
+            <class name="web.mb.tracker.sector.RFSectorTests2"/>
+
+            <class name="web.mb.tracker.DevRingTests"/>
+            <class name="web.mb.tracker.DevSiteTests"/>
+
+<!--            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>-->
+            <class name="web.mb.tracker.ntp.ProjectNtpTests"/>
+
+            <class name="web.mb.tracker.ESRTests"/>
+            <class name="web.mb.tracker.ImportDataTests"/>
+            <class name="web.mb.tracker.PORTests"/>
+<!--            <class name="web.mb.tracker.ProjectTests"/>-->
+            <!--            <class name="web.mb.tracker.ReportsTests"/>-->
+            <class name="web.mb.tracker.RingTests"/>
+            <class name="web.mb.tracker.SiteTests"/>
+
+            <!--tracker-sector-->
+            <class name="web.mb.tracker.sector.ProvisionFieldsTests"/>
+
+            <!--edb-->
+            <class name="web.mb.edb.EdbConsumerTest"/>
+            <class name="web.mb.edb.EdbProducerTest"/>
+
+            <!--feature-->
+<!--            <class name="web.mb.feature.pier.PierCrTests"/>-->
+<!--            <class name="web.mb.feature.MidCellAcsTests"/>-->
+            <class name="web.mb.feature.MidcellTests"/>
+            <!--reports-->
+<!--            <class name="web.mb.reports.TaskVizionReportTests"/>-->
+
+            <class name="web.mb.users.VendorTests"/>
+            <class name="web.mb.users.SdmUserTests"/>
+            <class name="web.mb.users.NonSuperUserTests"/>
+
+        </classes>
+    </test>
+</suite>
