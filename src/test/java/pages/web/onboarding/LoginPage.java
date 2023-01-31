@@ -153,6 +153,8 @@ public class LoginPage extends BasePage {
                 System.out.println("::" + "LOGIN WAS TRIED AGAIN");
             }
         }
+        sleep(15);
+        waitForPageToLoad();
     }
 
     public String getLoginPageTitle() {
