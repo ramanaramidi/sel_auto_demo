@@ -15,7 +15,6 @@
         <!--        <parameter name="browserName" value="chrome"/>-->
         <!--        <parameter name="localDriverPath" value="C:\driver\chromedriver.exe"/>-->
         <!--        <parameter name="deviceType" value=""/>-->
-
         <classes>
             <!--tracker-sector-->
 
