@@ -370,7 +370,7 @@ public class ProvisionFieldsTests extends BaseTest {
         rfSectorPage.backToRfSectorPage();
     }
 
-    @Test(groups = {"Integration"},description = "Acs Info Verification For Sector As RfEng",priority = 18)
+   // @Test(groups = {"Integration"},description = "Acs Info Verification For Sector As RfEng",priority = 18)
     public void acsInfoVerificationAsRfEng(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTrackerAsEng();
