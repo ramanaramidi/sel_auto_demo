@@ -174,6 +174,7 @@ public class ProjectTrackerPage extends BasePage {
     }
 
     public int getTableData(String columnName) throws Exception {
+        waitUntilVisibleElement(find(SiteCode));
         List<WebElement> tableHeaders = findAll(tableHeader);
         scrollToElement(tableHeaders.get(1));
         for(int i = 0; i<tableHeaders.size(); i++){
@@ -212,8 +213,8 @@ public class ProjectTrackerPage extends BasePage {
     }
 
     public AddProjectPage selectEditOption() throws Exception {
-        waitUntilVisibleElement(find(editProject));
         waitForPageToLoad();
+        waitUntilVisibleElement(find(editProject));
         click(find(editProject));
         waitForPageToLoad();
         return new AddProjectPage(driver);
@@ -818,7 +819,10 @@ public class ProjectTrackerPage extends BasePage {
 
     public String searchForImgInGrid(String columnName, String searchByColumn, String searchValue) throws Exception {
         fullScreen();
+        sleep(15);
+        System.out.println("15 second wait over for page load");
         waitForPageToLoad();
+        waitUntilVisibleElement(find(SiteCode));
         sleep(5);
         int columnToFind = getTableData(columnName);
         int columnValueToMatch = getTableData(searchByColumn);
@@ -956,12 +960,14 @@ public class ProjectTrackerPage extends BasePage {
     }
     public void searchForValueVendor(String data, String type) throws Exception {
         fullScreen();
+        waitForPageToLoad();
         waitUntilVisibleElement(find(SiteCode));
         setText(find(searchOption), data);
         selectSearchType(type);
         click(find(searchButton));
         waitUntilVisibleElement(find(SiteCode));
-        sleep(5);
+        waitForPageToLoad();
+        sleep(15);
     }
     public WebElement statusGrid(int index) throws Exception{
         return findAll(StatusFind).get(index);
@@ -1005,13 +1011,10 @@ public class ProjectTrackerPage extends BasePage {
 
     public String validateProjectCompletionObjective() throws Exception {
         sleep(3);
-        String parent =  switchToChildWindows();
-        fullScreenChildWindow();
         String objectiveValues = find(textArea).getAttribute("value");
         System.out.println("Project Objective Values are - " + objectiveValues);
         System.out.println("Project Objective Values are - " + objectiveValues.isEmpty());
         sleep(5);
-        // switchToSpecificWindow(parent);
         return objectiveValues;
     }
 
@@ -1027,6 +1030,7 @@ public class ProjectTrackerPage extends BasePage {
         fullScreenChildWindow();
         String subStringTask = projectCompletionObjectiveValues.substring(24,30);
         System.out.println("Task SubString is - " + subStringTask);
+        sleep(3);
         searchForValue(subStringTask,"T:Task");
 //        sleep(3);
 //        WebElement checkBox = find(checkBox1);
@@ -1048,6 +1052,7 @@ public class ProjectTrackerPage extends BasePage {
         switchToSpecificWindow(parent);
         return false;
     }
+
 
     public String validateRemainingTasksCount() throws Exception {
         sleep(5);
@@ -1098,6 +1103,8 @@ public class ProjectTrackerPage extends BasePage {
     }
 
     public void getPJ_Sectors() throws Exception {
+        String parent0 = switchToChildWindows();
+        fullScreenChildWindow();
         sleep(3);
         WebElement element = inputBoxDataBySname("SEC:Pole Owner");
         scrollToElement(element);
@@ -1117,11 +1124,17 @@ public class ProjectTrackerPage extends BasePage {
         String parent1 =  switchToChildWindows();
         fullScreenChildWindow();
         click(find(PJSectorsTab));
-        searchForValue("00TESTOA-0002070764","SEC:Project ID");
-        searchForValue("00TESTOA_A1GPV","SEC:Sector ID");
+        // searchForValue("00TESTOA-0002070764","SEC:Project ID");
+        // searchForValue("00TESTOA_A1GPV","SEC:Sector ID");
+        click(find(okButton));
+        sleep(2);
         switchToSpecificWindow(parent1);
+        click(find(okButton));
+        sleep(2);
+        switchToSpecificWindow(parent0);
         sleep(2);
     }
+
 
     public boolean getUnSelectedTasks() throws Exception {
         sleep(5);
@@ -1141,6 +1154,7 @@ public class ProjectTrackerPage extends BasePage {
                 System.out.println("Selected option - " + elements.get(i).getText());
             }
         }
+        click(find(okButton1));
         switchToSpecificWindow(parent);
         sleep(4);
 
@@ -1167,6 +1181,7 @@ public class ProjectTrackerPage extends BasePage {
         else
             return false;
     }
+
 
 //    public void checkTask() throws Exception {
 //        sleep(3);

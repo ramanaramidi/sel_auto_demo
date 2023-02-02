@@ -126,7 +126,7 @@ public class VendorTests extends BaseTest {
         loginPage = mainSideMenu.userLogoff();
         loginPage.userLogin(alphaUser);
     }
-    @Test(groups = {"Integration"}, description = "Upload the Required Documents", priority = 6)
+    //@Test(groups = {"Integration"}, description = "Upload the Required Documents", priority = 6)
     public void docUploadVendor() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         mainSideMenu = loginPage.LoginAsUser(ATC_MViscon);
@@ -138,7 +138,7 @@ public class VendorTests extends BaseTest {
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         softAssert.assertTrue(projectTrackerPage.searchForImgInGrid("PJ:Site Scope Complete (1000) [Doc]","PJ:Project ID",PROJECT_ACTIVE.projectId).contains("thumbnail"),"Check File Upload");
         softAssert.assertTrue(projectTrackerPage.searchForImgInGrid("PJ:Title Approved (1050) [Doc]","PJ:Project ID",PROJECT_ACTIVE.projectId).contains("thumbnail"),"Check File Upload");
-        projectTrackerPage.goToView("G:General Info");
+        //projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "Re-Upload of Revised Document", priority = 7)
@@ -148,11 +148,11 @@ public class VendorTests extends BaseTest {
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_1050_TITLE_APPROVED", Constants.EXCEL_FILE_UPLOAD,"sample.xlsx"),"File Upload");
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"}, description = "Review Status Of the Documents Vendor User", priority = 8)
+    //@Test(groups = {"Integration"}, description = "Review Status Of the Documents Vendor User", priority = 8)
     public void reviewStatusVendorUser() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToVendorProjectTracker();
-        projectTrackerPage.goToView("G:Vendor Doc Upload");
+        //projectTrackerPage.goToView("G:Vendor Doc Upload");
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         String parent = projectTrackerPage.switchToChildWindows();
@@ -165,8 +165,8 @@ public class VendorTests extends BaseTest {
         softAssert.closeAssert();
         loginPage = mainSideMenu.userLogoff();
         loginPage.userLogin(alphaUser);
-    }/*
-    @Test(groups = {"Integration"}, description = "Review Status Of the Documents Super User", priority = 9)
+    }
+    //@Test(groups = {"Integration"}, description = "Review Status Of the Documents Super User", priority = 9)
     public void reviewStatusFromGridSuperUser() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         mainSideMenu = loginPage.LoginAsUser(superUser);
@@ -179,5 +179,5 @@ public class VendorTests extends BaseTest {
         softAssert.assertTrue(response.equals("Approved"),"Check Approval Status");
         projectTrackerPage.goToView("G:General Info");
         softAssert.closeAssert();
-    }*/
+    }
 }

@@ -39,8 +39,6 @@ public class ESRTrackerPage extends BasePage {
     public By imageSettingTab = By.xpath("//span[text()='Image Settings']");
     public By imageHeight = By.xpath("//a[contains(text(),'Image Height')]");
     public By componentFieldHistory = By.xpath("//label[text()='Component Field History']");
-    public By getCellValue1 = By.xpath("//tr[@class=' ev_dhx_skyblue rowselected']//child::td[3]");
-    public By getCellValue2 = By.xpath("//tr[@class=' odd_dhx_skyblue']//child::td[3]");
     public By refresh = By.xpath("//div[@class='hdr_cell']//div[text()='Refresh']");
     public By refreshSorting = By.xpath("//div[@class='hdr_cell']//div[text()='Refresh']//following-sibling::div");
     public By descOrder= By.xpath("//div[text()='Sort DESC']");
@@ -84,6 +82,7 @@ public class ESRTrackerPage extends BasePage {
     }
     public String searchForValueInGrid(String columnName,int row) throws Exception {
         fullScreen();
+        waitForPageToLoad();
         int columnToFind = getTableData(columnName);
         //int columnValueToMatch = getTableData(searchByColumn);
         List<WebElement> tableContents = findAll(tableData);
@@ -108,10 +107,9 @@ public class ESRTrackerPage extends BasePage {
         return "ERROR OCCURRED";
     }
     public ESRTrackerPage selectEditOption() throws Exception {
+        waitForPageToLoad();
         waitUntilVisibleElement(find(EditButton));
-        waitForPageToLoad();
         click(find(EditButton));
-        waitForPageToLoad();
         return new ESRTrackerPage(driver);
     }
     public ESRTrackerPage selectAddOption() throws Exception {
@@ -203,6 +201,7 @@ public class ESRTrackerPage extends BasePage {
     public boolean verifyComponentFieldHistory() throws Exception{
         parentWindow = switchToChildWindows();
         fullScreenChildWindow();
+        waitForPageToLoad();
         click(find(documentEFile));
         click(find(fieldInfo));
         String parent1 = switchToChildWindows();
@@ -240,13 +239,11 @@ public class ESRTrackerPage extends BasePage {
         waitUntilVisibleElement(find(searchData));
         scrollToElement(find(refresh));
     }
-    public boolean verifySortingOrder(boolean set_SmallToBig) throws Exception {
+    public boolean verifySortingOrder(String getCellValue1, String getCellValue2,boolean set_SmallToBig) throws Exception {
         waitForPageToLoad();
-        scrollToElement(find(getCellValue1));
-        String cellValue1 = find(getCellValue1).getText();
+        String cellValue1 = getCellValue1;
         System.out.println(cellValue1);
-        scrollToElement(find(getCellValue2));
-        String cellValue2 = find(getCellValue2).getText();
+        String cellValue2 = getCellValue2;
         System.out.println(cellValue2);
         int compare = cellValue1.compareTo(cellValue2);
         System.out.println(compare);

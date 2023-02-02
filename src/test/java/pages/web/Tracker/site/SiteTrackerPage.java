@@ -45,6 +45,7 @@ public class SiteTrackerPage extends BasePage {
     public By tableHeader1 = By.xpath("//div[contains(@class,'customscroll')]//child::td[11]//div//a");
     public By tableData = By.xpath("//table[@class='obj overlap']//tr");
     public By singleRowValueSearch = By.xpath("//div[contains(@class,'objbox customscroll')]//table[contains(@class,'obj')]//tr//td");
+
     public By activering = By.xpath("//td[text()='Active']");
     public By siteCodeSearchButton = By.xpath("//*[@id='btnSearch0']");
     public By siteCodeSearch = By.xpath("//input[@id='qsValue0']");

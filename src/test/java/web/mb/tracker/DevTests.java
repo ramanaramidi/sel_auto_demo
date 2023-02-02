@@ -243,6 +243,7 @@ public class DevTests extends BaseTest {
     projectTrackerPage = mainSideMenu.goToProjectTracker();
     projectTrackerPage.searchForValue("AMEENAA3-0002249179", "PJ:Project ID");
     projectTrackerPage.selectEditOption();
+    projectTrackerPage.switchToProjectPage();
     projectTrackerPage.goToTasksPage();
     softAssert.assertFalse(
       projectTrackerPage.taskCheckBoxValidation(),

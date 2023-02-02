@@ -76,10 +76,13 @@ public class DevProjectTests extends BaseTest {
         projectTrackerPage = mainSideMenu.goToProjectTracker();
         projectTrackerPage.searchForValue("00TESTOA-0002070764", "PJ:Project ID");
         projectTrackerPage.selectEditOption();
+        String parentWindow = projectTrackerPage.switchToProjectPage();
         String ProjectCompletionObjectiveValues = projectTrackerPage.validateProjectCompletionObjective();
         softAssert.assertNotNull(ProjectCompletionObjectiveValues,"After Project Creation, values from POR field will get copied to Project Completion Objective");
         // softAssert.assertEquals(ObjectiveValuesFromPOR,ProjectCompletionObjectiveValues,"ObjectiveValues are equal");
+        projectTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
+
     }
 
     @Test(groups = {"Integration"}, description = "validateObjectiveValuesNA_UNNA", priority = 3)
@@ -89,12 +92,13 @@ public class DevProjectTests extends BaseTest {
         //  projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.searchForValue("00TESTOA-0002070764", "PJ:Project ID");
         projectTrackerPage.selectEditOption();
+        String parentWindow = projectTrackerPage.switchToProjectPage();
         String ProjectCompletionObjectiveValues = projectTrackerPage.validateProjectCompletionObjective();
         softAssert.assertNotNull(ProjectCompletionObjectiveValues,"After Project Creation, values from POR field will get copied to Project Completion Objective");
         projectTrackerPage.goToTasksPage();
         projectTrackerPage.verifyTasksActualized_UnAct(ProjectCompletionObjectiveValues);
+        projectTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
-
     }
     @Test(groups = {"Integration"}, description = "validateCountOfUnactualizedTasks", priority = 4)
     public void validateCountOfUnactualizedTasks(Method method) throws Exception {
@@ -103,10 +107,12 @@ public class DevProjectTests extends BaseTest {
         //  projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId,"PJ:Project ID");
         projectTrackerPage.searchForValue("00TESTOA-0002070764", "PJ:Project ID");
         projectTrackerPage.selectEditOption();
+        String parentWindow = projectTrackerPage.switchToProjectPage();
         String selectedTasks = projectTrackerPage.validateProjectCompletionObjective();
         softAssert.assertTrue(selectedTasks.length()>0,"For project selected Tasks count is displayed");
         String remainingTasks = projectTrackerPage.validateRemainingTasksCount();
         softAssert.assertTrue(remainingTasks.length()>0,"For project remaining Tasks count is displayed");
+        projectTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "validateProjectOffAirObjectiveField", priority = 9)
@@ -121,6 +127,7 @@ public class DevProjectTests extends BaseTest {
         boolean UnSelectedValues = projectTrackerPage.getUnSelectedTasks();
         softAssert.assertTrue(ProjectOffAirValues,"Selected Project OffAir Objective Values are Actualized-Un N/A'd");
         softAssert.assertTrue(UnSelectedValues,"UnSelected Values in Multi-Selecter are UnActualized and N/A");
+        projectTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
 
@@ -147,6 +154,7 @@ public class DevProjectTests extends BaseTest {
         rfSectorPage.getPJ_Sectors();
         rfSectorPage.clickMainLogo();
         projectTrackerPage = rfSectorPage.clickingProjectTracker();
+        String parentWindow = projectTrackerPage.switchToProjectPage();
         projectTrackerPage.searchForValue("00TESTOA-0002070764","PJ:Project ID");
         softAssert.closeAssert();
     }
@@ -188,7 +196,7 @@ public class DevProjectTests extends BaseTest {
         rfSectorPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 10)
+    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 11)
     public void validateProjectOffAirObjective_Remaining(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
@@ -202,7 +210,7 @@ public class DevProjectTests extends BaseTest {
         projectTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 11)
+    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 12)
     public void validateProjectOffAirObjective_Total(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
@@ -217,7 +225,7 @@ public class DevProjectTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 12)
+    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 13)
     public void uploadMultipleEfiles(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_3800_PRE_NTP", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png"),"PJ_3800_PRE_NTP Document should be uploaded");
@@ -228,8 +236,9 @@ public class DevProjectTests extends BaseTest {
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_1550_MNT_ANLSIS_RECD", Constants.IMAGE_FILE_UPLOAD,"Signature format.docx"),"PJ_1550_MNT_ANLSIS_RECD Document should be uploaded");
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_PORT_MATRIX", Constants.IMAGE_FILE_UPLOAD,"samplepptx.pptx"),"PJ_PORT_MATRIX Document should be uploaded");
         softAssert.assertTrue(projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_3675_BP_APPROVED", Constants.IMAGE_FILE_UPLOAD,"TestReports.html"),"PJ_3675_BP_APPROVED Document should be uploaded");
-    }/*
-    @Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 13)
+    }
+
+    //@Test(groups = {"Integration"}, description = "validateProjectOffAirObjective_Remaining", priority = 14)
     public void BulkUploadOfEfiles(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         ACSTrackerPage = mainSideMenu.goToACSIntakeTracker();
@@ -237,12 +246,11 @@ public class DevProjectTests extends BaseTest {
         ACSTrackerPage.selectEditOption();
         String FilesCount = ACSTrackerPage.uploadBulkFiles();
         softAssert.assertTrue(FilesCount.length()>0,"Bulk files are uploaded");
-    }*/
+    }
     @Test(groups = {"Integration"},description = "Verify Each Multi-selectors has it own Total Docs and Remaining Docs",priority = 2)
     public void verifyTotalAndRemainingDocsFields() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        String ProjectActive = "ASDFG123-0002249160";
         projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         projectTrackerPage.switchToProjectPage();
@@ -260,14 +268,12 @@ public class DevProjectTests extends BaseTest {
         softAssert.assertNotNull(projectTrackerPage.isDocsReadOnly("PJ:Zoning and Permitting Docs Remaining"),"Should be readonly");
         projectTrackerPage.backToTrackerPage();
         softAssert.closeAssert();
-    }/*
-    @Test(groups = {"Integration"},description = "Verify if Build To Suit is Blank then fields related to BTS should be Disabled",priority = 51)
+    }
+    //@Test(groups = {"Integration"},description = "Verify if Build To Suit is Blank then fields related to BTS should be Disabled",priority = 51)
     public void verifyBtsFieldIsBlank() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
         projectTrackerPage.goToView("G:Build to Suit");
-        //String ProjectActive = "ASDFG123-0002249160";
-        String ProjectActive = "SAU4RGRT-0002249202";
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectRowEditor();
         projectTrackerPage.btsField("");
@@ -279,12 +285,11 @@ public class DevProjectTests extends BaseTest {
         projectTrackerPage.goToView("General Info");
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"},description = "Verify if Build To Suit is Yes then fields related to BTS should be Enabled",priority = 50)
+    //@Test(groups = {"Integration"},description = "Verify if Build To Suit is Yes then fields related to BTS should be Enabled",priority = 50)
     public void verifyBtsFieldIsYes() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage= mainSideMenu.goToProjectTracker();
         projectTrackerPage.goToView("G:Build to Suit");
-        String ProjectActive = "SAU4RGRT-0002249202";
         projectTrackerPage.searchForValueVendor(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectRowEditor();
         projectTrackerPage.btsField("Yes");
@@ -295,12 +300,11 @@ public class DevProjectTests extends BaseTest {
         projectTrackerPage.backToTrackerPage();
         projectTrackerPage.goToView("General Info");
         softAssert.closeAssert();
-    }*/
+    }
     @Test(groups = {"Integration"},description = "Verify Checkbox for Run Event Rule",priority = 5)
     public void verifyRunEventRuleCheckBox() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
-        String ProjectActive = "ASDFG123-0002249160";
         projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         softAssert.assertTrue(projectTrackerPage.eventRuleCheckbox(),"Checkbox should be Checked");
@@ -312,7 +316,6 @@ public class DevProjectTests extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         softAssert.assertTrue((projectHelper.uploadDocument(PROJECT_ACTIVE.trackerId.toString(),"PJ_2025_AMEND1", Constants.IMAGE_FILE_UPLOAD,"simpleImage.png")),"Document should be uploaded");
         projectTrackerPage= mainSideMenu.goToProjectTracker();
-        String ProjectActive = "SAU4RGRT-0002249202";
         projectTrackerPage.searchForValue(PROJECT_ACTIVE.projectId, "PJ:Project ID");
         projectTrackerPage.selectEditOption();
         projectTrackerPage.selectDdtDeliverables("PJ:Leasing","Amendment 1","Amendment 2");

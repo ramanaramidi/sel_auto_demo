@@ -46,7 +46,7 @@ public class PORTrackerPage extends BasePage {
     public By totalPORIDCount = By.xpath("//span[@id='gridStat0']");
     public By porCountNav = By.xpath("//div[@id='navRange0']");
     public By tableHeader = By.xpath("//table[@class='hdr']//tr//td");
-    //public By tableData = By.xpath("//table[@class='obj']//tr");
+    public By tableData1 = By.xpath("//table[@class='obj']//tr");
     public By tableData = By.xpath("//table[@class='obj overlap']//tr");
     public By optionsMenu = By.id("btnoptionsGroupOpener0");
     public By addButton = By.xpath("//*[@id='btnAdd0']");
@@ -62,10 +62,6 @@ public class PORTrackerPage extends BasePage {
     public By patCreatedDate = By.xpath("//div[@class='hdr_cell']//div[text()='PAT:Created Date']");
     public By patCreatedDateSorting = By.xpath("//div[@class='hdr_cell']//div[text()='PAT:Created Date']//following-sibling::div");
     public By pORCreatedDate = By.xpath("//div[@class='hdr_cell']//div[text()='POR:Created Date']");
-    public By getCellDateRow1 = By.xpath("//tr[@class=' ev_dhx_skyblue rowselected']//child::td[31]");
-    public By getCellDateRow2 = By.xpath("//tr[@class=' ev_dhx_skyblue']//child::td[31]");
-    public By getCellValue1 = By.xpath("//tr[@class=' ev_dhx_skyblue rowselected']//child::td[4]");
-    public By getCellValue2 = By.xpath("//tr[@class=' odd_dhx_skyblue']//child::td[4]");
     public By pORCreatedDateSorting = By.xpath("//div[@class='hdr_cell']//div[text()='POR:Created Date']//following-sibling::div");
 
     public By descOrder = By.xpath("//div[text()='Sort DESC']");
@@ -118,6 +114,31 @@ public class PORTrackerPage extends BasePage {
                     return cellValue;
                 }
             }
+        }
+        return "ERROR OCCURRED";
+    }
+    public String searchForValueInGrid(String columnName,int row) throws Exception {
+        fullScreen();
+        waitForPageToLoad();
+        int columnToFind = getTableData(columnName);
+        List<WebElement> tableContents = findAll(tableData1);
+        if(columnToFind !=-1){
+
+            List<WebElement> cellDataForTheRow = findAll(By.tagName("td"),tableContents.get(row));
+            scrollToElement(cellDataForTheRow.get(row));
+            sleep(1);
+            scrollToElement(cellDataForTheRow.get(columnToFind));
+            String cellValue = getText(cellDataForTheRow.get(columnToFind));
+            if(cellValue.isEmpty()){
+                cellValue = getText(find(By.tagName("div"),cellDataForTheRow.get(columnToFind)));
+            }
+            if(cellValue.isEmpty()){
+                List<WebElement> elements = findAll(By.tagName("a"),cellDataForTheRow.get(columnToFind));
+                if(elements.size()>0){
+                    cellValue = getText(elements.get(0));
+                }
+            }
+            return cellValue;
         }
         return "ERROR OCCURRED";
     }
@@ -421,11 +442,11 @@ public class PORTrackerPage extends BasePage {
         scrollToElement(find(patCreatedDate));
     }
 
-    public boolean verifyDatesSortingOrder(boolean set_SmallToBig) throws Exception {
+    public boolean verifyDatesSortingOrder(String cellDate1, String cellDate2, boolean set_SmallToBig) throws Exception {
         waitForPageToLoad();
-        String dateStr1 = find(getCellDateRow1).getText();
+        String dateStr1 = cellDate1;
         System.out.println(dateStr1);
-        String dateStr2 = find(getCellDateRow2).getText();
+        String dateStr2 = cellDate2;
         System.out.println(dateStr2);
         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
         Date date1 = formatter.parse(dateStr1);
@@ -465,11 +486,11 @@ public class PORTrackerPage extends BasePage {
         waitUntilVisibleElement(find(searchData));
         scrollToElement(find(porAdminProgramName));
     }
-    public boolean verifyProgramNameSortingOrder(boolean set_SmallToBig) throws Exception {
+    public boolean verifyProgramNameSortingOrder(String cellValue1, String cellValue2, boolean set_SmallToBig) throws Exception {
         waitForPageToLoad();
-        String programName1 = find(getCellValue1).getText();
+        String programName1 = cellValue1;
         System.out.println(programName1);
-        String programName2 = find(getCellValue2).getText();
+        String programName2 = cellValue2;
         System.out.println(programName2);
         int compare = programName1.compareTo(programName2);
         System.out.println(compare);

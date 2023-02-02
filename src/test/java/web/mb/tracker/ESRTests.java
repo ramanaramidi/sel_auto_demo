@@ -119,7 +119,9 @@ public class ESRTests extends BaseTest {
         esrTrackerPage= mainSideMenu.goToProcesses();
         esrTrackerPage.searchForValue("Report","Process Type");
         esrTrackerPage.sortingASCOrder();
-        softAssert.assertTrue(esrTrackerPage.verifySortingOrder(smallToBig=true),"Refresh Column is now selectable and able get order in ASC");
+        String response1 = esrTrackerPage.searchForValueInGrid("Refresh",1);
+        String response2 = esrTrackerPage.searchForValueInGrid("Refresh",2);
+        softAssert.assertTrue(esrTrackerPage.verifySortingOrder(response1,response2,smallToBig=true),"Refresh Column is now selectable and able get order in ASC");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "Verify refresh Column is selectable",priority = 8)
@@ -128,7 +130,9 @@ public class ESRTests extends BaseTest {
         esrTrackerPage= mainSideMenu.goToProcesses();
         esrTrackerPage.searchForValue("Report","Process Type");
         esrTrackerPage.sortingDescOrder();
-        softAssert.assertTrue(esrTrackerPage.verifySortingOrder(smallToBig=false),"Refresh Column is now Clickable and able get order in DSC");
+        String response1 = esrTrackerPage.searchForValueInGrid("Refresh",1);
+        String response2 = esrTrackerPage.searchForValueInGrid("Refresh",2);
+        softAssert.assertTrue(esrTrackerPage.verifySortingOrder(response1,response2,smallToBig=false),"Refresh Column is now Clickable and able get order in DSC");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "Verify Sticky Menu", priority = 20)

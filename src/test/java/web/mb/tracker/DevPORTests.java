@@ -96,7 +96,9 @@ public class DevPORTests  extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         porTrackerPage= mainSideMenu.goToPorAdminTrackerPage();
         porTrackerPage.sortingASCOrderPat();
-        softAssert.assertTrue(porTrackerPage.verifyProgramNameSortingOrder(smallToBig=true),"POR Program created Date Sorting ascending Done Successfully");
+        String response1 = porTrackerPage.searchForValueInGrid("PAT:Program Name",1);
+        String response2 = porTrackerPage.searchForValueInGrid("PAT:Program Name",2);
+        softAssert.assertTrue(porTrackerPage.verifyProgramNameSortingOrder(response1,response2,smallToBig=true),"POR Program created Date Sorting ascending Done Successfully");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Admin Add Page and click on Apply",priority = 7)
@@ -104,7 +106,9 @@ public class DevPORTests  extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         porTrackerPage= mainSideMenu.goToPorAdminTrackerPage();
         porTrackerPage.sortingDSCOrderPat();
-        softAssert.assertTrue(porTrackerPage.verifyProgramNameSortingOrder(smallToBig=false),"POR Program created Date Sorting ascending Done Successfully");
+        String response1 = porTrackerPage.searchForValueInGrid("PAT:Program Name",1);
+        String response2 = porTrackerPage.searchForValueInGrid("PAT:Program Name",2);
+        softAssert.assertTrue(porTrackerPage.verifyProgramNameSortingOrder(response1,response2,smallToBig=false),"POR Program created Date Sorting ascending Done Successfully");
         softAssert.closeAssert();
     }
 
@@ -113,7 +117,9 @@ public class DevPORTests  extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         porTrackerPage= mainSideMenu.goToPorAdminTrackerPage();
         porTrackerPage.sortingASCOrderDatePat();
-        softAssert.assertTrue(porTrackerPage.verifyDatesSortingOrder(smallToBig=true),"POR Program created Date Sorting ascending Done Successfully");
+        String response1 = porTrackerPage.searchForValueInGrid("PAT:Created Date",1);
+        String response2 = porTrackerPage.searchForValueInGrid("PAT:Created Date",2);
+        softAssert.assertTrue(porTrackerPage.verifyDatesSortingOrder(response1,response2,smallToBig=true),"POR Program created Date Sorting ascending Done Successfully");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Admin Add Page and click on Apply",priority = 9)
@@ -121,7 +127,9 @@ public class DevPORTests  extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         porTrackerPage= mainSideMenu.goToPorAdminTrackerPage();
         porTrackerPage.sortingDSCOrderDatePat();
-        softAssert.assertTrue(porTrackerPage.verifyDatesSortingOrder(smallToBig=false),"POR Program created Date Sorting descending Done Successfully");
+        String response1 = porTrackerPage.searchForValueInGrid("PAT:Created Date",1);
+        String response2 = porTrackerPage.searchForValueInGrid("PAT:Created Date",2);
+        softAssert.assertTrue(porTrackerPage.verifyDatesSortingOrder(response1,response2,smallToBig=false),"POR Program created Date Sorting descending Done Successfully");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "Verify Active Program Name present in POR Tracker",priority = 10)

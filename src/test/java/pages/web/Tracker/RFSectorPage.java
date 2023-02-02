@@ -1612,10 +1612,12 @@ public class RFSectorPage extends BasePage
         click(pencilIcon("SEC:Node ID(s)").get(0));
         String parent1 = switchToChildWindows();
         fullScreenChildWindow();
-        WebElement element1 = inputBoxDataBySname("S:DAS OEM");
-        scrollToElement(element1);
-        sleep(4);
+        waitForPageToLoad();
+        //WebElement element1 = inputBoxDataBySname("S:DAS OEM");
+        //scrollToElement(element1);
+        //sleep(4);
         WebElement siteCategory = selectionBoxBySname("S:Site Category").get(0);
+        scrollToElement(siteCategory);
         String selectedOption = getFirstSelectedOptionInDropdown(siteCategory);
         System.out.println("Selected Option in drop down is -" + selectedOption);
         if (selectedOption.equalsIgnoreCase("Node")){

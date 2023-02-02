@@ -154,7 +154,6 @@ public class LoginPage extends BasePage {
             }
         }
         sleep(15);
-        waitForPageToLoad();
     }
 
     public String getLoginPageTitle() {

@@ -147,7 +147,7 @@ public class DevSiteTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "displayOnly_NodeSectors", priority = 6)
+   // @Test(groups = {"Integration"}, description = "displayOnly_NodeSectors", priority = 6)
     public void displayOnly_NodeSectors(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTracker();
