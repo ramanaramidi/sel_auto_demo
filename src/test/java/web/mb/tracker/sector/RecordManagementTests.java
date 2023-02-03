@@ -49,7 +49,7 @@ public class RecordManagementTests extends BaseTest {
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
-    public void login_RfSectorSet1(Method method) throws Exception {
+    public void login_RecordManagement(Method method) throws Exception {
         loginPage = new LoginPage(driver);
         if(alphaUser.getIsServiceAccount().equals("true")){
             loginPage.doLogin(LoginOptionEnum.UN_EMAIL);
