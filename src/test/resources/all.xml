@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Demo Parallel test suite" parallel="classes" thread-count="8">
+<suite name="Demo Parallel test suite" parallel="classes" thread-count="12">
     <parameter name="isDataSeeding" value="false"/>
     <test name="Demo Test Runner " preserve-order="true">
         <parameter name="url" value="https://magentabuiltstg.t-mobile.com/Login.do"/>
