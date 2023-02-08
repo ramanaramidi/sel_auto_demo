@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Demo Parallel test suite" parallel="classes" thread-count="6">
+<suite name="Demo Parallel test suite" parallel="classes" thread-count="8">
     <parameter name="isDataSeeding" value="false"/>
     <test name="Demo Test Runner " preserve-order="true">
         <parameter name="url" value="https://magentabuiltstg.t-mobile.com/Login.do"/>
@@ -39,7 +39,7 @@
             <class name="web.mb.tracker.ImportDataTests"/>
             <class name="web.mb.tracker.PORTests"/>
             <class name="web.mb.tracker.ProjectTests"/>
-<!--            <class name="web.mb.tracker.ReportsTests"/>-->
+            <class name="web.mb.tracker.ReportsTests"/>
             <class name="web.mb.tracker.RingTests"/>
             <class name="web.mb.tracker.SiteTests"/>
 
