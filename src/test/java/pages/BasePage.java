@@ -335,8 +335,8 @@ public class BasePage {
         webHelper.checkBoxCheckByJS(label);
     }
 
-    public boolean isCheckboxSelected(String id) throws Exception{
-        return webHelper.isCheckBoxSelected(id);
+    public boolean isCheckboxSelected(String jsId) throws Exception{
+        return webHelper.isCheckBoxSelected(jsId);
     }
 
     public void waitForPageToLoad(){

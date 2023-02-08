@@ -89,6 +89,7 @@ public class ProjectTrackerPage extends BasePage {
     public By listItems = By.xpath("//*[@id='gridbox0']/div[2]/table/tbody/tr/td");
     public By generalInfoTab = By.xpath("//div[@title='PJ:General Info']");
     public By projectOffAirButton = By.xpath("(//td//label[contains(text(),'PJ:Project')]//b//following::td//following::div//input)[1]");
+    public By runEventCheckBox = By.xpath("//label[text()='PJ:Run Event Rule']//parent::td//following-sibling::td//child::label//input");
     String parentWindow;
     String parentWindow1;
     String parentWindowHolder;
@@ -1283,7 +1284,7 @@ public class ProjectTrackerPage extends BasePage {
         fullScreen();
         WebElement checkBox = checkBoxByLabel("PJ:Run Event Rule");
         scrollToElement(checkBox);
-        boolean checkBoxSelected = isCheckboxSelected("idx297");
+        boolean checkBoxSelected = isCheckboxSelected(find(runEventCheckBox).getAttribute("id"));
         click(find(okButton));
         switchToSpecificWindow(parentWindow);
         return checkBoxSelected  ;

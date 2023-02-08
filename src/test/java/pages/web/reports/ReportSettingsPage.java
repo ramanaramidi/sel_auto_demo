@@ -14,7 +14,7 @@ public class ReportSettingsPage extends BasePage {
     public WebDriver driver;
     public By tbGridLink = By.xpath("//a[text()='TB Grid with Submit']");
 
-    public By okButton = By.xpath("//*[@id='btnOK']");
+    public By okButton = By.xpath("//input[@id='btnOK']");
     public By tbGridWorksheets = By.xpath("//div[@title='TB Grid Worksheets']");
     public By general = By.xpath("//div[@title='General']");
 
@@ -28,10 +28,10 @@ public class ReportSettingsPage extends BasePage {
 
     public By filterName = By.xpath("//select[@id='filterName_1002226']");
 
-    public By emailUncheck = By.xpath("//*[@id='lblcb2']");
-    public By emailLink = By.xpath("//*[@id='lblcb3']");
+    public By emailUncheck = By.xpath("(//div[@class='hdr_cell']//div[text()='Report Delivery']/ancestor::table/../following-sibling::div//label)[2]");
+    public By emailLink = By.xpath("(//div[@class='hdr_cell']//div[text()='Report Delivery']/ancestor::table/../following-sibling::div//label)[3]");
 
-    public By fileCheck = By.xpath("//*[@id='lblcb1']");
+    public By fileCheck = By.xpath("(//div[@class='hdr_cell']//div[text()='Report Delivery']/ancestor::table/../following-sibling::div//label)[4]");
     public By searchOption = By.xpath("//input[@id='qsValue0']");
     public By  searchButton = By.xpath("//input[@id='btnSearch0']");
     public By  editProject  = By.xpath("//input[@id='btnEdit0']");
@@ -62,7 +62,14 @@ public class ReportSettingsPage extends BasePage {
     public By comments = By.xpath("//textarea[@id='comments']");
     public By sortButton = By.xpath("//*[@id='gridbox0']/div[1]/table/tbody/tr[2]/td[2]/div/div/div[2]");
     public By descButton = By.xpath("//*[@id='contextMenu']/div[1]/div/div[2]/div/div[2]/div[2]/div[2]/div");
-    public By runOnce = By.xpath("//*[@id='reportRefreshFrequencyId']");
+    public By RunOnce = By.xpath("//*[@id='reportRefreshFrequencyId']");
+    public By DeploymentReport = By.xpath("//a[text()='Deployment Report']");
+    public By searchBar = By.xpath("//div[@class='component panelForm panel_menu']//input[@id='search_']");
+    public By fileCheck1 = By.xpath("(//div[@class='hdr_cell']//div[text()='Report Delivery']/ancestor::table/../following-sibling::div//label)[3]");
+    public By emailCheck1 = By.xpath("(//div[@class='hdr_cell']//div[text()='Report Delivery']/ancestor::table/../following-sibling::div//label)[2]");
+    public By emailLinkCheck1 = By.xpath("(//div[@class='hdr_cell']//div[text()='Report Delivery']/ancestor::table/../following-sibling::div//label)[2]");
+    public By selectAll = By.xpath("//label[contains(text(),'Select All (Max 5K)')]//ancestor::label//label");
+    public By closeButton = By.xpath("//input[@id='btnClose0']");
     String parentWindow;
     public ReportSettingsPage(WebDriver driver)
     {
@@ -86,11 +93,16 @@ public class ReportSettingsPage extends BasePage {
         String parent2 = switchToChildWindows();
         waitUntilVisibleElement(find(reportDeliveryOk));
         fullScreenChildWindow();
-        if(find(emailUncheck).isSelected())
-            find(emailUncheck).click();
-        find(fileCheck).click();
+        click(find(selectAll));
         sleep(3);
-        find(fileCheck).click();
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck1));
+//        searchForValue("File", "Report Delivery");
+//        click(find(checkAll));
+//        sleep(2);
+//        click(find(unCheckAll));
+//        click(find(checkAll));
         waitUntilVisibleElement(find(reportDeliveryOk));
         click(find(reportDeliveryOk));
         switchToSpecificWindow(parent2);
@@ -255,42 +267,34 @@ public class ReportSettingsPage extends BasePage {
 
     public RunReportsPage generateReportDeliveryAsFile() throws Exception {
         sleep(5);
-        String parent1 = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         fullScreen();
         sleep(2);
-//        quickClick(find(tbGridWorksheets));
-//        selectDropdownOption(find(trackorType),"Project Tracker");
-//        selectDropdownOption(find(viewName),"G: Project Milestone");
-//        selectDropdownOption(find(filterName),"G: Small Cell");
-//        find(general).click();
         dropDownDotsClick("Delivery");
         String parent2 = switchToChildWindows();
-        WebElement fileCheck1 = find(fileCheck);
-        // checkBoxCheckByJS(fileCheck1);
-        fileCheck1.click();
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck1));
         waitUntilVisibleElement(find(reportDeliveryOk));
         fullScreenChildWindow();
         sleep(3);
 //        if(find(emailUncheck).isSelected())
 //            find(emailUncheck).click();
         //checkBoxByLabel("lblcb0_0").click();
-        boolean checkbox = isCheckboxSelected("cb1");
-        System.out.println("checkbox status - " + checkbox);
-        if ((isCheckboxSelected("cb1")) == false){
-            click(find(fileCheck));
-        }
         waitUntilVisibleElement(find(reportDeliveryOk));
         click(find(reportDeliveryOk));
         switchToSpecificWindow(parent2);
         click(find(okButton));
-        switchToSpecificWindow(parent1);
+        switchToSpecificWindow(parentWindow);
         sleep(5);
         return new RunReportsPage(driver);
     }
 
     public RunReportsPage generateReportDeliveryAsEmail() throws Exception {
         sleep(5);
-        String parent1 = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         fullScreenChildWindow();
         sleep(5);
         dropDownDotsClick("Delivery");
@@ -304,46 +308,45 @@ public class ReportSettingsPage extends BasePage {
 //            click(find(emailUncheck));
 //            sleep(3);
 //        }
-        click(find(emailUncheck));
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(emailCheck1));
         waitUntilVisibleElement(find(reportDeliveryOk));
         click(find(reportDeliveryOk));
         switchToSpecificWindow(parent2);
         click(find(okButton));
-        switchToSpecificWindow(parent1);
+        switchToSpecificWindow(parentWindow);
         sleep(5);
         return new RunReportsPage(driver);
     }
 
     public RunReportsPage generateReportDeliveryAsEmailWithLink() throws Exception {
         sleep(5);
-        String parent1 = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         fullScreenChildWindow();
         sleep(5);
         dropDownDotsClick("Delivery");
         String parent2 = switchToChildWindows();
         sleep(5);
-//        waitUntilVisibleElement(find(reportDeliveryOk));
+        waitUntilVisibleElement(find(reportDeliveryOk));
         fullScreenChildWindow();
-        if ((isCheckboxSelected("cb1")) && (isCheckboxSelected("cb2")) && (isCheckboxSelected("cb3"))){
-            WebElement fileCheck1 = find(fileCheck);
-            // checkBoxCheckByJS(fileCheck1);
-            fileCheck1.click();
-            sleep(5);
-            // WebElement emailCheck1 = find(emailUncheck);
-            // checkBoxCheckByJS(emailCheck1);
-            //  emailCheck1.click();
-            //  sleep(4);
-        } else if ((!isCheckboxSelected("cb1")) && (!isCheckboxSelected("cb2")) && (!isCheckboxSelected("cb3"))){
-            WebElement emailLink1 = find(emailLink);
-            emailLink1.click();
-            // checkBoxCheckByJS(emailLink1);
-            sleep(3);
-        }
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(emailLinkCheck1));
+        sleep(2);
+        // WebElement emailCheck1 = find(emailUncheck);
+        // checkBoxCheckByJS(emailCheck1);
+        //  emailCheck1.click();
+        //  sleep(4);
         waitUntilVisibleElement(find(reportDeliveryOk));
         click(find(reportDeliveryOk));
         switchToSpecificWindow(parent2);
         click(find(okButton));
-        switchToSpecificWindow(parent1);
+        switchToSpecificWindow(parentWindow);
         sleep(5);
         return new RunReportsPage(driver);
     }
@@ -363,7 +366,7 @@ public class ReportSettingsPage extends BasePage {
 
     public RunReportsPage selectDeliveryFile() throws Exception {
         sleep(5);
-        String parent = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         sleep(4);
         fullScreenChildWindow();
         sleep(10);
@@ -371,19 +374,22 @@ public class ReportSettingsPage extends BasePage {
         String parent1 = switchToChildWindows();
         waitUntilVisibleElement(find(reportDeliveryOk));
         fullScreenChildWindow();
-        find(fileCheck).click();
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck));
         sleep(5);
-        find(fileCheck).click();
         click(find(reportDeliveryOk));
         switchToSpecificWindow(parent1);
         click(find(okButton));
         sleep(5);
-        switchToSpecificWindow(parent);
+        switchToSpecificWindow(parentWindow);
         return new RunReportsPage(driver);
     }
     public RunReportsPage selectDeliveryEmail() throws Exception {
         sleep(5);
-        String parent = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         sleep(4);
         fullScreenChildWindow();
         sleep(10);
@@ -391,70 +397,82 @@ public class ReportSettingsPage extends BasePage {
         String parent1 = switchToChildWindows();
         waitUntilVisibleElement(find(reportDeliveryOk));
         fullScreenChildWindow();
-        find(emailLink).click();
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(emailUncheck));
+        sleep(2);
         click(find(reportDeliveryOk));
         switchToSpecificWindow(parent1);
         click(find(okButton));
         sleep(5);
-        switchToSpecificWindow(parent);
+        switchToSpecificWindow(parentWindow);
         return new RunReportsPage(driver);
     }
     public RunReportsPage generateReportForCurrentTime() throws Exception {
         sleep(5);
-        String parent = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         sleep(4);
         fullScreen();
         sleep(5);
         fullScreenChildWindow();
-        //  sleep(5);
-        //find(comments).sendKeys("Generating Report for current time");
-        sleep(10);
+        sleep(2);
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck));
+        WebElement element = find(comments);
+        scrollToElement(element);
+        setText(element,"Generating Report for current time");
+        sleep(5);
         waitUntilVisibleElement(find(okButton));
-        WebElement button = find(okButton);
-        button.click();
-        sleep(10);
-        switchToSpecificWindow(parent);
+        click(find(okButton));
+        sleep(5);
+        switchToSpecificWindow(parentWindow);
         return new RunReportsPage(driver);
     }
     public RunReportsPage verifyRunHistory(String report) throws Exception {
         sleep(3);
-        searchForValue(report,"Report Name");
-        sleep(3);
         click(find(runHistory));
-        switchToChildWindows();
-        sleep(5);
-        fullScreenChildWindow();
         sleep(2);
-        WebElement icon = find(sortButton);
-        icon.click();
-        find(descButton).click();
-        sleep(5);
         return new RunReportsPage(driver);
     }
     public RunReportsPage generateReportForSpecificTime() throws Exception {
         sleep(5);
-        String parent = switchToChildWindows();
+        parentWindow = switchToChildWindows();
         sleep(4);
         fullScreen();
         sleep(5);
         fullScreenChildWindow();
-        sleep(10);
-        waitUntilVisibleElement(find(okButton));
+        sleep(5);
         click(find(specificRadioBtn));
         sleep(6);
-        WebElement option = find(runOnce);
-        selectDropdownOptionByIndex(option,3);
+        WebElement runOnce = find(RunOnce);
+        selectDropdownOption(runOnce,"Monday");
         WebElement hours = find(Hours);
-        selectDropdownOptionByIndex(hours,22);
+        selectDropdownOption(hours,"22");
         WebElement minutes = find(Minutes);
-        selectDropdownOptionByIndex(minutes,0);
+        selectDropdownOption(minutes,"00");
         sleep(4);
         click(find(okButton));
         sleep(2);
-        switchToSpecificWindow(parent);
+        switchToSpecificWindow(parentWindow);
         return new RunReportsPage(driver);
     }
 
+    public ReportSettingsPage searchForReport(String reportName) throws Exception {
+        sleep(4);
+        search("Deployment Report");
+        sleep(10);
+        click(find(DeploymentReport));
+        sleep(5);
+        return new ReportSettingsPage(driver);
+    }
+    public void search(String option) throws Exception {
+        setText(find(searchBar), option);
+    }
 }
     /*public String clickReport() throws Exception {
         waitUntilVisibleElement(find(reportLink));

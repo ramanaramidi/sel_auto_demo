@@ -89,7 +89,7 @@ public class DevSiteTests extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         Site siteNew = new Site(site.ringId,"Candidate","New Site");
         siteTracker = mainSideMenu.goToSiteTracker();
-        siteTracker.searchForValue(siteNew.ringId, "R:Ring Code");
+        //siteTracker.searchForValue(siteNew.ringId, "R:Ring Code");
         addNewSite = siteTracker.selectAddNewSiteOption();
         siteTracker = addNewSite.addingNewSiteTracker(siteNew);
         siteTracker.searchForValue(site.siteId,"S:Site Code");
@@ -105,7 +105,7 @@ public class DevSiteTests extends BaseTest {
         AssertionsUtil softAssert = new AssertionsUtil();
         Site siteNew = new Site(site.ringId,"Candidate","New Site");
         siteTracker = mainSideMenu.goToSiteTracker();
-        siteTracker.searchForValue(siteNew.ringId, "R:Ring Code");
+        //siteTracker.searchForValue(siteNew.ringId, "R:Ring Code");
         addNewSite = siteTracker.selectAddNewSiteOption();
         siteTracker = addNewSite.addingNewSiteTracker(siteNew);
         siteTracker.searchForValue(site.siteId,"S:Site Code");
@@ -147,18 +147,16 @@ public class DevSiteTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-   // @Test(groups = {"Integration"}, description = "displayOnly_NodeSectors", priority = 6)
+    @Test(groups = {"Integration"}, description = "displayOnly_NodeSectors", priority = 6)
     public void displayOnly_NodeSectors(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTracker();
         rfSectorPage.searchForValue("ARY4001A","S:Site Code");//00TESTOC_11TAC--sectorId
         rfSectorPage.selectEditOption();
-        String parentWindow = rfSectorPage.switchToProjectPage();
         rfSectorPage.displayNodeSectors();
-        rfSectorPage.switchToTracker(parentWindow);
-        siteTracker = mainSideMenu.goToSiteTracker();
+        rfSectorPage.clickMainLogo();
+        siteTracker = rfSectorPage.clickingSiteTracker();
         siteTracker.searchSiteTracker1("00TESTOA", "S:Site Code");
-        //rfSectorPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
 
@@ -169,11 +167,10 @@ public class DevSiteTests extends BaseTest {
         //change view to select BBU sites--write code
         siteTracker.searchForValue("00TESTOD","S:Site Code");
         siteTracker.selectEditOption();
-        String parentWindow = siteTracker.switchToProjectPage();
+        siteTracker.switchToProjectPage();
         siteTracker.displaySector_SiteLink();
         int Site_SectorsCount =  siteTracker.getSite_SectorCount();
         softAssert.assertTrue(Site_SectorsCount > 0,"For the Particular Parent Site ID with BBU/BTS Site Category only can create Sectors");
-        //siteTracker.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "Last Updated By and Last Updated Date", priority = 2)
@@ -189,51 +186,51 @@ public class DevSiteTests extends BaseTest {
 
     @Test(groups = {"Integration"}, description = "Get S:Count of BBU/BTS Sites", priority = 2)
     public void sitesWithBbuBts(Method method) throws Exception {
-        String ringIdActive = "SD" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        Ring ringActive = new Ring("Active", ringIdActive, "Indoor Node");
-        Site siteActive = new Site(ringIdActive,"Primary","Active Site");
-        Site_Active = siteHelper.createActiveRingAndSite(ringActive,siteActive);
+        String Active_RingID = "SD" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring Active_Ring = new Ring("Active", Active_RingID, "Indoor Node");
+        Site Active_Site = new Site(Active_RingID,"Primary","Active Site");
+        Active_Site = siteHelper.createActiveRingAndSite(Active_Ring,Active_Site);
 
-        String ringId_Active = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        Ring ring_Active = new Ring("Active", ringId_Active, "Indoor Node");
-        Site site_Active = new Site(ringId_Active,"Primary","Active Site");
-        Site_Active1 = siteHelper.createActiveRingAndPrimaryActiveSite(ring_Active,site_Active);
+        String Active_RingID1 = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring Active_Ring1 = new Ring("Active", Active_RingID1, "Indoor Node");
+        Site Active_Site1 = new Site(Active_RingID1,"Primary","Active Site");
+        Active_Site1 = siteHelper.createActiveRingAndPrimaryActiveSite(Active_Ring1,Active_Site1);
 
         AssertionsUtil softAssert = new AssertionsUtil();
         siteTracker = mainSideMenu.goToSiteTracker();
-        siteTracker.searchForValue(Site_Active1.siteId, "S:Site Code");
+        siteTracker.searchForValue(Active_Site1.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         int response = addNewSite.setSiteCategory("Hub");
         System.out.println("BBU Count Before::"+response );
-        siteTracker.searchForValue(Site_Active.siteId, "S:Site Code");
+        siteTracker.searchForValue(Active_Site.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
-        addNewSite.assignSiteWithHub(Site_Active1.siteId);
-        siteTracker.searchForValue(Site_Active1.siteId, "S:Site Code");
+        addNewSite.assignSiteWithHub(Active_Site1.siteId);
+        siteTracker.searchForValue(Active_Site1.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         softAssert.assertTrue(addNewSite.bbuCount()>response,"Hub has been assigned to the Site");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "Validate Aggregate Router is visible in S:Hub Site ID", priority = 2)
     public void validateAggregateRouterForSite(Method method) throws Exception {
-        String ringIdActive = "SD" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        Ring ringActive = new Ring("Active", ringIdActive, "Indoor Node");
-        Site siteActive = new Site(ringIdActive,"Primary","Active Site");
-        Site_Active = siteHelper.createActiveRingAndSite(ringActive,siteActive);
+        String Active_RingID = "SD" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring Active_Ring = new Ring("Active", Active_RingID, "Indoor Node");
+        Site Active_Site = new Site(Active_RingID,"Primary","Active Site");
+        Active_Site = siteHelper.createActiveRingAndSite(Active_Ring,Active_Site);
 
-        String ringId_Active = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        Ring ring_Active = new Ring("Active", ringId_Active, "Indoor Node");
-        Site site_Active = new Site(ringId_Active,"Primary","Active Site");
-        Site_Active1 = siteHelper.createActiveRingAndPrimaryActiveSite(ring_Active,site_Active);
+        String Active_RingID1 = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring Active_Ring1 = new Ring("Active", Active_RingID1, "Indoor Node");
+        Site Active_Site1 = new Site(Active_RingID1,"Primary","Active Site");
+        Active_Site1 = siteHelper.createActiveRingAndPrimaryActiveSite(Active_Ring1,Active_Site1);
 
         AssertionsUtil softAssert = new AssertionsUtil();
         siteTracker = mainSideMenu.goToSiteTracker();
-        siteTracker.searchForValue(Site_Active1.siteId, "S:Site Code");
+        siteTracker.searchForValue(Active_Site1.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
         addNewSite.setSiteCategory("Aggregate Router");
-        siteTracker.searchForValue(Site_Active.siteId, "S:Site Code");
+        siteTracker.searchForValue(Active_Site.siteId, "S:Site Code");
         addNewSite = siteTracker.selectEditOption();
-        String hudId = addNewSite.assignSiteWithAggregateRouter(Site_Active1.siteId);
-        softAssert.assertNotEquals(hudId,Site_Active1.siteId,"SIte with Aggregate router is not displayed");
+        String hudId = addNewSite.assignSiteWithAggregateRouter(Active_Site1.siteId);
+        softAssert.assertNotEquals(hudId,Active_Site1.siteId,"SIte with Aggregate router is not displayed");
         softAssert.closeAssert();
     }
 }

@@ -437,16 +437,6 @@ public class SiteTrackerPage extends BasePage {
         sleep(2);
         click(find(BBU_HUBSites));
         sleep(2);
-      /*  inputTextBox("qsValue0", "AMRI010C");
-        click(find(searchButton));*/
-        //  searchForValue("AMRI010C","S:Site Code");
-        //  searchSiteTracker("AMRI010C","S:Site Code");
-        //   sleep(5);
-        // click(find(editButton1));
-        //   find(By.linkText("AMRI010")).click();
-        //    sleep(3);
-        //  click(find(cancelButton));
-        //   sleep(3);
         String bbuBtsCount = getText(find(bbu_btsTabCounter));
         System.out.println("BBU/BTS Sites Count is: " + bbuBtsCount);
         return bbuBtsCount;
@@ -538,10 +528,10 @@ public class SiteTrackerPage extends BasePage {
         click(find(applyButton));
         sleep(4);
         dropDownValueSelection("SEC:Sector Status","Provision");
-        click(find(applyButton));
+        sleep(3);
+        click(find(okButton));
         sleep(4);
         switchToSpecificWindow(parent1);
-
     }
 
     public int getSite_SectorCount() throws Exception {

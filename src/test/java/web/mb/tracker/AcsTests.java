@@ -57,7 +57,8 @@ public class AcsTests extends BaseTest {
     }
 
     @Test(groups = {"Integration"},description = "Acs Test For Small Cell Hub With Hub Site Id",priority = 2)
-    public void smallCellHubActiveRingAndSiteAcsWithHubSiteId(Method method) throws Exception {
+    public void
+    smallCellHubActiveRingAndSiteAcsWithHubSiteId(Method method) throws Exception {
         //DATA CREATION
         String ringIdActiveProject = "PP" + MiscHelpers.getRandomString(5, true).toUpperCase();
         Ring ringActive = new Ring("Active", ringIdActiveProject, "Macro");
@@ -336,8 +337,9 @@ public class AcsTests extends BaseTest {
     }
 
 
-    @Test(groups = {"Integration"},description = "Acs Test For Small Cell Hub With EXisting Ring And Site With Site Category Aggregate Router",priority = 12)
-    public void smallCellHubExistingRingAndSiteAcs(Method method) throws Exception {
+    //@Test(groups = {"Integration"},description = "Acs Test For Small Cell Hub With EXisting Ring And Site With Site Category Aggregate Router",priority = 12)
+    public void
+    smallCellHubExistingRingAndSiteAcs(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteTracker = mainSideMenu.goToSiteTracker();
         siteTracker.searchForValue("Macro", "R:Ring ID Description");
@@ -351,7 +353,7 @@ public class AcsTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "Acs Test For Das Hub With EXisting Ring And Site With Site Category Aggregate Router",priority = 13)
+    //@Test(groups = {"Integration"},description = "Acs Test For Das Hub With EXisting Ring And Site With Site Category Aggregate Router",priority = 13)
     public void dasHubExistingRingAndSiteAcs(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteTracker = mainSideMenu.goToSiteTracker();

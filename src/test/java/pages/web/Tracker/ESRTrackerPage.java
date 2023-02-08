@@ -152,6 +152,7 @@ public class ESRTrackerPage extends BasePage {
         fullScreenChildWindow();
         waitForPageToLoad();
         String lastDigits = MiscHelpers.getRandomNumber(7);
+        setText(find(phoneNumber),"");
         setText(find(phoneNumber),"+1-123-"+lastDigits);
         click(find(okButton));
         switchToSpecificWindow(parentWindow);
@@ -172,6 +173,7 @@ public class ESRTrackerPage extends BasePage {
         fullScreenChildWindow();
         waitForPageToLoad();
         String lastDigits = MiscHelpers.getRandomNumber(7);
+        setText(find(phoneNumber),"");
         setText(find(phoneNumber),"+1-123-"+lastDigits);
         click(find(applyButton));
         waitForPageToLoad();

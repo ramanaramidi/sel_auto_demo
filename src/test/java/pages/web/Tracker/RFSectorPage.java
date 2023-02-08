@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.web.Tracker.site.SiteTrackerPage;
 import rest.sector.SectorHelper;
 import utility.helper.MiscHelpers;
 
@@ -54,7 +55,7 @@ public class RFSectorPage extends BasePage
     public By ApplyButton = By.xpath("//input[@id='btnApply']");
     public By ringCodeSearchButton = By.xpath("//input[@id='btnSearch0']");
     public By ringCodeSearch = By.xpath(" //input[@id='qsValue0']");
-    public By gnodeBID_field = By.xpath("//*[@id='idx49_disp']");
+    public By gnodeBID_field = By.xpath("(//label[text()='SEC:gNode B ID - Planned']//following::div[2]//input)[1]");
     public By editButton = By.xpath("//input[@id='btnEdit0']");
     public By bscAndRncPlanned = By.xpath("(//label[contains(text(),'SEC:BSC / RNC - Planned')]//following::td//div//div//input)[1]");
     public By bscAndRncPlannedDots = By.xpath("(//label[contains(text(),'SEC:BSC / RNC - Planned')]//following::td//div//div//input)[2]");
@@ -80,7 +81,7 @@ public class RFSectorPage extends BasePage
     public By CheckBox = By.xpath("//table//*[text()='SEC:Small Cell e911 Auto Provision - Request']/parent::td/following-sibling::td//label");
     public By UspsAddressValidation = By.xpath("//textarea[@sname='SEC:USPS Address Validation - Results']");
     public By applyButton  = By.xpath("//input[@id='btnApply']");
-    public By siteID = By.xpath("//*[@id='idx12_disp']");
+    public By siteID = By.xpath("(//td//label[contains(text(),'S:Site Code')]//following::td//div//input)[1]");
     public By addButton = By.xpath("//*[@id='btnAdd0']");
     public By cancel_Button = By.xpath("//*[@id='btnCancel']");
     public By LAC_TACTab = By.xpath("//*[@id='tabName2']");
@@ -111,6 +112,8 @@ public class RFSectorPage extends BasePage
     public By ProjectTracker = By.xpath("//div[text()='Project Tracker']");
     public By PJSectorsTab = By.xpath("//div[@title='PJ:Sectors']");
     public By sectorIdTextArea = By.xpath("(//td//label[contains(text(),'PJ:Sector IDs')]//following::td//following::textarea)[1]");
+    public By checkAll = By.xpath("//*[@id='SelectCheckboxes0']");
+    public By SiteTracker = By.xpath("//div[text()='Site Tracker']");
     String parentWindow;
     String parentWindow1;
     String parentWindow2;
@@ -1208,7 +1211,7 @@ public class RFSectorPage extends BasePage
 
     public String getCellPlannedNameLTE() throws Exception {
         String SectorId = inputBoxDataBySname("SEC:Sector ID").getAttribute("value");
-        String siteId = find(siteID).getAttribute("value");
+        String siteId = find(siteID).getAttribute("title");
         String suffix = SectorId.substring(9, 11);
         System.out.println("suffix is" + suffix);
         String prefix = SectorId.substring(11, 13);
@@ -1249,7 +1252,7 @@ public class RFSectorPage extends BasePage
 
     public String getCellPlannedName5G() throws Exception {
         String SectorId = inputBoxDataBySname("SEC:Sector ID").getAttribute("value");
-        String siteId = find(siteID).getAttribute("value");
+        String siteId = find(siteID).getAttribute("title");
         String suffix = SectorId.substring(9, 11);
         System.out.println("suffix is" + suffix);
         String prefix = SectorId.substring(11, 13);
@@ -1295,7 +1298,7 @@ public class RFSectorPage extends BasePage
 
     public String getCellPlannedNameUMTS() throws Exception {
         String SectorId = inputBoxDataBySname("SEC:Sector ID").getAttribute("value");
-        String siteId = find(siteID).getAttribute("value");
+        String siteId = find(siteID).getAttribute("title");
         String suffix = SectorId.substring(9, 11);
         System.out.println("suffix is" + suffix);
         String prefix = SectorId.substring(11, 13);
@@ -1310,7 +1313,7 @@ public class RFSectorPage extends BasePage
 
     public String getCellPlannedNameNBIOT() throws Exception {
         String SectorId = inputBoxDataBySname("SEC:Sector ID").getAttribute("value");
-        String siteId = find(siteID).getAttribute("value");
+        String siteId = find(siteID).getAttribute("title");
         String suffix = SectorId.substring(9, 11);
         System.out.println("sectorIDSubString1 is" + suffix);
         String prefix = SectorId.substring(11, 13);
@@ -1588,6 +1591,8 @@ public class RFSectorPage extends BasePage
 
     public void displayNodeSectors() throws Exception {
         sleep(4);
+        String parent0 =  switchToChildWindows();
+        fullScreenChildWindow();
         WebElement element = inputBoxDataBySname("SEC:Pole Owner");
         scrollToElement(element);
         sleep(4);
@@ -1603,30 +1608,33 @@ public class RFSectorPage extends BasePage
         click(find(SiteCodeSearchTextbox));
         setText(find(SiteCodeSearchTextbox),"5TC1903A");
         click(find(SiteCodeTextboxSearchButton));
-        click(find(check1));
+        click(find(checkAll));
         sleep(2);
-        quickClick(find(okButton1));
+        click(find(okButton1));
         switchToSpecificWindow(parent);
         click(find(applyButton));
         sleep(10);
         click(pencilIcon("SEC:Node ID(s)").get(0));
         String parent1 = switchToChildWindows();
         fullScreenChildWindow();
-        waitForPageToLoad();
-        //WebElement element1 = inputBoxDataBySname("S:DAS OEM");
-        //scrollToElement(element1);
-        //sleep(4);
+        sleep(5);
         WebElement siteCategory = selectionBoxBySname("S:Site Category").get(0);
-        scrollToElement(siteCategory);
         String selectedOption = getFirstSelectedOptionInDropdown(siteCategory);
         System.out.println("Selected Option in drop down is -" + selectedOption);
         if (selectedOption.equalsIgnoreCase("Node")){
             click(find(servingSectorsTab));
+            click(find(okButton));
+            switchToSpecificWindow(parent1);
             sleep(3);
         }
         else {
+            click(find(okButton));
             switchToSpecificWindow(parent1);
         }
+        click(find(okButton));
+        sleep(2);
+        switchToSpecificWindow(parent0);
+        sleep(2);
     }
 
     public String displaySector_ProjectLink() throws Exception {
@@ -1732,6 +1740,11 @@ public class RFSectorPage extends BasePage
     }
     public void clickMainLogo() throws Exception {
         click(find(mainLogo1));
+    }
+    public SiteTrackerPage clickingSiteTracker() throws Exception {
+        waitUntilVisibleElement(find(SiteTracker));
+        find(SiteTracker).click();
+        return new SiteTrackerPage(driver);
     }
     public ProjectTrackerPage clickingProjectTracker() throws Exception {
         waitUntilVisibleElement(find(ProjectTracker));

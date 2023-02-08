@@ -57,9 +57,13 @@ public class RunReportsPage extends BasePage {
     public By selectedOption = By.xpath("//div[@id='qsField0']//div[@class='l_items']//div[@class='component item_select selected']");
     public By closeButton = By.xpath("//input[@id='btnClose0']");
     public String topDivSearchTypeDropdown = "//div[@class='component item_select'][normalize-space()='textName']";
-    public By report1 = By.xpath("//a[@href='.'][normalize-space()='TB Grid with Submit']");
+    public By report1 = By.xpath("//a[@href='.'][normalize-space()='Deployment Report']");
     public By checkBox = By.xpath("//input[@id='lblcb4516061']");
     public By deleteBtn = By.xpath("//input[@id='btnDelete0']");
+    public By desButton = By.xpath("//*[@id='gridbox0']/div[1]/table/tbody/tr[2]/td[2]/div/div/div[2]");
+    public By order = By.xpath("//*[@id='contextMenu']/div[1]/div/div[2]/div/div[2]/div[2]/div[2]/div");
+    public By sortButton = By.xpath("//*[@id='gridbox0']/div[1]/table/tbody/tr[2]/td[2]/div/div/div[2]");
+    public By descButton = By.xpath("//*[@id='contextMenu']/div[1]/div/div[2]/div/div[2]/div[2]/div[2]/div");
     String parentWindow;
     String parentWindow1;
 
@@ -139,21 +143,23 @@ public class RunReportsPage extends BasePage {
         switchToSpecificWindow(parent);
         return ReportId;
     }
-    public ReportSettingsPage searchReport() throws Exception {
+    public RunReportsPage searchReport() throws Exception {
         sleep(4);
         search("Deployment Report");
         sleep(10);
         click(find(DeploymentReport));
         sleep(5);
-        return new ReportSettingsPage(driver);
+        return new RunReportsPage(driver);
     }
     public void search(String option) throws Exception {
         setText(find(searchBar), option);
     }
-    public void goToReport() throws Exception {
+    public ReportSettingsPage goToReport() throws Exception {
         click(find(report1));
+        return new ReportSettingsPage(driver);
     }
     public String searchForValueInGrid(String columnName,int row) throws Exception {
+        sleep(4);
         fullScreen();
         waitForPageToLoad();
         sleep(15);
@@ -191,15 +197,15 @@ public class RunReportsPage extends BasePage {
         return -1;
     }
     public void deleteRecord() throws Exception {
-        sleep(35);
-        WebElement check = find(checkBox);
         sleep(5);
-        click(check);
-        sleep(15);
+        WebElement element = find(reportCheckBox);
+        scrollToElement(element);
+        sleep(4);
+        click(find(reportCheckBox));
+        sleep(5);
         click(find(deleteBtn));
-        sleep(10);
-        //acceptAlert();
-        click(find(closeButton));
+        sleep(5);
+        acceptAlert();
         sleep(3);
     }
     public String getCurrentDate() {
@@ -330,6 +336,7 @@ public class RunReportsPage extends BasePage {
     public void deleteReport() throws Exception{
         sleep(10);
         click(find(reportCheckBox));
+        sleep(3);
         click(find(deleteOption));
         //clickCancelAndAlert(find(deleteOption),"accept");
         acceptAlert();
@@ -369,6 +376,10 @@ public class RunReportsPage extends BasePage {
 
     }
 
+    public void switchToRunReportpage(String parentWindow) throws Exception{
+        click(find(closeButton));
+        switchToSpecificWindow(parentWindow);
+    }
     public void backToRunReportpage() throws Exception{
         click(find(closeButton));
         switchToSpecificWindow(parentWindow);
@@ -508,5 +519,21 @@ public class RunReportsPage extends BasePage {
         List<WebElement> cellData = getTableCellsByRow(rows.get(1));
         System.out.println("Data" + cellData.get(1).getText());
         return !cellData.get(1).getText().isEmpty() && !cellData.get(1).getText().equals(" ");
+    }
+    public ReportSettingsPage searchForReport(String report) throws Exception {
+        sleep(4);
+        searchForValue(report,"Report Name");
+        sleep(5);
+        return new ReportSettingsPage(driver);
+    }
+    public void clickDescending() throws Exception {
+        WebElement icon = find(sortButton);
+        icon.click();
+        find(descButton).click();
+        sleep(5);
+//        click(find(desButton));
+//        sleep(3);
+//        click(find(order));
+//        sleep(2);
     }
 }

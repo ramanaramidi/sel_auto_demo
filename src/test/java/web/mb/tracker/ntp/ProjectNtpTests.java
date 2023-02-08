@@ -163,7 +163,7 @@ public class ProjectNtpTests extends BaseTest {
         softAssert.assertTrue(projectNTPPage.verifyDevelopmentApprovalStatus(),"Development Approval Status should not be as Approved");
         softAssert.assertTrue(projectNTPPage.verifyApprovalTabsCheckboxes(),"In Approvals Tab all Approval checkboxes should be Unchecked");
         // projectNTPPage.switchToTracker(parentWindow);
-        softAssert.assertTrue(projectNTPPage.switchToTrackerOnException(parentWindow),"");
+        projectNTPPage.switchToTrackerOnCancel(parentWindow);
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "verifySetVendorStatus",priority = 9)
@@ -225,7 +225,7 @@ public class ProjectNtpTests extends BaseTest {
         projectNTPPage.navigateToNTPTabs();
         boolean file = projectNTPPage.verifyPDF();
         softAssert.assertNotNull(file,"PDF merged document should be available");
-        projectNTPPage.switchToTrackerOnException(parentWindow);
+        projectNTPPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
 

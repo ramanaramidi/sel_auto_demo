@@ -93,7 +93,8 @@ public class ProjectTests extends BaseTest {
             softAssert.assertTrue(addProjectPage.verifyUpdatedByAndDateDetails(superUser),"Details should match post update");
             projectTrackerPage = addProjectPage.returnToProjectTracker();
         }
-        softAssert.closeAssert();
+        softAssert.closeAssert()
+        ;
     }
 
     @Test(dependsOnMethods = "login",groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
@@ -123,6 +124,7 @@ public class ProjectTests extends BaseTest {
         String projectId = addPORPage.changePORRequestQueue1(porData);
         porTrackerPage = addPORPage.returnToPORTracker();
         porTrackerPage.refresh();
+        sleepFor(15);
         String response = porTrackerPage.searchForValueInGrid("PJ:Project ID","POR:POR ID",porData.porId);
         projectTrackerPage = mainSideMenu.goToProjectTracker();
         projectTrackerPage.searchForValue(response,"PJ:Project ID");

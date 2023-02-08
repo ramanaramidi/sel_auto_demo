@@ -158,7 +158,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
         projectNTPPage.checkNTPCheckBox();
         softAssert.assertTrue(projectNTPPage.verifyDevelopmentApprovalStatus(),"Development Approval Status should not be as Approved");
         softAssert.assertTrue(projectNTPPage.verifyApprovalTabsCheckboxes(),"In Approvals Tab all Approval checkboxes should be Unchecked");
-        softAssert.assertTrue(projectNTPPage.switchToTrackerOnException(parentWindow),"");
+        projectNTPPage.switchToTrackerOnCancel(parentWindow);
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "verifySetVendorStatus",priority = 9)
@@ -220,7 +220,7 @@ public class ProjectNtpSiteDevTests extends BaseTest {
         projectNTPPage.navigateToNTPTabs();
         boolean file = projectNTPPage.verifyPDF();
         softAssert.assertNotNull(file,"PDF merged document should be available in NTP Submitted by GC (4075)");
-        projectNTPPage.switchToTrackerOnException(parentWindow);
+        projectNTPPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
 
@@ -259,7 +259,6 @@ public class ProjectNtpSiteDevTests extends BaseTest {
         softAssert.assertTrue(projectNTPPage.verifyDevelopmentApprovalStatus(),"Development Approval Status should be Rejected");
         softAssert.assertFalse(projectNTPPage.verifyNTPCheckBox(),"CX NTP checkbox should be Unchecked");
         projectNTPPage.switchToTracker(parentWindow);
-        //softAssert.assertTrue(projectNTPPage.switchToTrackerOnException(parentWindow),"");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "Verify PJ:Construction NTP Submitted to GC (4100)", priority=14)

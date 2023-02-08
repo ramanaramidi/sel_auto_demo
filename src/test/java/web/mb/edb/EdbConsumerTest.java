@@ -488,7 +488,8 @@ public class EdbConsumerTest extends BaseTest {
     }
 
     @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 30)
-    public void verifyEdbCEntryForMovingExistingSite(Method method) throws Exception {
+    public void
+    verifyEdbCEntryForMovingExistingSite(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         String key = keys.get("MovingExistingSite");
         edbConsumerTrackerPage= mainSideMenu.goToEdbConsumerPage();

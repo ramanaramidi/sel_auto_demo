@@ -36,6 +36,7 @@ public class ProjectNTPPage extends BasePage {
     public By textboxNTPConstruction4075 = By.xpath("//input[@sname='PJ:Construction NTP Submitted to GC (4075) [Doc]']");
     public By label_NTPConstruction = By.xpath("//span[text()='NTP Construction']");
     public By label_NTPApproval = By.xpath("//span[text()='NTP Approvals']");
+    public By CXNTCheckBox = By.xpath("//label[text()='PJ:CX NTP Start']//parent::td//following-sibling::td//child::label//input");
 
     public void searchForValue(String data, String type) throws Exception
     {
@@ -146,13 +147,20 @@ public class ProjectNTPPage extends BasePage {
         sleep(3);
         dropDownValueSelection("PJ:Development Approval Status","Approved");
         WebElement check = inputBoxDataBySname("PJ:CX NTP Start");
+        sleep(3);
+        boolean check_Box = isCheckboxSelected(find(CXNTCheckBox).getAttribute("id"));
+        if (!check_Box){
         checkBoxCheckByJS(check);
+    }
         sleep(6);
-        /*if(!(isCheckboxSelected("idx470"))) {
-         checkBoxCheckByJS(check);
-    }*/
         click(find(applyButton));
         sleep(3);
+    }
+    public void switchToTrackerOnCancel(String parentWindow) throws Exception {
+        sleep(3);
+        click(find(cancel));
+        sleep(5);
+        switchToSpecificWindow(parentWindow);
     }
 
     public String verifyDevelopmentApprovalName() throws Exception {
@@ -311,13 +319,13 @@ public class ProjectNTPPage extends BasePage {
         WebElement checkBox = inputBoxDataBySname("PJ:CX NTP Start");
         WebElement commentsBox = textAreaBySname("PJ:Development Comments");
         scrollToElement(commentsBox);
-        boolean isCheckBoxSelected = false;
-        if(!isCheckBoxSelected){
+        boolean check_Box = isCheckboxSelected(find(CXNTCheckBox).getAttribute("id"));
+        if(check_Box){
             checkBoxCheckByJS(checkBox);
         }
         click(find(applyButton));
         sleep(5);
-        acceptAlert();
+        //acceptAlert();
         sleep(3);
     }
 
@@ -333,7 +341,8 @@ public class ProjectNTPPage extends BasePage {
         waitUntilVisibleElement(find(applyButton));
         WebElement NTPSubmittedBox = inputBoxDataBySname("PJ(A 4075) Construction NTP Submitted to GC");
         sleep(5);
-        clearInputBoxByElementAndSendKeys(NTPSubmittedBox);
+        //clearInputBoxByElementAndSendKeys(NTPSubmittedBox);
+        setText(NTPSubmittedBox,"");
         sleep(5);
         click(find(applyButton));
     }
@@ -369,7 +378,8 @@ public class ProjectNTPPage extends BasePage {
     public void unActualizationOf4100() throws Exception {
         waitUntilVisibleElement(find(applyButton));
         WebElement NTPAcceptedBox = inputBoxDataBySname("PJ(P 4100) Construction NTP Accepted by GC");
-        clearInputBoxByElementAndSendKeys(NTPAcceptedBox);
+        // clearInputBoxByElementAndSendKeys(NTPAcceptedBox);
+        setText(NTPAcceptedBox, "");
         sleep(2);
         click(find(applyButton));
     }

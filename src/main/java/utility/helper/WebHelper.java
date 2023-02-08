@@ -164,7 +164,7 @@ public class WebHelper {
     }
 
     public void clickTableLinkByText(String text) throws Exception {
-        String baseLocator = "//a[@href=\"\\'.'\"][normalize-space()='TOBEREPLACED']";
+        String baseLocator = "//a[@href=\".\"][normalize-space()='TOBEREPLACED']";
         baseLocator = baseLocator.replace("TOBEREPLACED",text);
         click(find(By.xpath(baseLocator),null,0));
     }
@@ -814,13 +814,13 @@ public class WebHelper {
             js.executeScript("arguments[0].click();", value);
         }
     }
-    public boolean isCheckBoxSelected(String id) {
+    public boolean isCheckBoxSelected(String jsId) {
         WebDriver driver1 = this.driver;
         if (driver1 == null) {
             throw new NullPointerException("null cannot be cast to non-null type org.openqa.selenium.JavascriptExecutor");
         } else {
             JavascriptExecutor js = (JavascriptExecutor) driver1;
-            String method ="return document.getElementById('" + id + "').checked;";
+            String method ="return document.getElementById('" + jsId + "').checked;";
             Object value = js.executeScript(method);
             System.out.println((boolean)value);
             return (boolean) value;
