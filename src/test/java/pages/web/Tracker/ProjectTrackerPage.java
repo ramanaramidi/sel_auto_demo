@@ -1066,7 +1066,7 @@ public class ProjectTrackerPage extends BasePage {
         sleep(3);
         click(find(DASTab));
         sleep(2);
-        dropDownDotsClick("PJ:Sector IDs");
+        dropDownDotsClick("PJ:Sector IDs (Build)");
         sleep(4);
         String parent = switchToChildWindows();
         fullScreen();
@@ -1090,7 +1090,7 @@ public class ProjectTrackerPage extends BasePage {
         sleep(3);
         click(find(DASTab));
         sleep(2);
-        dropDownDotsClick("PJ:Sector IDs");
+        dropDownDotsClick("PJ:Sector IDs (Build)");
         sleep(4);
         String parent = switchToChildWindows();
         fullScreen();

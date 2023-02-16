@@ -53,15 +53,16 @@ public class SiteTrackerPage extends BasePage {
     public By applyButton  = By.xpath("//input[@id='btnApply']");
     public By BBU_HUBSites = By.xpath("//*[@id='tab6']");
     public By cancelButton = By.xpath("//*[@id='btnCancel']");
-    public By rfSectorTab = By.xpath("//span[@id='tabLabel6']");
-    public By addButton = By.xpath("//*[@id='btnAdd6']");
+    public By rfSectorTab = By.xpath("//div[@title='SEC:RF Sector/Cell Tracker']");
+    public By addButton = By.xpath("//*[@value='Add']");
     public By okButton = By.xpath("//*[@id='btnOK']");
     public By generalInfoTab = By.xpath("//span[@id='tabLabel1']");
-    public By editButton = By.xpath("//*[@id='btnEdit6']");
+    public By editButton = By.xpath("(//*[@value='Edit'])[3]");
     public By editButton1 = By.xpath("//*[@id='btnEdit0']");
-    public By bbu_btsTabCounter = By.id("tabCounter6");
+    public By BBU_BTSSites = By.xpath("//div[@title='S:BBU / BTS Sites']");
+    public By bbu_btsTabCounter = By.xpath("//div[@title='S:BBU / BTS Sites']/div[3]/span");
     public By okButton1 = By.xpath("//input[@id='btnOK0']");
-    public By rfSectorTabCounter = By.id("tabCounter6");
+    public By rfSectorTabCounter = By.xpath("//div[@title='SEC:RF Sector/Cell Tracker']/div[3]/span");
     MiscHelpers miscHelpers;
     String parentWindow;
     public AddSitePage selectEditOption() throws Exception {
@@ -353,6 +354,7 @@ public class SiteTrackerPage extends BasePage {
         sleep(4);
         dropDownValueSelection("S:Site Category","BBU/BTS");
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(6);
         dropDownDotsClick("S:Hub Site ID");
         String parent2 = switchToChildWindows();
@@ -366,6 +368,7 @@ public class SiteTrackerPage extends BasePage {
         quickClick(find(siteCodeSelectionOKButton));
         switchToSpecificWindow(parent2);
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(10);
         click(pencilIcon("S:Hub Site ID").get(0));
         String parent3 = switchToChildWindows();
@@ -435,7 +438,7 @@ public class SiteTrackerPage extends BasePage {
         String parent3 = switchToChildWindows();
         fullScreenChildWindow();
         sleep(2);
-        click(find(BBU_HUBSites));
+        click(find(BBU_BTSSites));
         sleep(2);
         String bbuBtsCount = getText(find(bbu_btsTabCounter));
         System.out.println("BBU/BTS Sites Count is: " + bbuBtsCount);

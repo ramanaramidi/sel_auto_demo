@@ -28,13 +28,6 @@ public class DevSiteTests extends BaseTest {
     MainSideMenu mainSideMenu;
     RFSectorPage rfSectorPage;
     Site Site_Active;
-    Site Site_Active1;
-    ProjectTrackerPage projectTrackerPage;
-    PORTrackerPage porTrackerPage;
-    AddPORPage addPORPage;
-    PorHelper porHelper = new PorHelper();
-    String VALID_RING_PRIMARY_BUILD_SITE = "";
-    Site ACTIVE_RING_NEW_SITE;
     Site site;
     SiteHelper siteHelper = new SiteHelper();
     SiteTrackerPage siteTracker;
@@ -58,11 +51,6 @@ public class DevSiteTests extends BaseTest {
         Ring ringActive = new Ring("Active", ringIdActive, "Indoor Node");
         Site siteActive = new Site(ringIdActive,"Primary","Active Site");
         Site_Active = siteHelper.createActiveRingAndSite(ringActive,siteActive);
-
-        String ringId_Active = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
-        Ring ring_Active = new Ring("Active", ringId_Active, "Indoor Node");
-        Site site_Active = new Site(ringId_Active,"Primary","Active Site");
-        Site_Active1 = siteHelper.createActiveRingAndPrimaryActiveSite(ring_Active,site_Active);
     }
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
@@ -97,7 +85,7 @@ public class DevSiteTests extends BaseTest {
         String siteType = site.siteType;
         siteTracker.setSiteType(siteType);
         siteTracker.getSiteClass(siteType);
-
+        softAssert.closeAssert();
     }
 
     @Test(groups = {"Integration"}, description = "validateBBU_BTSSectors_HUBCount", priority = 3)
@@ -212,12 +200,12 @@ public class DevSiteTests extends BaseTest {
     }
     @Test(groups = {"Integration"}, description = "Validate Aggregate Router is visible in S:Hub Site ID", priority = 2)
     public void validateAggregateRouterForSite(Method method) throws Exception {
-        String Active_RingID = "SD" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        String Active_RingID = "SY" + MiscHelpers.getRandomString(5, true).toUpperCase();
         Ring Active_Ring = new Ring("Active", Active_RingID, "Indoor Node");
         Site Active_Site = new Site(Active_RingID,"Primary","Active Site");
         Active_Site = siteHelper.createActiveRingAndSite(Active_Ring,Active_Site);
 
-        String Active_RingID1 = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        String Active_RingID1 = "BU" + MiscHelpers.getRandomString(5, true).toUpperCase();
         Ring Active_Ring1 = new Ring("Active", Active_RingID1, "Indoor Node");
         Site Active_Site1 = new Site(Active_RingID1,"Primary","Active Site");
         Active_Site1 = siteHelper.createActiveRingAndPrimaryActiveSite(Active_Ring1,Active_Site1);

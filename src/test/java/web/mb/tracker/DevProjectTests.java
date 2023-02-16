@@ -149,7 +149,7 @@ public class DevProjectTests extends BaseTest {
     public void validateSector_RelatedProjects(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTracker();
-        rfSectorPage.searchForValue("00TESTOA-0002070764","SEC:Project ID");
+        rfSectorPage.searchForValue("00TESTOA-0002070764","SEC:Project ID (Build)");
         rfSectorPage.selectEditOption();
         rfSectorPage.getPJ_Sectors();
         rfSectorPage.clickMainLogo();

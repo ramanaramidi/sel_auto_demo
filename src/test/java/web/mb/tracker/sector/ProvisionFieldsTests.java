@@ -173,7 +173,7 @@ public class ProvisionFieldsTests extends BaseTest {
         String SectorID = "SAUXMYC8_21LAZ";
         rfSectorPage.searchForValue(SectorID, "SEC:Sector ID");
         rfSectorPage.editRFSector();
-        rfSectorPage.changeZipCode("500081");
+        rfSectorPage.changeZipCode();
         softAssert.assertNotEquals(rfSectorPage.getZipFieldValue("SEC:Zip"),rfSectorPage.getZipFieldValue("SEC:USPS Zip"),"Zip Should not match");
         softAssert.assertTrue(rfSectorPage.uspsAddressValidation(),"SEC:USPS Address Validation - Results should = 'Pass' or 'Failed'");
         softAssert.assertTrue(rfSectorPage.verifyE911DropDown("SEC:Small Cell e911 Auto Provision - Results"),"SEC:Small Cell e911 Auto Provision - Results");

@@ -37,10 +37,10 @@ public class AddSitePage extends BasePage {
     public By intergationAdminSite =By.xpath("//span[text()=' Integration Admin (Site)']");
     public By spectrumSpatialApiYes =By.xpath(" //select[@id='idx216']//option[text()='Yes']");
     public By generalInfoPage =By.xpath("//span[text()='General Info']");
-    public By documentOptions =By.id("btnoptionsGroupOpener5");
-    public By documentDeleteOption = By.id("itemDelete5");
-    public By documentsTab = By.id("tabName5");
-    public By documentsTabCounter = By.id("tabCounter5");
+    public By documentOptions = By.id("btnoptionsGroupOpener7");
+    public By documentDeleteOption = By.xpath("//div[text()='Delete']");
+    public By documentsTab = By.xpath("//span[text()='Document']");
+    public By documentsTabCounter = By.xpath("(//span[text()='Document']//following::div//span)[1]");
     public By firstOption = By.xpath("//tr[@class=' ev_dhx_skyblue rowselected']//input");
     public By okButton1 = By.xpath("//input[@id='btnOK0']");
     public By onAirOffAirTab = By.xpath("//span[@id='tabLabel2']");

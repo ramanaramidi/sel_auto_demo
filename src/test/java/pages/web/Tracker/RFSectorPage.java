@@ -111,7 +111,7 @@ public class RFSectorPage extends BasePage
     public By mainLogo1 = By.xpath("//*[@id='mainLogo']");
     public By ProjectTracker = By.xpath("//div[text()='Project Tracker']");
     public By PJSectorsTab = By.xpath("//div[@title='PJ:Sectors']");
-    public By sectorIdTextArea = By.xpath("(//td//label[contains(text(),'PJ:Sector IDs')]//following::td//following::textarea)[1]");
+    public By sectorIdTextArea = By.xpath("(//td//label[contains(text(),'PJ:Sector IDs (Build)')]//following::td//following::textarea)[1]");
     public By checkAll = By.xpath("//*[@id='SelectCheckboxes0']");
     public By SiteTracker = By.xpath("//div[text()='Site Tracker']");
     String parentWindow;
@@ -1047,7 +1047,7 @@ public class RFSectorPage extends BasePage
         scrollToElement(status);
         String dropdownName = getFirstSelectedOptionInDropdown(status);
         System.out.println("e911 Auto Provision Results:" +dropdownName);
-        return dropdownName.equals("Ready for Submission to Upsilon")||dropdownName.equals("USPS - Validation Failed");
+        return dropdownName.equals("Ready for Submission to ELSA")||dropdownName.equals("USPS - Validation Failed");
     }
     public boolean uspsAddressValidation() throws Exception {
         waitForPageToLoad();
@@ -1081,11 +1081,12 @@ public class RFSectorPage extends BasePage
         sleep(5);
         //click(find(ApplyButton));
     }
-    public void changeZipCode(String zip) throws Exception{
+    public void changeZipCode() throws Exception{
         parentWindow = switchToChildWindows();
         fullScreen();
         WebElement zipCode = inputBoxDataBySname("SEC:Zip");
         scrollToElement(zipCode);
+        String zip = MiscHelpers.getRandomNumber(5);
         clearInputBoxByElementAndSendKeys(zipCode);
         inputTextBox("SEC:Zip",zip);
         click(find(ApplyButton));
@@ -1642,7 +1643,7 @@ public class RFSectorPage extends BasePage
         WebElement element = inputBoxDataBySname("SEC:Pole Owner");
         scrollToElement(element);
         sleep(4);
-        dropDownDotsClick("SEC:Project ID");
+        dropDownDotsClick("SEC:Project ID (Build)");
         String parent = switchToChildWindows();
         fullScreenChildWindow();
         sleep(4);
@@ -1653,7 +1654,7 @@ public class RFSectorPage extends BasePage
         click(find(okButton1));
         switchToSpecificWindow(parent);
         sleep(3);
-        click(pencilIcon("SEC:Project ID").get(0));
+        click(pencilIcon("SEC:Project ID (Build)").get(0));
         String parent1 =  switchToChildWindows();
         fullScreenChildWindow();
         click(find(DASTab));
@@ -1713,7 +1714,7 @@ public class RFSectorPage extends BasePage
         WebElement element = inputBoxDataBySname("SEC:Pole Owner");
         scrollToElement(element);
         sleep(4);
-        dropDownDotsClick("SEC:Project ID");
+        dropDownDotsClick("SEC:Project ID (Build)");
         String parent = switchToChildWindows();
         fullScreenChildWindow();
         sleep(4);
@@ -1724,7 +1725,7 @@ public class RFSectorPage extends BasePage
         click(find(okButton1));
         switchToSpecificWindow(parent);
         sleep(3);
-        click(pencilIcon("SEC:Project ID").get(0));
+        click(pencilIcon("SEC:Project ID (Build)").get(0));
         String parent1 =  switchToChildWindows();
         fullScreenChildWindow();
         click(find(PJSectorsTab));
