@@ -47,7 +47,7 @@ public class AddSitePage extends BasePage {
     public By bbuBtsTab = By.xpath("//span[@id='tabLabel6']");
     public By rfSectorTab = By.xpath("//span[@id='tabLabel7']");
     public By  siteTrackerTableElement = By.xpath("//tr[contains(@class,'ev_dhx_skyblue rowselected')]//parent::*");
-
+    public By fopsTab = By.xpath("//div[@title='S:FOPS Info']");
     String parentWindow1;
 
     public SiteTrackerPage addNewSiteWith9CharactersSiteCode(String ringCode, String siteCode) throws Exception {
@@ -308,9 +308,11 @@ public class AddSitePage extends BasePage {
         setText(find(siteNewCoordinateLatVal), site.latitude);
         setText(find(siteNewCoordinateLongVal), site.longitude);
         buttonClick("OK", 4);
-
-
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(9);
         click(find(okButton));
+        sleep(4);
         switchToSpecificWindow(parent1);
         sleep(5);
     }
@@ -806,6 +808,7 @@ public class AddSitePage extends BasePage {
     }
 
     public void assignSiteWithHub1(String siteId) throws Exception {
+        waitForPageToLoad();
         WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
         scrollToElement(sitecategory);
         dropDownDotsClick("S:Hub Site ID");
@@ -906,5 +909,18 @@ public class AddSitePage extends BasePage {
         click(find(okButton));
         switchToSpecificWindow(parentWindow);
         return new SiteTrackerPage(driver);
+    }
+    public SiteFopsPage goToFopsTab() throws Exception {
+        parentWindow = switchToChildWindows();
+        waitUntilVisibleElement(find(applyButton));
+        sleep(5);
+        click(find(fopsTab));
+        waitForPageToLoad();
+        fullScreen();
+        return new SiteFopsPage(driver);
+    }
+
+    public String getParentWindow() {
+        return parentWindow;
     }
 }

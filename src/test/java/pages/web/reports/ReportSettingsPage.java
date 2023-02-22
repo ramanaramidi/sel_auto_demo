@@ -418,21 +418,54 @@ public class ReportSettingsPage extends BasePage {
         sleep(5);
         fullScreenChildWindow();
         sleep(2);
+        dropDownDotsClick("Delivery");
+        String parent1 = switchToChildWindows();
+        waitUntilVisibleElement(find(reportDeliveryOk));
+        fullScreenChildWindow();
+        sleep(3);
         click(find(selectAll));
         sleep(3);
         click(find(selectAll));
         sleep(2);
         click(find(fileCheck));
-        WebElement element = find(comments);
-        scrollToElement(element);
-        setText(element,"Generating Report for current time");
         sleep(5);
+        click(find(reportDeliveryOk));
+        switchToSpecificWindow(parent1);
         waitUntilVisibleElement(find(okButton));
         click(find(okButton));
         sleep(5);
         switchToSpecificWindow(parentWindow);
         return new RunReportsPage(driver);
     }
+    public RunReportsPage generateReportForCurrentTime_TB() throws Exception {
+        sleep(5);
+        parentWindow = switchToChildWindows();
+        sleep(4);
+        fullScreen();
+        sleep(5);
+        fullScreenChildWindow();
+        sleep(2);
+        dropDownDotsClick("Delivery");
+        String parent1 = switchToChildWindows();
+        sleep(2);
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck1));
+//        WebElement element = find(comments);
+//        scrollToElement(element);
+//        setText(element,"Generating Report for current time");
+        sleep(5);
+        click(find(reportDeliveryOk));
+        switchToSpecificWindow(parent1);
+        waitUntilVisibleElement(find(okButton));
+        click(find(okButton));
+        sleep(5);
+        switchToSpecificWindow(parentWindow);
+        return new RunReportsPage(driver);
+    }
+
     public RunReportsPage verifyRunHistory(String report) throws Exception {
         sleep(3);
         click(find(runHistory));
@@ -447,6 +480,19 @@ public class ReportSettingsPage extends BasePage {
         sleep(5);
         fullScreenChildWindow();
         sleep(5);
+        dropDownDotsClick("Delivery");
+        String parent1 = switchToChildWindows();
+        waitUntilVisibleElement(find(reportDeliveryOk));
+        fullScreenChildWindow();
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck));
+        sleep(5);
+        click(find(reportDeliveryOk));
+        switchToSpecificWindow(parent1);
+        sleep(3);
         click(find(specificRadioBtn));
         sleep(6);
         WebElement runOnce = find(RunOnce);
@@ -461,7 +507,41 @@ public class ReportSettingsPage extends BasePage {
         switchToSpecificWindow(parentWindow);
         return new RunReportsPage(driver);
     }
-
+    public RunReportsPage generateReportForSpecificTime_TB() throws Exception {
+        sleep(5);
+        parentWindow = switchToChildWindows();
+        sleep(4);
+        fullScreen();
+        sleep(5);
+        fullScreenChildWindow();
+        sleep(5);
+        dropDownDotsClick("Delivery");
+        String parent1 = switchToChildWindows();
+        waitUntilVisibleElement(find(reportDeliveryOk));
+        fullScreenChildWindow();
+        click(find(selectAll));
+        sleep(3);
+        click(find(selectAll));
+        sleep(2);
+        click(find(fileCheck1));
+        sleep(5);
+        click(find(reportDeliveryOk));
+        switchToSpecificWindow(parent1);
+        sleep(3);
+        click(find(specificRadioBtn));
+        sleep(6);
+        WebElement runOnce = find(RunOnce);
+        selectDropdownOption(runOnce,"Monday");
+        WebElement hours = find(Hours);
+        selectDropdownOption(hours,"22");
+        WebElement minutes = find(Minutes);
+        selectDropdownOption(minutes,"00");
+        sleep(4);
+        click(find(okButton));
+        sleep(2);
+        switchToSpecificWindow(parentWindow);
+        return new RunReportsPage(driver);
+    }
     public ReportSettingsPage searchForReport(String reportName) throws Exception {
         sleep(4);
         search("Deployment Report");

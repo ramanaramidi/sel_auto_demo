@@ -484,7 +484,7 @@ public class RunReportsPage extends BasePage {
     }
 
 
-    public void removeMandatoryFields() throws Exception {
+    public boolean removeMandatoryFields() throws Exception {
         WebElement market = find(marketField);
         setText(market,"");
         WebElement projectStatus = find(projectStatusField);
@@ -496,10 +496,13 @@ public class RunReportsPage extends BasePage {
         WebElement selectTask = find(selectTaskField);
         setText(selectTask,"");
         click(find(okButton));
-        acceptAlert();
-        click(find(cancelButton));
-        acceptAlert();
-        switchToSpecificWindow(parentWindow);
+        if(isAlertPresent()){
+            acceptAlert();
+            click(find(cancelButton));
+            acceptAlert();
+            switchToSpecificWindow(parentWindow);
+            return true;
+        } return false;
     }
 
     public void changeDeliveryType() throws Exception{
@@ -527,9 +530,11 @@ public class RunReportsPage extends BasePage {
         return new ReportSettingsPage(driver);
     }
     public void clickDescending() throws Exception {
+        waitForPageToLoad();
         WebElement icon = find(sortButton);
         icon.click();
         find(descButton).click();
+        waitForPageToLoad();
         sleep(5);
 //        click(find(desButton));
 //        sleep(3);

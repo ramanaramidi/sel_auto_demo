@@ -227,6 +227,7 @@ public class RFSectorPage extends BasePage
     }
 
     public RFSectorPage editRFSector() throws Exception {
+        waitForPageToLoad();
         waitUntilVisibleElement(find(EditButton));
         buttonClick("Edit", 3);
         return new RFSectorPage(driver);
@@ -602,12 +603,14 @@ public class RFSectorPage extends BasePage
     public boolean setSectorStatus(String status) throws Exception {
         parentWindow = switchToChildWindows();
         fullScreenChildWindow();
+        waitForPageToLoad();
         waitUntilVisibleElement(find(ApplyButton));
         WebElement sectorStatus = selectionBoxBySname("SEC:Sector Status").get(0);
         selectDropdownOption(sectorStatus, status);
+        waitForPageToLoad();
         waitUntilVisibleElement(find(okButton));
         click(find(ApplyButton));
-        sleep(2);
+        sleep(5);
         if (isAlertPresent()) {
             acceptAlert();
             click(find(CancelButton));
@@ -1590,7 +1593,7 @@ public class RFSectorPage extends BasePage
         return technology_Field;
     }
 
-    public void displayNodeSectors() throws Exception {
+    public void displayNodeSectors(String siteCode) throws Exception {
         sleep(4);
         String parent0 =  switchToChildWindows();
         fullScreenChildWindow();
@@ -1607,7 +1610,7 @@ public class RFSectorPage extends BasePage
 //        click(find(check));
 //        sleep(2);
         click(find(SiteCodeSearchTextbox));
-        setText(find(SiteCodeSearchTextbox),"5TC1903A");
+        setText(find(SiteCodeSearchTextbox),siteCode);
         click(find(SiteCodeTextboxSearchButton));
         click(find(checkAll));
         sleep(2);

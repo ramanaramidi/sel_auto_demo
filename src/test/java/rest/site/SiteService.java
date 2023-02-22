@@ -68,6 +68,23 @@ public class SiteService {
         logReport.info(" End of ----updateSiteToActivateWithPrimary");
         return responseDetails;
     }
+    public ApiResponse updateSiteForFops(Site site) {
+        logReport.info(" Start of ----updateSiteForFops");
+        SiteRequestBuilder siteRequestBuilder = new SiteRequestBuilder();
+        Map<String, String> params = new HashMap<>();
+        params.put("TRACKOR_KEY", site.siteId);
+        Map<String, String> headers = siteRequestBuilder.getHeader();
+        ApiRequest requestDetails = new ApiRequest(
+                baseUrl + SiteConstants.CREATE_SITE_TRACKER_URL,
+                params,
+                headers,
+                siteRequestBuilder.updateSiteForFops(site)
+        );
+        ApiResponse responseDetails = RestClientLib.put(requestDetails);
+        System.out.println("API RESPONSE:: " + responseDetails.responseBody);
+        logReport.info(" End of ----updateSiteForFops");
+        return responseDetails;
+    }
 
     public ApiResponse getSiteTrackerDetailsBySiteIdAndCustomFields(String siteId,String fields){
         logReport.info(" Start of ----getSiteTrackerDetailsBySiteIdAndCustomFields");

@@ -358,6 +358,12 @@ public class WebHelper {
         String locator = locatorFormat.replace("THISISTOCHANGE",value);
         return find(By.xpath(locator),null,0);
     }
+    public WebElement checkBoxByLabelInput(String value) throws Exception {
+        String locatorFormat =
+                "//label[text()='THISISTOCHANGE']//parent::td//following-sibling::td//child::label//input";
+        String locator = locatorFormat.replace("THISISTOCHANGE", value);
+        return find(By.xpath(locator), null, 0);
+    }
 
     public WebElement checkBoxByBoldedLabel(String value) throws Exception {
         String locatorFormat = "//b[normalize-space()='THISISTOCHANGE']//parent::label//parent::td//following-sibling::td//child::label";
@@ -420,6 +426,11 @@ public class WebHelper {
         String locator = locatorFormat.replace("THISISTOCHANGE",value);
         return find(By.xpath(locator),null,0);
     }
+    public List<WebElement> textAreaBySnameAll(String value) throws Exception {
+        String locatorFormat = "//textarea[@sname='THISISTOCHANGE']";
+        String locator = locatorFormat.replace("THISISTOCHANGE", value);
+        return findAll(By.xpath(locator), null, 0);
+    }
 
     public WebElement clipButtonBySname(String value) throws Exception {
         String locatorFormat = "//input[@sname='THISISTOCHANGE']//parent::div//following-sibling::div[@class = 'newFieldBtn']";
@@ -461,7 +472,21 @@ public class WebHelper {
         String locator = locatorFormat.replace("THISISTOCHANGE",value);
         return findAll(By.xpath(locator),null,0);
     }
-
+    public WebElement fieldByLabelText(String value) throws Exception {
+        String locatorFormat = "//label[text()='THISISTOCHANGE']";
+        String locator = locatorFormat.replace("THISISTOCHANGE", value);
+        return find(By.xpath(locator), null, 0);
+    }
+    public List<WebElement> fieldByLabelTextIndex(String value) throws Exception {
+        String locatorFormat = "//label[text()='THISISTOCHANGE']";
+        String locator = locatorFormat.replace("THISISTOCHANGE", value);
+        return findAll(By.xpath(locator), null, 0);
+    }
+    public WebElement sectionsByLabelText(String value) throws Exception {
+        String locatorFormat = "//p[contains(text(),'THISISTOCHANGE ')]";
+        String locator = locatorFormat.replace("THISISTOCHANGE", value);
+        return find(By.xpath(locator), null, 0);
+    }
     public WebElement selectionBoxBySname(WebElement root,String value,String selectionText) throws Exception {
         String locatorFormat = "//select[@sname='THISISTOCHANGE']//option[text()='SELECTIONTEXT']";
         String locator = locatorFormat.replace("THISISTOCHANGE",value);
@@ -560,6 +585,10 @@ public class WebHelper {
     public void selectDropdownOption(WebElement element, String visibleText) {
         Select selectDropdown = new Select(element);
         selectDropdown.selectByVisibleText(visibleText);
+    }
+    public List<WebElement> selectGetDropdownOptions(WebElement element) {
+        Select selectDropdown = new Select(element);
+        return selectDropdown.getOptions();
     }
 
     public String getFirstSelectedOptionInDropdown(WebElement element) {

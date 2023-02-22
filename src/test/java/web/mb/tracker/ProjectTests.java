@@ -97,7 +97,7 @@ public class ProjectTests extends BaseTest {
         ;
     }
 
-    @Test(dependsOnMethods = "login",groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
+    @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
     public void VerifyProjectTrackerNotGeneratedWhenPORQueueIncorrectStatus_Project(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         porTrackerPage= mainSideMenu.goToPorTrackerPage();
@@ -112,7 +112,7 @@ public class ProjectTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(dependsOnMethods = "login",groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
+    @Test(groups = {"Integration"},description = "Enter the Mandatory fields in POR Add Page and click on Apply.",priority = 4)
     public void createNewProjectTrackerFromPOR_Project(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         porTrackerPage= mainSideMenu.goToPorTrackerPage();

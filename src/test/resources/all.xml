@@ -54,6 +54,16 @@
             <class name="web.mb.feature.pier.PierCrTests"/>
             <class name="web.mb.feature.MidCellAcsTests"/>
             <class name="web.mb.feature.MidcellTests"/>
+            <!--feature-fops-->
+            <class name="web.mb.feature.fops.FOPSTests"/>
+            <class name="web.mb.feature.fops.FOPSFieldTechTests"/>
+            <class name="web.mb.feature.fops.FOPSSafetyTests"/>
+            <class name="web.mb.feature.fops.FOPSRiotTests"/>
+            <class name="web.mb.feature.fops.FOPSOSHATests"/>
+            <class name="web.mb.feature.fops.FOPSFacilityAccessTests"/>
+            <class name="web.mb.feature.fops.FOPSTelcoTests"/>
+            <class name="web.mb.feature.fops.FopsPowerTests"/>
+            <class name="web.mb.feature.fops.FOPSOtherAccessTests"/>
             <!--reports-->
             <class name="web.mb.reports.TaskVizionReportTests"/>
 

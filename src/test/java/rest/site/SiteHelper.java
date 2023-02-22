@@ -106,6 +106,12 @@ public class SiteHelper {
             return site;
         return null;
     }
+    public Site updateSiteForFops(Site site) {
+        SiteService siteService = new SiteService();
+        ApiResponse response = siteService.updateSiteForFops(site);
+        if (!response.isError) return site;
+        return null;
+    }
 
     public Site createPrimaryActiveSite(Site site){
         SiteService siteService = new SiteService();

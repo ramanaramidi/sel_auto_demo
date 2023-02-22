@@ -109,6 +109,7 @@ public class ESRTests extends BaseTest {
     public void verifyComponentHistory(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         esrTrackerPage = mainSideMenu.goToDocument();
+        esrTrackerPage.waitUntilPageLoad();
         esrTrackerPage.selectEditOption();
         softAssert.assertTrue(esrTrackerPage.verifyComponentFieldHistory(), "Component Field History dialog is Displayed");
         softAssert.closeAssert();

@@ -166,7 +166,6 @@ public class PORTests extends BaseTest {
     }
 
     @Test(
-            dependsOnMethods = "login",
             groups = { "Integration" },
             description = "Enter the Mandatory fields in POR Add Page and click on Apply.",
             priority = 4

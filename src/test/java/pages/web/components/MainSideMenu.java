@@ -7,6 +7,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
 import pages.web.Tracker.*;
+import pages.web.Tracker.site.SiteFopsPage;
 import pages.web.Tracker.site.SiteTrackerPage;
 import pages.web.onboarding.LoginPage;
 import pages.web.reports.ImportPage;
@@ -518,5 +519,10 @@ public class MainSideMenu extends BasePage {
         click(find(runReports));
         sleep(5);
         return new RunReportsPage(driver);
+    }
+    public SiteFopsPage goToSiteTrackerFops() throws Exception {
+        navigateToAppCenter();
+        clickingSiteTracker();
+        return new SiteFopsPage(driver);
     }
 }

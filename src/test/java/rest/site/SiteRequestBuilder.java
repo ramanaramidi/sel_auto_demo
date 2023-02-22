@@ -62,6 +62,11 @@ public class SiteRequestBuilder {
         baseRequest = baseRequest.replace("REPLACEWITHSITECLASS",site.siteClass);
         return baseRequest;
     }
+    public String updateSiteForFops(Site site) {
+        String baseRequest = SiteConstants.UPDATE_FOR_FOPS_SITE;
+        baseRequest = baseRequest.replace("REPLACEWITHSITECLASS", site.siteClass);
+        return baseRequest;
+    }
 
     public String updateSiteToActivateWithPrimary(Site site){
         String baseRequest = SiteConstants.UPDATE_FOR_ACTIVE_SITE_PRIMARY_BUILD;

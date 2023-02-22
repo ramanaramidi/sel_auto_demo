@@ -309,6 +309,11 @@ public class SiteTrackerPage extends BasePage {
         if (option.equals(siteType)){
             s1.selectByIndex(1);
         }
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(3);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
 
 //        WebElement status = selectionBoxBySname("S:Site Type").get(0);
 //        scrollToElement(status);
@@ -337,7 +342,7 @@ public class SiteTrackerPage extends BasePage {
     }
 
     public void setSiteType(String siteType) throws Exception {
-        switchToChildWindows();
+        parentWindow = switchToChildWindows();
         fullScreenChildWindow();
         sleep(2);
         dropDownValueSelection("S:Site Type",siteType);
@@ -345,8 +350,8 @@ public class SiteTrackerPage extends BasePage {
         sleep(3);
     }
 
-    public String verifyingBBU_BTSSectors_Hub(String siteId) throws Exception {
-        switchToChildWindows();
+    public String verifyingBBU_BTSSectors_Hub(String siteID, String siteCode) throws Exception {
+        parentWindow = switchToChildWindows();
         fullScreenChildWindow();
         sleep(5);
         WebElement element1 = inputBoxDataBySname("S:DAS OEM");
@@ -361,9 +366,9 @@ public class SiteTrackerPage extends BasePage {
         fullScreenChildWindow();
         sleep(4);
         click(find(siteCodeSearch));
-        setText(find(siteCodeSearch),"SA01101C");
+        setText(find(siteCodeSearch),siteCode);
         click(find(siteCodeSearchButton));
-        radioButtonClick("S:Site Code", "SA01101C");
+        radioButtonClick("S:Site Code",siteCode);
         sleep(3);
         quickClick(find(siteCodeSelectionOKButton));
         switchToSpecificWindow(parent2);
@@ -383,9 +388,9 @@ public class SiteTrackerPage extends BasePage {
         find(rfSectorTab).click();
         sleep(2);
         click(find(addButton));
-        String parent1 = switchToChildWindows();
+        String parent4 = switchToChildWindows();
         fullScreenChildWindow();
-        inputBoxDataBySname("SEC:Sector ID", siteId+"_"+MiscHelpers.getRandomNumber(2)+"LAA");
+        inputBoxDataBySname("SEC:Sector ID", siteID+"_"+MiscHelpers.getRandomNumber(2)+"LAA");
         click(find(applyButton));
         sleep(4);
         dropDownValueSelection("SEC:Sector Status","Provision");
@@ -393,7 +398,7 @@ public class SiteTrackerPage extends BasePage {
         sleep(4);
         click(find(okButton));
         sleep(2);
-        switchToSpecificWindow(parent3);
+        switchToSpecificWindow(parent4);
         // sleep(3);
         click(find(generalInfoTab));
         String count = inputBoxDataBySname("S:Count of BBU/BTS Sectors (New or Provision)").getText();
@@ -401,19 +406,22 @@ public class SiteTrackerPage extends BasePage {
         click(find(rfSectorTab));
         click(find(editButton));
         sleep(3);
-        switchToChildWindows();
+        String parent5  = switchToChildWindows();
         fullScreenChildWindow();
         dropDownValueSelection("SEC:Sector Status","On-Air");
         click(find(applyButton));
         click(find(okButton));
         sleep(4);
-        switchToSpecificWindow(parent3);
+        switchToSpecificWindow(parent5);
         click(find(generalInfoTab));
+        waitForPageToLoad();
         String count1 = inputBoxDataBySname("S:Count of BBU/BTS Sectors (On-Air)").getText();
         System.out.println("RFSECTOR On-Air status sectors count " + count1);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
         return BBU_BTSSitesCount;
     }
-    public String checkBBU_HUBSitesCount() throws Exception {
+    public String checkBBU_HUBSitesCount(String siteCode) throws Exception {
         sleep(3);
         WebElement element1 = inputBoxDataBySname("S:DAS OEM");
         scrollToElement(element1);
@@ -426,9 +434,9 @@ public class SiteTrackerPage extends BasePage {
         fullScreenChildWindow();
         sleep(4);
         click(find(siteCodeSearch));
-        setText(find(siteCodeSearch),"AMRI010A");
+        setText(find(siteCodeSearch),siteCode);
         click(find(siteCodeSearchButton));
-        radioButtonClick("S:Site Code", "AMRI010A");
+        radioButtonClick("S:Site Code", siteCode);
         sleep(3);
         quickClick(find(siteCodeSelectionOKButton));
         switchToSpecificWindow(parent2);
@@ -442,6 +450,8 @@ public class SiteTrackerPage extends BasePage {
         sleep(2);
         String bbuBtsCount = getText(find(bbu_btsTabCounter));
         System.out.println("BBU/BTS Sites Count is: " + bbuBtsCount);
+        click(find(okButton));
+        switchToSpecificWindow(parent3);
         return bbuBtsCount;
     }
     public void switchToTracker(String parentWindow) throws Exception {
@@ -510,7 +520,7 @@ public class SiteTrackerPage extends BasePage {
         sleep(5);
         waitUntilVisibleElement(find(okButton));
     }
-    public void displaySector_SiteLink() throws Exception {
+    public void displaySector_SiteLink(String siteCode) throws Exception {
         sleep(2);
         WebElement element1 = inputBoxDataBySname("S:DAS OEM");
         scrollToElement(element1);
@@ -527,10 +537,15 @@ public class SiteTrackerPage extends BasePage {
         click(find(addButton));
         String parent1 = switchToChildWindows();
         fullScreenChildWindow();
-        inputBoxDataBySname("SEC:Sector ID", "00TESTOD_"+MiscHelpers.getRandomNumber(2)+"LAA");
+        inputBoxDataBySname("SEC:Sector ID", siteCode+"_"+MiscHelpers.getRandomNumber(2)+"LAA");
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(4);
         dropDownValueSelection("SEC:Sector Status","Provision");
+        waitForPageToLoad();
+        sleep(3);
+        click(find(applyButton));
+        waitForPageToLoad();
         sleep(3);
         click(find(okButton));
         sleep(4);
@@ -538,8 +553,11 @@ public class SiteTrackerPage extends BasePage {
     }
 
     public int getSite_SectorCount() throws Exception {
+        waitForPageToLoad();
         String sectorsCount = getText(find(rfSectorTabCounter));
         System.out.println("BBU/BTS Sites Count is: " + sectorsCount);
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
         return Integer.parseInt(sectorsCount);
     }
 

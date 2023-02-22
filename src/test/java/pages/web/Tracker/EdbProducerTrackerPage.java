@@ -30,6 +30,8 @@ public class EdbProducerTrackerPage extends BasePage
 
 
     public boolean isValuePresentInGrid(String columnName) throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         int columnToFind = getTableData(columnName);
         if(columnToFind == -1){
             System.out.println("COULD NOT FIND THE COLUMN");
@@ -50,6 +52,7 @@ public class EdbProducerTrackerPage extends BasePage
     }
 
     public int getTableData(String columnName) throws Exception {
+        waitForPageToLoad();
         List<WebElement> tableHeaders = findAll(tableHeader);
         scrollToElement(tableHeaders.get(1));
         for(int i = 0; i<tableHeaders.size()-1; i++){
@@ -61,6 +64,7 @@ public class EdbProducerTrackerPage extends BasePage
     }
 
     public String searchForValueInGrid(String columnName,int row) throws Exception {
+        waitForPageToLoad();
         fullScreen();
         int columnToFind = getTableData(columnName);
         //int columnValueToMatch = getTableData(searchByColumn);

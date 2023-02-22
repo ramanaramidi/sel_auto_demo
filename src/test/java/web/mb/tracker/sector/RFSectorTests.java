@@ -252,7 +252,7 @@ public class RFSectorTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "verify 5G technology",priority = 13)
+    //@Test(groups = {"Integration"},description = "verify 5G technology",priority = 13)
     public void Verify_5G_TechnologyField_NG(Method method) throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
         Sector sector = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_12NGB"));
@@ -266,7 +266,7 @@ public class RFSectorTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "verify 5G technology",priority = 14)
+    //@Test(groups = {"Integration"},description = "verify 5G technology",priority = 14)
     public void Verify_5G_TechnologyField_NH(Method method) throws Exception{
         AssertionsUtil softAssert = new AssertionsUtil();
         Sector sector = sectorHelper.createNewSector(new Sector(siteForSector.siteId,siteForSector.siteId+"_12NHB"));

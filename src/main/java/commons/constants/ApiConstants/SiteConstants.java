@@ -55,4 +55,14 @@ public class SiteConstants {
             "      }\n" +
             "      ]\n" +
             "}";
+    public static final String UPDATE_FOR_FOPS_SITE =
+            "{\n" +
+                    "  \"fields\": {\n" +
+                    "    \"S_TELCO_ACCESS_NOTIF_PERIOD\":\"REPLACEWITHSITECLASS\",\n" +
+                    "    \"S_TELCO_TMO_NID_LOCATION\":\"REPLACEWITHSITECLASS\",\n" +
+                    "    \"S_TELCO_AAV_COMBO_KEYS\":\"REPLACEWITHSITECLASS\",\n" +
+                    "    \"S_POWER_ACCESS_NOTIF_PERIOD\":\"REPLACEWITHSITECLASS\",\n" +
+                    "    \"S_OTHER_ACCESS_NOTIF_PERIOD\":\"REPLACEWITHSITECLASS\"\n" +
+                    "  }\n" +
+                    "}";
 }

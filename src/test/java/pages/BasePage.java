@@ -142,6 +142,9 @@ public class BasePage {
     public WebElement checkBoxByLabel(String label) throws Exception {
         return webHelper.checkBoxByLabel(label);
     }
+    public WebElement checkBoxByLabelInput(String label) throws Exception {
+        return webHelper.checkBoxByLabelInput(label);
+    }
 
     public WebElement checkBoxByBoldedLabel(String label) throws Exception {
         return webHelper.checkBoxByBoldedLabel(label);
@@ -179,6 +182,9 @@ public class BasePage {
     public WebElement textAreaBySname(String value) throws Exception {
         return webHelper.textAreaBySname(value);
     }
+    public List<WebElement> textAreaBySnameAll(String value) throws Exception {
+        return webHelper.textAreaBySnameAll(value);
+    }
 
     public WebElement clipButtonBySname(String value) throws Exception {
         return webHelper.clipButtonBySname(value);
@@ -206,6 +212,15 @@ public class BasePage {
     public List<WebElement> lockByLabelText(String value) throws Exception {
         return webHelper.lockByLabelText(value);
     }
+    public WebElement fieldByLabelText(String text) throws Exception {
+        return webHelper.fieldByLabelText(text);
+    }
+    public List<WebElement> fieldByLabelTextIndex(String value) throws Exception {
+        return webHelper.fieldByLabelTextIndex(value);
+    }
+    public WebElement sectionsByLabelText(String value) throws Exception {
+        return webHelper.sectionsByLabelText(value);
+    }
 
     public String getText(WebElement element) throws Exception {
         return webHelper.getText(element);
@@ -221,6 +236,9 @@ public class BasePage {
 
     public void selectDropdownOption(WebElement element, String visibleText) {
         webHelper.selectDropdownOption(element, visibleText);
+    }
+    public List<WebElement> selectGetDropdownOptions(WebElement element) {
+        return webHelper.selectGetDropdownOptions(element);
     }
 
     public String getFirstSelectedOptionInDropdown(WebElement element) {

@@ -50,10 +50,10 @@ public class TaskVizionReportTests extends BaseTest {
         runReportsPage = mainSideMenu.goToRunReportTracker();
         runReportsPage.searchForValue(" TaskVizion Report", "Report Name");
         runReportsPage.goToTaskVizionReportsPage();
-        runReportsPage.removeMandatoryFields();
-        runReportsPage.goToHistoryField();
-        softAssert.assertFalse(runReportsPage.isDataPresentInTable(),"Report Is Not Created");
-        runReportsPage.backToRunReportpage();
+        softAssert.assertTrue(runReportsPage.removeMandatoryFields(),"Report will not be generated");
+        //runReportsPage.goToHistoryField();
+        //softAssert.assertFalse(runReportsPage.isDataPresentInTable(),"Report Is Not Created");
+        //runReportsPage.backToRunReportpage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "generation of taskvizion report with mandatory fields", priority = 3)

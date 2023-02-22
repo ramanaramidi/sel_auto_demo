@@ -200,6 +200,11 @@ public class ESRTrackerPage extends BasePage {
             return true;
         }else return false;
     }
+    public void waitUntilPageLoad() throws Exception{
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(EditButton));
+        sleep(20);
+    }
     public boolean verifyComponentFieldHistory() throws Exception{
         parentWindow = switchToChildWindows();
         fullScreenChildWindow();
