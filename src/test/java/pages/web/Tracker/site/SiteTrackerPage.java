@@ -374,7 +374,9 @@ public class SiteTrackerPage extends BasePage {
         switchToSpecificWindow(parent2);
         click(find(applyButton));
         waitForPageToLoad();
+        waitUntilVisibleElement(find(okButton));
         sleep(10);
+        scrollToElement(pencilIcon("S:Hub Site ID").get(0));
         click(pencilIcon("S:Hub Site ID").get(0));
         String parent3 = switchToChildWindows();
         fullScreenChildWindow();
@@ -392,9 +394,11 @@ public class SiteTrackerPage extends BasePage {
         fullScreenChildWindow();
         inputBoxDataBySname("SEC:Sector ID", siteID+"_"+MiscHelpers.getRandomNumber(2)+"LAA");
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(4);
         dropDownValueSelection("SEC:Sector Status","Provision");
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(4);
         click(find(okButton));
         sleep(2);
@@ -410,6 +414,8 @@ public class SiteTrackerPage extends BasePage {
         fullScreenChildWindow();
         dropDownValueSelection("SEC:Sector Status","On-Air");
         click(find(applyButton));
+        waitForPageToLoad();
+        sleep(3);
         click(find(okButton));
         sleep(4);
         switchToSpecificWindow(parent5);

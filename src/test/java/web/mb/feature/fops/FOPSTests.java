@@ -95,7 +95,7 @@ public class FOPSTests extends BaseTest {
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
         siteFopsPage.searchForValue(site.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        siteFopsPage.goTo_FopsTab();
+        siteFopsPage.goToFOPSTab();
         softAssert.assertTrue(
                 siteFopsPage.verifySectionIsDisplayed("Field Tech"),
                 "Field Tech Section Is Present"

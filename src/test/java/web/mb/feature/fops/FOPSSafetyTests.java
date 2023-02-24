@@ -140,7 +140,7 @@ public class FOPSSafetyTests extends BaseTest {
     softAssert.closeAssert();
   }
 
-  @Test(groups = { "Integration" }, description = "login", priority = 2)
+  @Test(groups = { "Integration" }, description = "login", priority = 3)
   public void verifyingSiteSecurityIssue_Safety(Method method)
     throws Exception {
     AssertionsUtil softAssert = new AssertionsUtil();
@@ -155,7 +155,7 @@ public class FOPSSafetyTests extends BaseTest {
     siteFopsPage.switchToTrackerPageByCancel();
     softAssert.closeAssert();
   }
-    @Test(groups = { "Integration" }, description = "login", priority = 3)
+    @Test(groups = { "Integration" }, description = "login", priority = 4)
     public void verifyingSignageVisitRequired_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -171,7 +171,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 5)
     public void verifyingFields_Safety(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -222,7 +222,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 6)
     public void verifyingSiteSecurityDropDownValue_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -254,7 +254,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 4)
+    @Test(groups = { "Integration" }, description = "login", priority = 7)
     public void verifyingSignageVisitRequiredDropDownValue_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -276,7 +276,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 8)
     public void validateAuditPhotosIcon_Safety(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -292,7 +292,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 9)
     public void updatingSiteSecurityDropDownValue_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -321,7 +321,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 5)
+    @Test(groups = { "Integration" }, description = "login", priority = 10)
     public void updatingSignageVisitDropDownValue_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -352,7 +352,7 @@ public class FOPSSafetyTests extends BaseTest {
     }
 
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 11)
     public void validateSiteSafetyComments_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -369,7 +369,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 12)
     public void validateSiteEnvironmentalHazard_Safety(Method method)
             throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -386,7 +386,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 13)
     public void verifyingFaaNotamContactIsEditable_Safety(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -397,7 +397,7 @@ public class FOPSSafetyTests extends BaseTest {
         siteFopsPage.switchToTrackerPageByCancel();
         softAssert.closeAssert();
     }
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 14)
     public void updateObstructionLightingWithoutFaaNotam_Safety(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -409,7 +409,7 @@ public class FOPSSafetyTests extends BaseTest {
         softAssert.closeAssert();
 
     }
-    @Test(groups = { "Integration" }, description = "login", priority = 2)
+    @Test(groups = { "Integration" }, description = "login", priority = 15)
     public void updateObstructionLightingWithFaaNotam_Safety(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();

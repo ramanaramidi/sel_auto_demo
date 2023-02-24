@@ -3,10 +3,14 @@ package web.mb.feature.fops;
 import common.BaseTest;
 import commons.enums.LoginOptionEnum;
 import java.lang.reflect.Method;
+
+import commons.objects.Ring;
+import commons.objects.Site;
 import org.testng.annotations.Test;
 import pages.web.Tracker.site.SiteFopsPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
+import rest.site.SiteHelper;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -18,6 +22,8 @@ public class FOPSTelcoTests extends BaseTest {
     MainSideMenu mainSideMenu;
     SiteFopsPage siteFopsPage;
     MiscHelpers miscHelpers;
+    Site Site_Active;
+    SiteHelper siteHelper = new SiteHelper();
 
     public FOPSTelcoTests() {
         if (envURL == null) {
@@ -41,17 +47,23 @@ public class FOPSTelcoTests extends BaseTest {
                 loginPage.launchUrl(url);
             }
         }
+        generateCommonData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
+    }
+    private void generateCommonData() {
+        String ringId_Active =
+                "SA" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring ring_Active = new Ring("Active", ringId_Active, "Indoor Node");
+        Site site_Active = new Site(ringId_Active, "Primary", "Active Site");
+        Site_Active =
+                siteHelper.createActiveRingAndPrimaryActiveSite(ring_Active, site_Active);
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessFields", priority = 2)
     public void verifyTelcoAccessFields(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Gate Combo"), "Telco Access Gate Combo field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Keys"), "S:Telco Access Keys field is displayed in Telco Access Details section");
@@ -71,18 +83,15 @@ public class FOPSTelcoTests extends BaseTest {
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco TMO NID Location"), "S:Telco TMO NID Location field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco TMO Combo/Keys"), "S:Telco TMO Combo/Keys field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Notify FOPS for Transport Outage"), "S:Telco Notify FOPS for Transport Outage field is displayed in Telco Access Details section");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessDateFields", priority = 3)
     public void verifyTelcoAccessDateFields(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Sunday - Start"),"S:Telco Access Sunday - Start field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Monday - Start"),"S:Telco Access Monday - Start field is displayed in Telco Access Details section");
@@ -98,251 +107,201 @@ public class FOPSTelcoTests extends BaseTest {
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Thursday - End"),"S:Telco Access Thursday - End field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Friday - End"),"S:Telco Access Friday - End field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Telco Access Saturday - End"),"S:Telco Access Saturday - End field is displayed in Telco Access Details section");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessGateComboField", priority = 4)
     public void verifyTelcoAccessGateComboField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField("S:Telco Access Gate Combo"),"Text Field should ne 150 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessKeysField", priority = 5)
     public void verifyTelcoAccessKeysField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoAccessKeys(),"Text Field should ne 50 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoDemarcLocationField", priority = 6)
     public void verifyTelcoDemarcLocationField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoDemarcLocation(),"Text Field should ne 50 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoProviderCompanyNameField", priority = 7)
     public void verifyTelcoProviderCompanyNameField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoProviderCompanyName(),"Text Field is Present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessDescriptionField", priority = 8)
     public void verifyTelcoAccessDescriptionField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         String text = "Testing";
-        softAssert.assertTrue(siteFopsPage.verifyTextArea_TelcoAccessDescription(text),"Text Field is Present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.updateTextArea_TelcoAccessDescription(text);
+        softAssert.assertTrue(siteFopsPage.verifyTextArea_TelcoAccessDescription(),"Text Field is Present");
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessNotesField", priority = 9)
     public void verifyTelcoAccessNotesField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         String text = "Testing";
         softAssert.assertTrue(siteFopsPage.verifyTextField_NotesField("S:Telco Access Notes",text),"Text Field limit Max Length is 4000 characters");
         softAssert.assertTrue(siteFopsPage.verifyTextArea_TelcoAccessNotesHistory(text),"Text from Telco Notes field is moved into Telco Notes History field");
         softAssert.assertTrue(siteFopsPage.verifyDateTimeStamped("S:Telco Access Notes History"),"Telco Notes History contains Username, Date and Time stamped");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessNotesHistoryField", priority = 10)
     public void verifyTelcoAccessNotesHistoryField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         String text ="";
         softAssert.assertTrue(siteFopsPage.verifyTextArea_NotesHistory("S:Telco Access Notes History",text),"Text Area should be readonly");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAAVNIDLocationField", priority = 11)
     public void verifyTelcoAAVNIDLocationField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoAAVNIDLocation(),"Text Field should ne 50 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAAVComboKeysField", priority = 12)
     public void verifyTelcoAAVComboKeysField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoAAVComboKeys(),"Text Field should ne 50 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyS247TelcoAccess", priority = 13)
     public void verifyS247TelcoAccess(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyDropDownField_S247TelcoAccess(),"Dropdown Field is Present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessNotificationRequiredCheckBox", priority = 14)
     public void verifyTelcoAccessNotificationRequiredCheckBox(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertContains(siteFopsPage.verifyNotificationCheckBox("S:Telco Access Notification Required"),"checkbox","Telco Access Notification Required CheckBox is Present");
         softAssert.assertTrue(siteFopsPage.verifyCheckBoxChecked_TelcoAccess("S:Telco Access Notification Required"),"Telco Notification checkBox checked and saved");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessNotificationPeriodField", priority = 15)
     public void verifyTelcoAccessNotificationPeriodField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoAccessNotificationPeriod(),"Text Field is present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessModifiedByField", priority = 16)
     public void verifyTelcoAccessModifiedByField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
-        softAssert.assertTrue(siteFopsPage.verifyModifiedBy("S:Telco Access Modified By"),"Telco Access ModifiedBy field should be pre populated with data");
-        siteFopsPage.switchToTracker(parentWindow);
+        softAssert.assertTrue(siteFopsPage.verifyModifiedBy("S:Telco Access Modified By",superUser),"Telco Access ModifiedBy field should be pre populated with data");
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessModifiedDateField", priority = 17)
     public void verifyTelcoAccessModifiedDateField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyModifiedDate("S:Telco Access Modified Date"),"Telco Access Modified Date field should be pre populated with data");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoProviderContactNumberField", priority = 18)
     public void verifyTelcoProviderContactNumberField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoProviderContactNumber(),"Text Field is Present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoTMONIDLocationField", priority = 19)
     public void verifyTelcoTMONIDLocationField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoTMONIDLocation(),"Text Field should ne 50 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoTMOComboKeysField", priority = 20)
     public void verifyTelcoTMOComboKeysField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextField_TelcoTMOComboKeysField(),"Text Field should ne 50 characters limit");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
 
@@ -350,15 +309,12 @@ public class FOPSTelcoTests extends BaseTest {
     public void verifyTelcoNotifyFopsForTransportOutageField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertContains(siteFopsPage.verifyNotificationCheckBox("S:Telco Notify FOPS for Transport Outage"),"checkbox","Telco Access Notification Required CheckBox is Present");
         softAssert.assertTrue(siteFopsPage.verifyCheckBoxChecked_TelcoAccess("S:Telco Notify FOPS for Transport Outage"),"Telco Notify FOPS checkBox checked and saved");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
 
@@ -370,11 +326,8 @@ public class FOPSTelcoTests extends BaseTest {
     public void verifyTelcoAccessDatesField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertContains(
                 siteFopsPage.verifyFieldDate("S:Telco Access Sunday - Start"),
@@ -446,7 +399,7 @@ public class FOPSTelcoTests extends BaseTest {
                 "23:59",
                 "Telco Access Saturday End field ends with time 23:59"
         );
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(
@@ -457,18 +410,16 @@ public class FOPSTelcoTests extends BaseTest {
     public void verifyTelcoAccessStartDateField_Updated(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
+        siteFopsPage.updateFieldStartDate("S:Telco Access Sunday - Start");
         softAssert.assertContains(
                 siteFopsPage.verifyFieldStartDate("S:Telco Access Sunday - Start"),
                 "14:00",
                 "Telco Access Sunday start field starts with time 14:00"
         );
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(
@@ -479,18 +430,16 @@ public class FOPSTelcoTests extends BaseTest {
     public void verifyTelcoAccessEndDateField_Updated(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
+        siteFopsPage.updateFieldEndDate("S:Telco Access Sunday - End");
         softAssert.assertContains(
                 siteFopsPage.verifyFieldEndDate("S:Telco Access Sunday - End"),
                 "22:00",
                 "Telco Access Sunday start field starts with time 22:00"
         );
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
 }

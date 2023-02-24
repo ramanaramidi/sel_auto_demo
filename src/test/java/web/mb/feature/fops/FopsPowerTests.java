@@ -111,9 +111,9 @@ public class FopsPowerTests extends BaseTest {
         );
         softAssert.assertTrue(
                 siteFopsPage.validateFieldIsDisplayed(
-                        "S:PWR Site Portable Generator Plug Type"
+                        "S:Power Generator Plug"
                 ),
-                "S:PWR Site Portable Generator Plug Type"
+                "S:Power Generator Plug"
         );
         softAssert.assertTrue(
                 siteFopsPage.validateFieldIsDisplayed("S:Power Provider Company Name"),
@@ -256,8 +256,8 @@ public class FopsPowerTests extends BaseTest {
                 "S:Power Access Keys"
         );
         softAssert.assertTrue(
-                siteFopsPage.isFieldDropDown("S:PWR Site Portable Generator Plug Type"),
-                "S:PWR Site Portable Generator Plug Type"
+                siteFopsPage.isFieldCheckbox("S:Power Generator Plug"),
+                "S:Power Generator Plug"
         );
         softAssert.assertTrue(
                 siteFopsPage.isFieldInputBox("S:Power Provider Company Name"),

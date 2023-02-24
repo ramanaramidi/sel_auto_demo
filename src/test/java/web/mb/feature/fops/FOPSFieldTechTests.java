@@ -121,7 +121,7 @@ public class FOPSFieldTechTests extends BaseTest {
         siteFopsPage.selectEditOption();
         siteFopsPage.goToFopsTab();
         softAssert.assertNotNull(
-                siteFopsPage.validateFieldTechNameIsReadOnly(),
+                siteFopsPage.validateFieldIsReadOnly("S:Field Tech Name "),
                 "Field Tech name Field Is In Read Only Mode"
         );
 
@@ -135,15 +135,15 @@ public class FOPSFieldTechTests extends BaseTest {
         );
         softAssert.assertNotNull(
                 siteFopsPage.validateFieldIsReadOnly("S:Field Tech Manager Name"),
-                "Field Tech Email Field Is In Read Only Mode"
+                "Field Tech Manager Name Field Is In Read Only Mode"
         );
         softAssert.assertNotNull(
                 siteFopsPage.validateFieldIsReadOnly("S:Field Tech Manager Phone"),
-                "Field Tech Email Field Is In Read Only Mode"
+                "Field Tech Manager Phone Field Is In Read Only Mode"
         );
         softAssert.assertNotNull(
                 siteFopsPage.validateFieldIsReadOnly("S:Field Tech Manager Email"),
-                "Field Tech Email Field Is In Read Only Mode"
+                "Field Tech Manager Email Field Is In Read Only Mode"
         );
         siteFopsPage.switchToTrackerPageByCancel();
         softAssert.closeAssert();

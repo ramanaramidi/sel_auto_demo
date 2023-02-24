@@ -310,6 +310,7 @@ public class AddSitePage extends BasePage {
         buttonClick("OK", 4);
         click(find(applyButton));
         waitForPageToLoad();
+        waitUntilVisibleElement(find(okButton));
         sleep(9);
         click(find(okButton));
         sleep(4);

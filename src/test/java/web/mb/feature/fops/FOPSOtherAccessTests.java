@@ -2,10 +2,13 @@ package web.mb.feature.fops;
 
 import common.BaseTest;
 import commons.enums.LoginOptionEnum;
+import commons.objects.Ring;
+import commons.objects.Site;
 import org.testng.annotations.Test;
 import pages.web.Tracker.site.SiteFopsPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
+import rest.site.SiteHelper;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
 
@@ -19,6 +22,8 @@ public class FOPSOtherAccessTests extends BaseTest {
     MainSideMenu mainSideMenu;
     SiteFopsPage siteFopsPage;
     MiscHelpers miscHelpers;
+    Site Site_Active;
+    SiteHelper siteHelper = new SiteHelper();
 
     public FOPSOtherAccessTests() {
         if (envURL == null) {
@@ -42,17 +47,23 @@ public class FOPSOtherAccessTests extends BaseTest {
                 loginPage.launchUrl(url);
             }
         }
+        generateCommonData();
         mainSideMenu = loginPage.LoginAsUser(superUser);
+    }
+    private void generateCommonData() {
+        String ringId_Active =
+                "SA" + MiscHelpers.getRandomString(5, true).toUpperCase();
+        Ring ring_Active = new Ring("Active", ringId_Active, "Indoor Node");
+        Site site_Active = new Site(ringId_Active, "Primary", "Active Site");
+        Site_Active =
+                siteHelper.createActiveRingAndPrimaryActiveSite(ring_Active, site_Active);
     }
     @Test(groups = {"Integration"}, description = "verifyOtherAccessFields", priority = 2)
     public void verifyOtherAccessFields(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Type (Name)"), "S:Other Access Type (Name) field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Gate Combo"), "S:Other Access Gate Combo field is displayed in Telco Access Details section");
@@ -65,18 +76,15 @@ public class FOPSOtherAccessTests extends BaseTest {
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Notification Period"), "S:Other Access Notification Period field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Modified By"), "S:Other Access Modified By field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Modified Date"), "S:Other Access Modified Date field is displayed in Telco Access Details section");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyOtherAccessDateFields", priority = 3)
     public void verifyOtherAccessDateFields(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Sunday - Start"),"S:Other Access Sunday - Start - Start field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Monday - Start"),"S:Other Access Monday - Start field is displayed in Telco Access Details section");
@@ -92,32 +100,29 @@ public class FOPSOtherAccessTests extends BaseTest {
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Thursday - End"),"S:Other Access Thursday - End field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Friday - End"),"S:Other Access Friday - End field is displayed in Telco Access Details section");
         softAssert.assertTrue(siteFopsPage.validateFieldIsDisplayed("S:Other Access Saturday - End"),"S:Other Access Saturday - End field is displayed in Telco Access Details section");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyOtherAccess_TextFields", priority = 4)
     public void verifyOtherAccess_TextFields(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Type (Name)"),"FOPS Other Access Testing","Text Field");
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Gate Combo"),"FOPS Other Access Testing","Text Field");
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Keys"),"FOPS Other Access Testing","Text Field");
-        softAssert.assertContains(siteFopsPage.verifyTextArea_OtherAccessFields("S:Other Access Description"),"Testing","Text Area Field");
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Notes"),"FOPS Other Access Testing","Text Field");
-        softAssert.assertContains(siteFopsPage.verifyTextArea_OtherAccessFields("S:Other Access Notes History"),"Testing","Text Area Field");
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Notification Period"),"FOPS Other Access Testing","Text Field");
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Modified By")," ","Text Field");
-        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Modified Date"),MiscHelpers.currentDateTime("MM/dd/yyyy"),"Text Field");
+        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Type (Name)"),"FOPS Other Access Testing","S:Other Access Type (Name) is Text Field");
+        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Gate Combo"),"FOPS Other Access Testing","S:Other Access Gate Combo is Text Field");
+        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Keys"),"FOPS Other Access Testing","S:Other Access Keys is Text Field");
+        softAssert.assertTrue(siteFopsPage.isFieldTextArea("S:Other Access Description"),"S:Other Access Description is Text Area Field");
+        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Notes"),"FOPS Other Access Testing","S:Other Access Notes is Text Field");
+        softAssert.assertContains(siteFopsPage.verifyTextArea_OtherAccessFields("S:Other Access Notes History"),"Testing","S:Other Access Notes History is Text Area Field");
+        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Notification Period"),"FOPS Other Access Testing","S:Other Access Notification Period isText Field");
+        softAssert.assertNotNull(siteFopsPage.validateFieldIsReadOnly("S:Other Access Modified By"),"S:Other Access Modified By is Read only");
+        softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Modified Date"),MiscHelpers.currentDateTime("MM/dd/yyyy"),"S:Other Access Modified Date is Text Field");
         softAssert.assertTrue(siteFopsPage.verifyDropDownField_S247OtherAccess(),"$24*7 Other Access Drop Down");
         softAssert.assertContains(siteFopsPage.verifyNotificationCheckBox("S:Other Access Notification Required"),"checkbox","Other Access Notification Required CheckBox is Present");
         softAssert.assertTrue(siteFopsPage.verifyCheckBoxChecked_OtherAccess("S:Other Access Notification Required"),"Other Notification checkBox checked and saved");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(
@@ -128,11 +133,8 @@ public class FOPSOtherAccessTests extends BaseTest {
     public void verifyTelcoAccessDatesField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertContains(
                 siteFopsPage.verifyFieldDate("S:Other Access Sunday - Start"),
@@ -204,95 +206,77 @@ public class FOPSOtherAccessTests extends BaseTest {
                 "23:59",
                 "Telco Access Saturday End field ends with time 23:59"
         );
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyOtherAccessDescriptionField", priority = 8)
     public void verifyOtherAccessDescriptionField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyTextArea_OtherAccessDescription(),"Text Field is Present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyOtherAccessNotesField", priority = 9)
     public void verifyOtherAccessNotesField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         String text = "Testing";
         softAssert.assertTrue(siteFopsPage.verifyTextField_NotesField("S:Other Access Notes",text),"Text Field limit Max Length is 4000 characters");
         softAssert.assertTrue(siteFopsPage.verifyTextArea_NotesHistory("S:Other Access Notes History",text),"Text from Other Access Notes field is moved into OtherAccess Notes History field");
         softAssert.assertTrue(siteFopsPage.verifyDateTimeStamped("S:Other Access Notes History"),"Other Access Notes History contains Username, Date and Time stamped");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessModifiedByField", priority = 16)
     public void verifyTelcoAccessModifiedByField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
-        softAssert.assertTrue(siteFopsPage.verifyModifiedBy("S:Other Access Modified By"),"Other Access ModifiedBy field should be pre populated with data");
-        siteFopsPage.switchToTracker(parentWindow);
+        softAssert.assertTrue(siteFopsPage.verifyModifiedBy("S:Other Access Modified By",superUser),"Other Access ModifiedBy field should be pre populated with data");
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyTelcoAccessModifiedDateField", priority = 17)
     public void verifyTelcoAccessModifiedDateField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyModifiedDate("S:Other Access Modified Date"),"Other Access Modified Date field should be pre populated with data");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyOtherAccessNotificationRequiredCheckBox", priority = 14)
     public void verifyOtherAccessNotificationRequiredCheckBox(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertContains(siteFopsPage.verifyNotificationCheckBox("S:Other Access Notification Required"),"checkbox","Other Access Notification Required CheckBox is Present");
         softAssert.assertTrue(siteFopsPage.verifyCheckBoxChecked_OtherAccess("S:Other Access Notification Required"),"Other Notification checkBox checked and saved");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyS247TelcoAccess", priority = 13)
     public void verifyS247OtherAccess(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
-        String siteCode = "QAAPI18A";
-        siteFopsPage.searchForValue(siteCode, "S:Site Code");
+        siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
-        String parentWindow = siteFopsPage.switchToProjectPage();
-        siteFopsPage.isFOPSTabExists();
         siteFopsPage.goToFopsTab();
         softAssert.assertTrue(siteFopsPage.verifyDropDownField_S247OtherAccess(),"Dropdown Field is Present");
-        siteFopsPage.switchToTracker(parentWindow);
+        siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }
 }

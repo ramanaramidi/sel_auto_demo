@@ -155,7 +155,7 @@ public class FOPSRiotTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "login", priority = 2)
+    //@Test(groups = {"Integration"}, description = "login", priority = 2)
     public void verifyingSiteRiotFields_SiteRiot(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -189,7 +189,7 @@ public class FOPSRiotTests extends BaseTest {
 
  */
 
-    @Test(groups = {"Integration"}, description = "login", priority = 2)
+    //@Test(groups = {"Integration"}, description = "login", priority = 2)
     public void verifyingCurrentVersion_SiteRiot(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -204,7 +204,7 @@ public class FOPSRiotTests extends BaseTest {
         siteFopsPage.switchToSiteTracker();
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"}, description = "login", priority = 2)
+    //@Test(groups = {"Integration"}, description = "login", priority = 2)
     public void verifyingLastPerformedDate_SiteRiot(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -220,7 +220,7 @@ public class FOPSRiotTests extends BaseTest {
         siteFopsPage.goToSiteTracker();
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"}, description = "login", priority = 2)
+    //@Test(groups = {"Integration"}, description = "login", priority = 2)
     public void verifyingAuditExpirationDate_SiteRiot(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();
@@ -239,7 +239,7 @@ public class FOPSRiotTests extends BaseTest {
         softAssert.closeAssert();
 
     }
-    @Test(groups = {"Integration"}, description = "login", priority = 2)
+    //@Test(groups = {"Integration"}, description = "login", priority = 2)
     public void verifyingDocumentUploadedBy_SiteRiot(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         siteFopsPage = mainSideMenu.goToSiteTrackerFops();

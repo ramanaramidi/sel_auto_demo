@@ -614,6 +614,7 @@ public class SiteFopsPage extends BasePage {
         String fieldText = textAreaName.getText();
         System.out.println("text of the Field is -" + fieldText);
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(4);
         return fieldText;
     }
@@ -775,19 +776,25 @@ public class SiteFopsPage extends BasePage {
         }
         return false;
     }
-
-    public Boolean verifyTextArea_TelcoAccessDescription(String text) throws Exception {
+    public void updateTextArea_TelcoAccessDescription(String text) throws Exception {
         waitForPageToLoad();
-        //String text = "Testing";
+        //String text = "Testing"
         int length = text.length();
         System.out.println("Expected length of the Field is -" + length);
         WebElement textAreaName = textAreaBySname("S:Telco Access Description");
         scrollToElement(textAreaName);
         setText(textAreaName, text);
         sleep(3);
-        String fieldText = textAreaName.getText();
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(4);
+    }
+
+    public Boolean verifyTextArea_TelcoAccessDescription() throws Exception {
+        waitForPageToLoad();
+        WebElement textAreaName = textAreaBySname("S:Telco Access Description");
+        scrollToElement(textAreaName);
+        String fieldText = textAreaName.getText();
         System.out.println("Actual length of the Field is -" + fieldText);
         int fieldLength = fieldText.length();
         System.out.println("Actual length of the Field is -" + fieldLength);
@@ -919,7 +926,7 @@ public class SiteFopsPage extends BasePage {
     public boolean verifyDateTimeStamped(String name) throws Exception {
         waitForPageToLoad();
         String notesText = textAreaBySname(name).getAttribute("title");
-        String date_timeText = MiscHelpers.currentDateTime("MM/dd/yyyy hh:mma");
+        String date_timeText = MiscHelpers.currentDateTime("MM/dd/yyyy hh:mm");
         System.out.println("current Date and Time is - " + date_timeText);
         if (notesText.contains(date_timeText)){
             return true;
@@ -927,7 +934,7 @@ public class SiteFopsPage extends BasePage {
             return false;
         }
     }
-    public boolean verifyModifiedBy(String name) throws Exception {
+    public boolean verifyModifiedBy(String name,Users userDetails) throws Exception {
         waitForPageToLoad();
         WebElement textFieldName = inputBoxDataBySname(
                 name
@@ -936,7 +943,7 @@ public class SiteFopsPage extends BasePage {
         sleep(3);
         String fieldText = textFieldName.getAttribute("value");
         System.out.println("Field is -" + fieldText);
-        String User = "PYedram1";
+        String User = userDetails.getNtCode();
         //userDetails.getNtCode();
         System.out.println("User is -" + User);
         if (fieldText.contains(User)){
@@ -999,27 +1006,40 @@ public class SiteFopsPage extends BasePage {
         System.out.println("field starts with - " + fieldName);
         return fieldName;
     }
-    public String verifyFieldStartDate(String name) throws Exception {
+    public void updateFieldStartDate(String name) throws Exception {
         waitForPageToLoad();
         WebElement fieldNameText = inputBoxDataBySname(name);
         scrollToElement(fieldNameText);
         sleep(2);
         setText(fieldNameText,"14:00");
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(3);
+    }
+    public String verifyFieldStartDate(String name) throws Exception {
+        waitForPageToLoad();
+        WebElement fieldNameText = inputBoxDataBySname(name);
+        scrollToElement(fieldNameText);
         String fieldName = fieldNameText.getAttribute("title");
         System.out.println("field starts with - " + fieldName);
-        click(find(applyButton));
         return fieldName;
     }
     public String verifyFieldEndDate(String name) throws Exception {
         waitForPageToLoad();
         WebElement fieldNameText = inputBoxDataBySname(name);
         scrollToElement(fieldNameText);
-        sleep(2);
-        setText(fieldNameText,"22:00");
         String fieldName = fieldNameText.getAttribute("title");
         System.out.println("field starts with - " + fieldName);
-        click(find(applyButton));
         return fieldName;
+    }
+    public void updateFieldEndDate(String name) throws Exception {
+        waitForPageToLoad();
+        WebElement fieldNameText = inputBoxDataBySname(name);
+        scrollToElement(fieldNameText);
+        setText(fieldNameText,"22:00");
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(3);
     }
     public Boolean verifyDropDownField_S247OtherAccess() throws Exception {
         waitForPageToLoad();
@@ -1115,7 +1135,7 @@ public class SiteFopsPage extends BasePage {
 
     public void goToFopsTab() throws Exception {
         parentWindow = switchToChildWindows();
-        fullScreen();
+        fullScreenChildWindow();
         waitForPageToLoad();
         click(find(FOPSInfoTab));
         waitForPageToLoad();
@@ -1271,6 +1291,7 @@ public class SiteFopsPage extends BasePage {
     }
 
     public boolean veryfySiteSecuruity() throws Exception {
+        waitForPageToLoad();
         WebElement siteSecurity = selectionBoxBySname("S:Site Security Issues")
                 .get(0);
         String value = getFirstSelectedOptionInDropdown(siteSecurity);
@@ -1983,7 +2004,7 @@ public class SiteFopsPage extends BasePage {
 
     public void checkUncheckCheckBox(String sName) throws Exception {
         waitForPageToLoad();
-        WebElement checkBoxField = checkBoxByLabelInput(sName);
+        WebElement checkBoxField = checkBoxByLabel(sName);
         scrollToElement(checkBoxField);
         click(checkBoxField);
     }
