@@ -18,33 +18,33 @@
         <classes>
             <!--tracker-sector-->
 
-            <class name="web.mb.tracker.sector.RFSectorTests"/>
-            <class name="web.mb.tracker.AcsTests"/>
+<!--            <class name="web.mb.tracker.sector.RFSectorTests"/>-->
+<!--            <class name="web.mb.tracker.AcsTests"/>-->
             <class name="web.mb.tracker.DevProjectTests"/>
 <!--            <class name="web.mb.tracker.sector.StatusFlows"/>-->
-            <class name="web.mb.tracker.DevTests"/>
+<!--            <class name="web.mb.tracker.DevTests"/>-->
 
             <class name="web.mb.tracker.DevPORTests"/>
-            <class name="web.mb.tracker.sector.DevSectorTests"/>
-            <class name="web.mb.tracker.sector.RecordManagementTests"/>
-            <class name="web.mb.tracker.sector.RFSectorTests2"/>
+<!--            <class name="web.mb.tracker.sector.DevSectorTests"/>-->
+<!--            <class name="web.mb.tracker.sector.RecordManagementTests"/>-->
+<!--            <class name="web.mb.tracker.sector.RFSectorTests2"/>-->
 
-            <class name="web.mb.tracker.DevRingTests"/>
-            <class name="web.mb.tracker.DevSiteTests"/>
+<!--            <class name="web.mb.tracker.DevRingTests"/>-->
+<!--            <class name="web.mb.tracker.DevSiteTests"/>-->
 
-<!--            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>-->
+            <class name="web.mb.tracker.ntp.ProjectNtpSiteDevTests"/>
             <class name="web.mb.tracker.ntp.ProjectNtpTests"/>
 
             <class name="web.mb.tracker.ESRTests"/>
             <class name="web.mb.tracker.ImportDataTests"/>
             <class name="web.mb.tracker.PORTests"/>
-<!--            <class name="web.mb.tracker.ProjectTests"/>-->
+            <class name="web.mb.tracker.ProjectTests"/>
             <!--            <class name="web.mb.tracker.ReportsTests"/>-->
             <class name="web.mb.tracker.RingTests"/>
             <class name="web.mb.tracker.SiteTests"/>
 
             <!--tracker-sector-->
-            <class name="web.mb.tracker.sector.ProvisionFieldsTests"/>
+<!--            <class name="web.mb.tracker.sector.ProvisionFieldsTests"/>-->
 
             <!--edb-->
             <class name="web.mb.edb.EdbConsumerTest"/>
@@ -52,12 +52,12 @@
 
             <!--feature-->
 <!--            <class name="web.mb.feature.pier.PierCrTests"/>-->
-<!--            <class name="web.mb.feature.MidCellAcsTests"/>-->
+            <class name="web.mb.feature.MidCellAcsTests"/>
             <class name="web.mb.feature.MidcellTests"/>
             <!--reports-->
 <!--            <class name="web.mb.reports.TaskVizionReportTests"/>-->
 
-            <class name="web.mb.users.VendorTests"/>
+<!--            <class name="web.mb.users.VendorTests"/>-->
             <class name="web.mb.users.SdmUserTests"/>
             <class name="web.mb.users.NonSuperUserTests"/>
 

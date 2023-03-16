@@ -537,7 +537,9 @@ public abstract class BaseTest extends TestListenerAdapter{
 	public WebDriver getLocalDriver(String browserName, String localDriverPath) {
 		if (browserName.equalsIgnoreCase("chrome")) {
 			System.setProperty("webdriver.chrome.driver", localDriverPath);
-			driver = new ChromeDriver();
+			ChromeOptions options = new ChromeOptions();
+			options.addArguments("--remote-allow-origins=*");
+			driver = new ChromeDriver(options);
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 		} else if (browserName.equalsIgnoreCase("firefox")) {
 

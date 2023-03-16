@@ -17,10 +17,9 @@
         <!--        <parameter name="deviceType" value=""/>-->
 
         <classes>
-            <!--users-->
-<!--            <class name="web.mb.users.VendorTests"/>-->
+            <!--users--><!--            <class name="web.mb.users.VendorTests"/>-->
 <!--            <class name="web.mb.users.SdmUserTests"/>-->
-<!--            <class name="web.mb.users.NonSuperUserTests"/>-->
+<!--            <class name="web.mb.tracker.ProjectTests"/>-->
         </classes>
     </test>
 </suite>
