@@ -18,11 +18,17 @@
 
         <classes>
             <!--tracker-sector-->
-            <class name="web.mb.tracker.sector.DevSectorTests"/>
-            <class name="web.mb.tracker.sector.RecordManagementTests"/>
-            <class name="web.mb.tracker.sector.RFSectorTests"/>
-            <class name="web.mb.tracker.sector.RFSectorTests2"/>
-            <class name="web.mb.tracker.sector.StatusFlows"/>
+<!--            <class name="web.mb.tracker.sector.DevSectorTests"/>-->
+<!--            <class name="web.mb.tracker.sector.RecordManagementTests"/>-->
+<!--            <class name="web.mb.tracker.sector.RFSectorTests"/>-->
+<!--            <class name="web.mb.tracker.sector.RFSectorTests2"/>-->
+            <class name="web.mb.feature.power.BasicCabinetTests"/>
+            <class name="web.mb.feature.power.PowerCabinetTests"/>
+            <class name="web.mb.feature.power.VoltageBoosterTests"/>
+            <class name="web.mb.feature.power.BatteryTests"/>
+            <class name="web.mb.feature.power.PowerRectifierTests"/>
+            <class name="web.mb.feature.power.CabinetTracker"/>
+<!--            <class name="web.mb.tracker.sector.RecordManagementTests"/>-->
         </classes>
     </test>
 </suite>

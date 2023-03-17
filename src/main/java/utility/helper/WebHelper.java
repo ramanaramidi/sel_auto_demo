@@ -915,4 +915,10 @@ public class WebHelper {
   /*  function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }*/
+
+    public WebElement fieldByLabelContainsText(String value) throws Exception {
+        String locatorFormat = "//label[contains(text(),'THISISTOCHANGE')]";
+        String locator = locatorFormat.replace("THISISTOCHANGE", value);
+        return find(By.xpath(locator), null, 0);
+    }
 }

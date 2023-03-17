@@ -1,13 +1,13 @@
 package commons.objects;
 
 import commons.constants.Constants;
-import utility.helper.MiscHelpers;
-
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import utility.helper.MiscHelpers;
 
 public class Site {
+
     public String siteId;
     public String longitude;
     public String latitude;
@@ -22,9 +22,10 @@ public class Site {
     public String siteStatus;
     public String preferredLandlordId;
     public Integer trackerId;
+    public String cabinet;
 
-    public Site(String ringId, String buildStatus, String status){
-        this.siteId = "SAU"+MiscHelpers.getRandomString(5,true).toUpperCase();
+    public Site(String ringId, String buildStatus, String status) {
+        this.siteId = "SAU" + MiscHelpers.getRandomString(5, true).toUpperCase();
         this.longitude = Constants.VALID_LONGITUDE;
         this.latitude = Constants.VALID_LATITUDE;
         this.ringId = ringId;
@@ -37,10 +38,18 @@ public class Site {
         this.siteCity = getRandomSiteCity();
         this.siteStatus = status;
         this.preferredLandlordId = getRandomPreferredLandlord();
+        this.cabinet = null;
     }
 
-    public Site(String ringId, String buildStatus, String siteType, String siteClass, String siteBuildOutType ,String status){
-        this.siteId = "SAU"+MiscHelpers.getRandomString(5,true).toUpperCase();
+    public Site(
+            String ringId,
+            String buildStatus,
+            String siteType,
+            String siteClass,
+            String siteBuildOutType,
+            String status
+    ) {
+        this.siteId = "SAU" + MiscHelpers.getRandomString(5, true).toUpperCase();
         this.longitude = Constants.VALID_LONGITUDE;
         this.latitude = Constants.VALID_LATITUDE;
         this.ringId = ringId;
@@ -53,93 +62,105 @@ public class Site {
         this.siteCity = getRandomSiteCity();
         this.siteStatus = status;
         this.preferredLandlordId = getRandomPreferredLandlord();
+        this.cabinet = null;
     }
 
-    public  String getSiteName(){
-        return "Test"+MiscHelpers.getRandomString(3,false);
+    public String getSiteName() {
+        return "Test" + MiscHelpers.getRandomString(3, false);
     }
 
-    public String getRandomSiteClass(String siteType){
+    public String getRandomSiteClass(String siteType) {
         List<String> siteClassListStructureNonBuild = Arrays.asList(
                 "Bell Tower",
                 "Billboard",
                 "Cactus",
                 "Catenary Structure",
                 "Clock Tower",
-                "Flag Pole");
+                "Flag Pole"
+        );
         List<String> siteClassListBuild = Arrays.asList(
                 "3G Repeater",
                 "Building Other",
                 "In Building",
                 "Non TMO Repeater",
                 "Repeater",
-                "Roof Top Mount");
+                "Roof Top Mount"
+        );
         List<String> siteClassListDas = Arrays.asList(
                 "In-Building BTS",
                 "In-Building DAS",
                 "In-Building HUB",
                 "Outdoor BTS",
                 "Outdoor HUB",
-                "External DAS");
-        List<String> siteClassListNonCell = Arrays.asList(
-                "Non Cell Site");
-        List<String> siteClassListRouter = Arrays.asList(
-                "Aggregate");
+                "External DAS"
+        );
+        List<String> siteClassListNonCell = Arrays.asList("Non Cell Site");
+        List<String> siteClassListRouter = Arrays.asList("Aggregate");
         Random r = new Random();
-        switch (siteType){
-            case "Structure Non Building":return siteClassListStructureNonBuild.get(r.nextInt(siteClassListStructureNonBuild.size()));
-            case "Building":return siteClassListBuild.get(r.nextInt(siteClassListBuild.size()));
-            case "Engineering DAS":return siteClassListDas.get(r.nextInt(siteClassListDas.size()));
-            case "Non Cell Site":return siteClassListNonCell.get(r.nextInt(siteClassListNonCell.size()));
-            case "Router":return siteClassListRouter.get(r.nextInt(siteClassListRouter.size()));
-            default:return "Test Site";
+        switch (siteType) {
+            case "Structure Non Building":
+                return siteClassListStructureNonBuild.get(
+                        r.nextInt(siteClassListStructureNonBuild.size())
+                );
+            case "Building":
+                return siteClassListBuild.get(r.nextInt(siteClassListBuild.size()));
+            case "Engineering DAS":
+                return siteClassListDas.get(r.nextInt(siteClassListDas.size()));
+            case "Non Cell Site":
+                return siteClassListNonCell.get(r.nextInt(siteClassListNonCell.size()));
+            case "Router":
+                return siteClassListRouter.get(r.nextInt(siteClassListRouter.size()));
+            default:
+                return "Test Site";
         }
-
-
-
     }
 
-    public String getRandomSiteType(){
+    public String getRandomSiteType() {
         Random r = new Random();
         List<String> siteTypeList = Arrays.asList(
                 "Structure Non Building",
                 "Building"
-//                "Engineering DAS",
-//                "Non Cell Site",
-//                "Router",
-//                "Test Site"
+                //                "Engineering DAS",
+                //                "Non Cell Site",
+                //                "Router",
+                //                "Test Site"
         );
         return siteTypeList.get(r.nextInt(siteTypeList.size()));
     }
 
-    public String getRandomBuildStatus(){
+    public String getRandomBuildStatus() {
         Random r = new Random();
         List<String> buildStatusTypeList = Arrays.asList(
                 "Candidate",
                 "Primary",
                 "Final Build",
                 "Alt 1",
-                "Rejected");
+                "Rejected"
+        );
         return buildStatusTypeList.get(r.nextInt(buildStatusTypeList.size()));
     }
-    public String getRandomBuildOutType(){
+
+    public String getRandomBuildOutType() {
         Random r = new Random();
         List<String> buildOutTypeList = Arrays.asList(
-//                "Leased",
-//                "Raw Land",
-                "Build To Suit");
-//                "Temp Install");
+                //                "Leased",
+                //                "Raw Land",
+                "Build To Suit"
+        );
+        //                "Temp Install");
         return buildOutTypeList.get(r.nextInt(buildOutTypeList.size()));
     }
-    public String getRandomPreferredLandlord(){
+
+    public String getRandomPreferredLandlord() {
         Random r = new Random();
         List<String> preferredLandlordList = Arrays.asList(
                 "1 - ATC SLMA - 203708",
-                "1 - ATC SLMA - 204030");
+                "1 - ATC SLMA - 204030"
+        );
         return preferredLandlordList.get(r.nextInt(preferredLandlordList.size()));
     }
 
-    public String getRandomSiteCity(){
+    public String getRandomSiteCity() {
         Random r = new Random();
         List<String> cityList = Arrays.asList(
                 "Alexander City",
@@ -153,10 +174,12 @@ public class Site {
                 "Chickasaw",
                 "Clanton",
                 "Cullman",
-                "Decatur");
+                "Decatur"
+        );
         return cityList.get(r.nextInt(cityList.size()));
     }
-    public String getRandomSiteAddress(){
+
+    public String getRandomSiteAddress() {
         Random r = new Random();
         List<String> addressList = Arrays.asList(
                 "42 W Megan St, Gilbert, AZ, 85233",
@@ -187,7 +210,8 @@ public class Site {
                 "16640 Nall Ave, Stilwell, KS, 66085",
                 "14513 N 145th St, Basehor, KS, 66007",
                 "8705 Creighton Ct, Hurstbourne, KY, 40222",
-                "478 W 2nd St, Maysville, KY, 41056");
+                "478 W 2nd St, Maysville, KY, 41056"
+        );
         return addressList.get(r.nextInt(addressList.size()));
     }
 }

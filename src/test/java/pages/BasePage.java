@@ -360,4 +360,9 @@ public class BasePage {
     public void waitForPageToLoad(){
         webHelper.waitForPageToLoad();
     }
+
+    public WebElement fieldByLabelContainsText(String value) throws Exception {
+        return webHelper.fieldByLabelContainsText(value);
+    }
+
 }

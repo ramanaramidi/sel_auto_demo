@@ -70,6 +70,10 @@ public class MainSideMenu extends BasePage {
     public By reportsLocator = By.xpath("//div[text()='Reports']");
     public By ACSIntakeTracker = By.xpath("//div[@title='ACS Intake Tracker']");
     public By runReports = By.xpath("(//div[text()='Run Reports'])[1]");
+    public By cabinetTracker = By.xpath(
+            "//div[@title='Cabinet Tracker']//a"
+    );
+    public By cabinetEquipmentTracker = By.xpath("//div[text()='Cabinet Equipment Tracker']");
 
 
     public void navigateToAppCenter() throws Exception {
@@ -524,5 +528,38 @@ public class MainSideMenu extends BasePage {
         navigateToAppCenter();
         clickingSiteTracker();
         return new SiteFopsPage(driver);
+    }
+
+    public CabinetTrackerPage goToCabinetTrackerPage() throws Exception {
+        navigateToAppCenter();
+        search("Cabinet Tracker");
+        click(find(cabinetTracker));
+        sleep(5);
+        return new CabinetTrackerPage(driver);
+    }
+
+    public PowerCabinetPage goToSite_Tracker1() throws Exception {
+        navigateToAppCenter();
+        clickingSiteTracker();
+        return new PowerCabinetPage(driver);
+    }
+
+    public PowerCabinetPage goToCabinetEquipment_Tracker() throws Exception {
+        sleep(6);
+        clickMainLogo1();
+        search("Cabinet Equipment");
+        sleep(5);
+        click(find(cabinetEquipmentTracker));
+        sleep(8);
+        return new PowerCabinetPage(driver);
+    }
+
+    public CabinetEquipmentTrackerPage goToCabinetEquipmentTracker() throws Exception {
+        waitForPageToLoad();
+        navigateToAppCenter();
+        search("Cabinet Equipment Tracker");
+        click(find(cabinetEquipmentTracker));
+        sleep(5);
+        return new CabinetEquipmentTrackerPage(driver);
     }
 }

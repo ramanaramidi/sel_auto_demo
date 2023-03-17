@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.web.Tracker.CabinetTrackerPage;
 import pages.web.Tracker.site.SiteTrackerPage;
 import rest.sector.SectorRequestBuilder;
 import utility.helper.MiscHelpers;
@@ -48,6 +49,9 @@ public class AddSitePage extends BasePage {
     public By rfSectorTab = By.xpath("//span[@id='tabLabel7']");
     public By  siteTrackerTableElement = By.xpath("//tr[contains(@class,'ev_dhx_skyblue rowselected')]//parent::*");
     public By fopsTab = By.xpath("//div[@title='S:FOPS Info']");
+    public By cabinetTrackerTab = By.xpath("//div[@title='CAB:Cabinet Tracker']");
+    public By editOption = By.xpath("(//input[@value='Edit'])[3]");
+    public By addOption = By.xpath("//input[@value='Add']");
     String parentWindow1;
 
     public SiteTrackerPage addNewSiteWith9CharactersSiteCode(String ringCode, String siteCode) throws Exception {
@@ -924,4 +928,34 @@ public class AddSitePage extends BasePage {
     public String getParentWindow() {
         return parentWindow;
     }
+
+    public void goToCabinetTrackerTab() throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(applyButton));
+        scrollToElement(find(cabinetTrackerTab));
+        click(find(cabinetTrackerTab));
+        waitForPageToLoad();
+    }
+
+    public CabinetTrackerPage selectEditOption_CB() throws Exception {
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(editOption));
+        click(find(editOption));
+        sleep(5);
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        return  new CabinetTrackerPage(driver);
+    }
+
+    public CabinetTrackerPage selectAddNewCabinetOption() throws Exception {
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(addOption));
+        click(find(addOption));
+        return  new CabinetTrackerPage(driver);
+    }
+
+
 }
