@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.web.Tracker.site.SiteTrackerPage;
 
 public class CabinetTrackerPage extends BasePage {
 
@@ -61,6 +62,15 @@ public class CabinetTrackerPage extends BasePage {
         return new AddCabinetPage(driver);
     }
 
+    public CabinetEquipmentTrackerPage cabinetEquipmentTrackerTab() throws Exception {
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(applyButton));
+        scrollToElement(find(cabinetEquipmentTrackerTab));
+        click(find(cabinetEquipmentTrackerTab));
+        waitForPageToLoad();
+        return new CabinetEquipmentTrackerPage(driver);
+    }
+
     public AddCabinetPage clickAddButton() throws Exception {
         waitForPageToLoad();
         buttonClick("Add", 1);
@@ -82,6 +92,13 @@ public class CabinetTrackerPage extends BasePage {
         click(find(okButton));
         switchToSpecificWindow(parentWindow);
         fullScreenChildWindow();
+    }
+
+    public SiteTrackerPage switchToAddTrackerPage(String parentWindow) throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return new SiteTrackerPage(driver);
     }
 
     public String addMandatoryFields() throws Exception {
@@ -120,4 +137,5 @@ public class CabinetTrackerPage extends BasePage {
         switchToSpecificWindow(parent);
         return CabinetID;
     }
+
 }

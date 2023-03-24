@@ -1,6 +1,7 @@
 package pages.web.components;
 
 import commons.enums.LoginOptionEnum;
+import commons.objects.Site;
 import commons.objects.Users;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -398,6 +399,16 @@ public class MainSideMenu extends BasePage {
         click(find(appCenter));
         clickingProjectTracker();
         return new ProjectTrackerPage(driver);
+    }
+
+    public SiteTrackerPage goToSiteTrackerPageSiteDev() throws Exception {
+        waitUntilVisibleElement(find(siteDevButton));
+        sleep(6);
+        click(find(siteDevButton));
+        sleep(2);
+        click(find(appCenter));
+        clickingSiteTracker();
+        return new SiteTrackerPage(driver);
     }
 
     public RFSectorPage goToRFSectorTrackerAsSiteDev() throws Exception {

@@ -1,6 +1,7 @@
 package rest.power;
 
 import commons.constants.ApiConstants.PowerConstants;
+import commons.objects.Cabinet;
 import commons.objects.Site;
 import testData.UserData;
 
@@ -31,6 +32,52 @@ public class PowerRequestBuilder {
         baseRequest =
                 baseRequest.replace(
                         "REPLACEWITHMODEL",
+                        model
+                );
+        return baseRequest;
+    }
+
+    public String createNewCabinetEquipment(Cabinet cabinet) {
+        String baseRequest = PowerConstants.CREATE_CABINET_EQUIPMENT;
+        baseRequest = baseRequest.replace("REPLACEWITHCABINETEQUIPMENTID", cabinet.cabinetEquipmentId);
+        baseRequest =
+                baseRequest.replace("REPLACEWITHCLASSID", cabinet.type);
+        baseRequest =
+                baseRequest.replace("REPLACEWITHCABINET", cabinet.cabinetId);
+        return baseRequest;
+    }
+
+    public String updateCabinetEquipmentStringAndManufacture(Cabinet cabinet) {
+        String baseRequest = PowerConstants.UPDATE_FOR_CABINET_EQUIPMENT_STRING;
+        baseRequest =
+                baseRequest.replace(
+                        "REPLACEWITHSTRING",
+                        cabinet.string
+                );
+
+        baseRequest =
+                baseRequest.replace(
+                        "REPLACEWITHMANUFACTURE",
+                        cabinet.manufacture
+                );
+        return baseRequest;
+    }
+
+    public String updateCabinetEquipmentModel(Cabinet cabinet) {
+        String baseRequest = PowerConstants.UPDATE_FOR_CABINET_EQUIPMENT_MODEL;
+        baseRequest =
+                baseRequest.replace(
+                        "REPLACEWITHMODEL",
+                        cabinet.model
+                );
+        return baseRequest;
+    }
+
+    public String updateCabinetBatteryString(String model) {
+        String baseRequest = PowerConstants.UPDATE_FOR_CABINET_BATTERY;
+        baseRequest =
+                baseRequest.replace(
+                        "REPLACEWITHBATTERYSTRING",
                         model
                 );
         return baseRequest;

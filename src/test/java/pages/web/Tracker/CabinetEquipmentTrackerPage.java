@@ -32,6 +32,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     public By editSite = By.xpath("//input[@id='btnEdit0']");
     public By searchInputBox = By.xpath("//input[@id='qsValue0']");
     public By addOption = By.xpath("//input[@value='Add']");
+    public By editOption = By.id("btnEdit2");
     public By cabinetID = By.xpath("//label[contains(text(),'CAB:Cabinet ID')]");
     public By searchOption = By.xpath("//input[@id='qsValue0']");
     public By equipmentIDClick = By.xpath("//div[@class='objbox customscroll']//table[@class='obj']//tbody//tr[2]//td[2]//a");
@@ -50,6 +51,12 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         waitForPageToLoad();
         waitUntilVisibleElement(find(addOption));
         click(find(addOption));
+    }
+
+    public void selectEditCabinetOption() throws Exception {
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(editOption));
+        click(find(editOption));
     }
 
     public String switchToCabinetPage() {
@@ -87,6 +94,20 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         fullScreenChildWindow();
     }
 
+    public CabinetTrackerPage switchToAddTrackerPageByCancel(String parentWindow) throws Exception {
+        click(find(cancelButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return  new CabinetTrackerPage(driver);
+    }
+
+    public CabinetTrackerPage switchToAddTrackerPageByOkay(String parentWindow) throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return  new CabinetTrackerPage(driver);
+    }
+
     public boolean validateFieldIsDisplayed(String name) throws Exception {
         waitForPageToLoad();
         WebElement fieldNameText = fieldByLabelTextIndex(name).get(0);
@@ -107,6 +128,14 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         radioButtonValueSelectionByTd("CAB:Cabinet ID");
         click(find(okButton1));
         switchToSpecificWindow(parent2);
+        WebElement cabinetEquipmentType = selectionBoxBySname("CABE:Cabinet Equipment Type").get(0);
+        selectDropdownOption(cabinetEquipmentType, type);
+        sleep(3);
+    }
+
+    public void verifyAddBattery(String type) throws Exception{
+        fullScreenChildWindow();
+        waitForPageToLoad();
         WebElement cabinetEquipmentType = selectionBoxBySname("CABE:Cabinet Equipment Type").get(0);
         selectDropdownOption(cabinetEquipmentType, type);
         sleep(3);
@@ -145,6 +174,21 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         radioButtonValueSelectionByTd("CAB:Cabinet ID");
         click(find(okButton1));
         switchToSpecificWindow(parent2);
+        WebElement cabinetEquipmentType = selectionBoxBySname("CABE:Cabinet Equipment Type").get(0);
+        selectDropdownOption(cabinetEquipmentType, type);
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(3);
+        String EquipmentID = inputBoxDataBySname("CABE:Cabinet Equipment ID").getAttribute("origval");
+        System.out.println("Equipment ID is " + EquipmentID);
+        waitForPageToLoad();
+        sleep(5);
+        return EquipmentID;
+    }
+
+    public String addBattery(String type) throws Exception {
+        waitForPageToLoad();
+        fullScreenChildWindow();
         WebElement cabinetEquipmentType = selectionBoxBySname("CABE:Cabinet Equipment Type").get(0);
         selectDropdownOption(cabinetEquipmentType, type);
         click(find(applyButton));

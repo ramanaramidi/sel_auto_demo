@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.web.Tracker.site.SiteTrackerPage;
 import utility.helper.MiscHelpers;
 
 import java.util.ArrayList;
@@ -50,6 +51,8 @@ public class AddCabinetPage extends BasePage {
     public String getValueInField(String sname) throws Exception {
         return getDocumentTextByXpathJs(inputBoxXpathBySname(sname));
     }
+
+
 
     public String switchToAddCabinetPage() {
         parentWindow = switchToChildWindows();
@@ -355,10 +358,26 @@ public class AddCabinetPage extends BasePage {
         waitForPageToLoad();
     }
 
+
+
     public void switchToTrackerPage(String parentWindow) throws Exception {
         click(find(okButton));
         switchToSpecificWindow(parentWindow);
         fullScreenChildWindow();
+    }
+
+    public CabinetTrackerPage switchToCabinetTrackerPage(String parentWindow) throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return new CabinetTrackerPage(driver);
+    }
+
+    public SiteTrackerPage switchToAddTrackerPage(String parentWindow) throws Exception {
+        click(find(okButton));
+        switchToSpecificWindow(parentWindow);
+        fullScreenChildWindow();
+        return new SiteTrackerPage(driver);
     }
 
     public boolean verifyVoltageBoosters() throws Exception{

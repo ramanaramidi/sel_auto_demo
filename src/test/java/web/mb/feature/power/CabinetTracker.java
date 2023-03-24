@@ -2,11 +2,14 @@ package web.mb.feature.power;
 
 import common.BaseTest;
 import commons.enums.LoginOptionEnum;
+import commons.objects.Cabinet;
 import commons.objects.Ring;
 import commons.objects.Site;
 import org.testng.annotations.Test;
 import pages.web.Tracker.AddCabinetPage;
 import pages.web.Tracker.CabinetTrackerPage;
+import pages.web.Tracker.site.AddSitePage;
+import pages.web.Tracker.site.SiteTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
 import rest.power.PowerHelper;
@@ -27,6 +30,9 @@ public class CabinetTracker extends BaseTest {
     PowerHelper powerHelper = new PowerHelper();
     CabinetTrackerPage cabinetTrackerPage;
     AddCabinetPage addCabinetPage;
+    SiteTrackerPage siteTrackerPage;
+    AddSitePage addNewSite;
+    String parentWindow;
 
     public CabinetTracker() {
         if (envURL == null) {
@@ -641,4 +647,25 @@ public class CabinetTracker extends BaseTest {
         softAssert.closeAssert();
     }
 
+    @Test(groups = { "Integration" }, description = "alcatelLucentNorthstarVendor", priority = 50)
+    public void verifyCabinetEquipmentPowerValues(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        site = generateSiteAndCabinet("Alcatel Lucent-Northstar","379");
+        Cabinet cabinet = new Cabinet(site.cabinet,site.cabinet+"_"+"B1",site.siteId,"Battery");
+        powerHelper.updateCabinetBatteryString(cabinet,"4");
+        powerHelper.createNewCabinetEquipment(cabinet);
+        powerHelper.updateCabinetEquipmentModel(cabinet);
+        siteTrackerPage = mainSideMenu.goToSiteTracker();
+        siteTrackerPage.searchForValue(cabinet.siteId, "S:Site Code");
+        addNewSite = siteTrackerPage.selectEditOption();
+        parentWindow = addNewSite.goToPowerTab();
+        softAssert.assertContains(addNewSite.getValueInField("S:PWR All Batteries"),"4000","S:PWR All Batteries");
+        softAssert.assertContains(addNewSite.getValueInField("S:PWR Lead Sulfate"),"800","S:PWR Lead Sulfate");
+        softAssert.assertContains(addNewSite.getValueInField("S:PWR Lead Dioxide"),"400","S:PWR Lead Dioxide");
+        softAssert.assertContains(addNewSite.getValueInField("S:PWR Lead Oxide"),"400","S:PWR Lead Oxide");
+        softAssert.assertContains(addNewSite.getValueInField("S:PWR Electrolyte"),"800","S:PWR Electrolyte");
+        softAssert.assertContains(addNewSite.getValueInField("S:PWR Lead"),"400","S:PWR Lead");
+        addNewSite.closeAndCancel(parentWindow);
+        softAssert.closeAssert();
+    }
 }

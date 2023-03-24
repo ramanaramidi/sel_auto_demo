@@ -30,6 +30,13 @@ public class PowerConstants {
                     "  }\n" +
                     "}";
 
+    public static final String UPDATE_FOR_CABINET_BATTERY =
+            "{\n" +
+                    "  \"fields\": {\n" +
+                    "    \"CAB_NO_OF_BATTERY_STRINGS_SUP\": \"REPLACEWITHBATTERYSTRING\"\n" +
+                    "  }\n" +
+                    "}";
+
     public static final String CREATE_CABINETS_EQUIPMENT =
             "{\n" +
                     "  \"fields\": {\n" +
@@ -43,6 +50,37 @@ public class PowerConstants {
                     "          }\n" +
                     "      }\n" +
                     "      ]\n" +
+                    "}";
+
+    public static final String CREATE_CABINET_EQUIPMENT =
+            "{\n" +
+                    " \"fields\": {\n" +
+                    "    \"TRACKOR_KEY\": \"REPLACEWITHCABINETEQUIPMENTID\",\n" +
+                    "    \"TRACKOR_CLASS_ID\": \"REPLACEWITHCLASSID\"\n" +
+                    "      },\n" +
+                    "  \"parents\": [\n" +
+                    "      {\n" +
+                    "          \"trackor_type\": \"CabinetTracker\",\n" +
+                    "          \"filter\": {\n" +
+                    "               \"TRACKOR_KEY\": \"REPLACEWITHCABINET\"\n" +
+                    "          }\n" +
+                    "      }\n" +
+                    "      ]\n" +
+                    "}";
+
+    public static final String UPDATE_FOR_CABINET_EQUIPMENT_STRING =
+            "{\n" +
+                    " \"fields\": {\n" +
+                    "    \"CABE_BAT_STRING_TYPE\": \"REPLACEWITHSTRING\",\n" +
+                    "    \"CABE_BAT_MANUFACTURER\": \"REPLACEWITHMANUFACTURE\"\n" +
+                    "      }\n" +
+                    "}";
+
+    public static final String UPDATE_FOR_CABINET_EQUIPMENT_MODEL =
+            "{\n" +
+                    "  \"fields\": {\n" +
+                    "    \"CABE_BAT_MODEL\": \"REPLACEWITHMODEL\"\n" +
+                    "  }\n" +
                     "}";
 
 }

@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
+import pages.web.Tracker.AddCabinetPage;
 import pages.web.Tracker.CabinetTrackerPage;
 import pages.web.Tracker.site.SiteTrackerPage;
 import rest.sector.SectorRequestBuilder;
@@ -52,6 +53,7 @@ public class AddSitePage extends BasePage {
     public By cabinetTrackerTab = By.xpath("//div[@title='CAB:Cabinet Tracker']");
     public By editOption = By.xpath("(//input[@value='Edit'])[3]");
     public By addOption = By.xpath("//input[@value='Add']");
+    public By powerTab = By.id("tabName22");
     String parentWindow1;
 
     public SiteTrackerPage addNewSiteWith9CharactersSiteCode(String ringCode, String siteCode) throws Exception {
@@ -950,6 +952,14 @@ public class AddSitePage extends BasePage {
         return  new CabinetTrackerPage(driver);
     }
 
+    public AddCabinetPage selectAddOption_CB() throws Exception {
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(editOption));
+        click(find(editOption));
+        sleep(5);
+        return  new AddCabinetPage(driver);
+    }
+
     public CabinetTrackerPage selectAddNewCabinetOption() throws Exception {
         waitForPageToLoad();
         waitUntilVisibleElement(find(addOption));
@@ -957,5 +967,24 @@ public class AddSitePage extends BasePage {
         return  new CabinetTrackerPage(driver);
     }
 
+    public String goToPowerTab() throws Exception {
+        parentWindow = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(applyButton));
+        scrollToElement(find(powerTab));
+        click(find(powerTab));
+        waitForPageToLoad();
+        return parentWindow;
+    }
 
+    public String getValueInField(String sname) throws Exception {
+        scrollToElement(find(By.xpath(inputBoxXpathBySname(sname))));
+        return getDocumentTextByXpathJs(inputBoxXpathBySname(sname));
+    }
+    public void closeAndCancel(String parentWindow) throws Exception {
+        click(find(cancelButton));
+        sleep(3);
+        switchToSpecificWindow(parentWindow);
+    }
 }
