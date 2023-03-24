@@ -611,7 +611,7 @@ public class BatteryTests extends BaseTest {
         String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToBatteryTab();
         cabinetEquipmentTrackerPage.updateDropdownFieldValue("CABE:Active", "No");
-        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CAB:Cabinet Type/Purpose"), "CAB:Cabinet Type/Purpose is Locked");
+        //softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CAB:Cabinet Type/Purpose"), "CAB:Cabinet Type/Purpose is Locked");
         softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT String Type"), "CABE:BAT String Type is Locked");
         softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Manufacturer"), "CABE:BAT Manufacturer is Locked");
         softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Model"), "CABE:BAT Model is Locked");

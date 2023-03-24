@@ -200,8 +200,8 @@ public class BasicCabinetTests extends BaseTest {
         cabinetTrackerPage.searchForValue(cabinetID.cabinet, "CAB:Cabinet ID");
         addCabinetPage = cabinetTrackerPage.selectEditOption();
         String parentWindow = addCabinetPage.switchToAddCabinetPage();
-        softAssert.assertDoesNotContains(addCabinetPage.getSelectionFieldValue("CAB:Cabinet Vendor"),"","Field is populated");
-        softAssert.assertDoesNotContains(addCabinetPage.getFieldUpdatedValue("CAB:Cabinet Model"),"","Field is populated");
+        softAssert.assertNotEquals(addCabinetPage.getSelectionFieldValue("CAB:Cabinet Vendor"),"","Field is populated");
+        softAssert.assertNotEquals(addCabinetPage.getFieldUpdatedValue("CAB:Cabinet Model"),"","Field is populated");
         softAssert.assertTrue(addCabinetPage.validateFieldIsLocked("CAB:Cabinet Vendor"),"CAB:Cabinet Vendor is Locked");
         softAssert.assertTrue(addCabinetPage.validateFieldIsLocked("CAB:Cabinet Model"),"CAB:Cabinet Model is Locked");
         addCabinetPage.switchToTrackerPage(parentWindow);

@@ -531,7 +531,7 @@ public class RfVoltageBoosterTests extends BaseTest {
         String parentWindow3 = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
         cabinetEquipmentTrackerPage.updateBusbarInstalledValue("Single Mode", "Yes");
-        softAssert.assertFalse(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3), "If Operating Configuration is Single Mode - Busbar field value cannot be updated with 'Yes'");
+        softAssert.assertFalse(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3), "If Operating Configuration is Single Mode - Busbar field value can be updated with 'Yes'");
         cabinetTrackerPage = cabinetEquipmentTrackerPage.switchToAddTrackerPageByCancel(parentWindow2);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow);
         softAssert.closeAssert();
@@ -581,7 +581,7 @@ public class RfVoltageBoosterTests extends BaseTest {
         String parentWindow3 = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
         cabinetEquipmentTrackerPage.updateBusbarInstalledValue("Parallel Mode", "No");
-        softAssert.assertFalse(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3), "If Operating Configuration is Parallel Mode - Busbar field value cannot be updated with 'No'");
+        softAssert.assertFalse(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3), "If Operating Configuration is Parallel Mode - Busbar field value can be updated with 'No'");
         cabinetTrackerPage = cabinetEquipmentTrackerPage.switchToAddTrackerPageByCancel(parentWindow2);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow);
         softAssert.closeAssert();
