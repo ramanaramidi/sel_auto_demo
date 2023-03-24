@@ -217,6 +217,7 @@ public class ProjectTrackerPage extends BasePage {
         waitForPageToLoad();
         waitUntilVisibleElement(find(editProject));
         click(find(editProject));
+        sleep(10);
         waitForPageToLoad();
         return new AddProjectPage(driver);
     }

@@ -138,8 +138,8 @@ public class DevPORTests  extends BaseTest {
         porTrackerPage= mainSideMenu.goToPorTrackerPage();
         porTrackerPage.fullScreen();
         porTrackerPage.clickAddNewPORButton();
-        String programName =porTrackerPage.VerifyProgramNameInPORTracker("test_101_New Build");
-        softAssert.assertContains(programName,"test_101_New Build","Should be Available in the POR Tracker");
+        String programName =porTrackerPage.VerifyProgramNameInPORTracker("5GmmW_Stage 2_Site Mod");
+        softAssert.assertContains(programName,"5GmmW_Stage 2_Site Mod","Should be Available in the POR Tracker");
         softAssert.closeAssert();
     }
     @Test(groups = {"Integration"},description = "Verify Inactive Program Name present in POR Tracker",priority = 11)

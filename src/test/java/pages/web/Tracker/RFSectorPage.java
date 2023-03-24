@@ -285,6 +285,7 @@ public class RFSectorPage extends BasePage
         dropDownValueSelection("SEC:Sector Type", "Macro");
         click(find(ApplyButton));
         sleep(5);
+        waitForPageToLoad();
         waitUntilVisibleElement(find(ApplyButton));
         click(find(okButton));
         switchToSpecificWindow(parent1);

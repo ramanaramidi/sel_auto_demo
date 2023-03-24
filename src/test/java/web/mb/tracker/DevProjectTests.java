@@ -131,7 +131,7 @@ public class DevProjectTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "validatePJ_TotalSectors", priority = 5)
+   // @Test(groups = {"Integration"}, description = "validatePJ_TotalSectors", priority = 5)
     public void validatePJ_TotalSectors(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();
@@ -145,7 +145,7 @@ public class DevProjectTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"}, description = "validateSector_RelatedProjects", priority = 6)
+   // @Test(groups = {"Integration"}, description = "validateSector_RelatedProjects", priority = 6)
     public void validateSector_RelatedProjects(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTracker();

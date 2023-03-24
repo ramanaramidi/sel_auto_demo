@@ -32,6 +32,7 @@ public class CabinetTrackerPage extends BasePage {
     public By okButton1 = By.xpath("//input[@id='btnOK0']");
     public By applyButton = By.xpath("//input[@id='btnApply']");
     public By searchInputBox = By.xpath("//input[@id='qsValue0']");
+    public By add_Button = By.xpath("//input[@id='btnAdd0']");
     String parentWindow = "";
 
     public void searchForValue(String data, String type) throws Exception {
@@ -42,7 +43,7 @@ public class CabinetTrackerPage extends BasePage {
         click(find(searchButton));
         waitUntilVisibleElement(find(editButton));
         waitForPageToLoad();
-        sleep(20);
+        sleep(5);
     }
 
     public void selectSearchType(String type) throws Exception {
@@ -55,6 +56,7 @@ public class CabinetTrackerPage extends BasePage {
     }
 
     public AddCabinetPage selectEditOption() throws Exception {
+        waitForPageToLoad();
         waitUntilVisibleElement(find(editButton));
         sleep(10);
         click(find(editButton));
@@ -73,7 +75,8 @@ public class CabinetTrackerPage extends BasePage {
 
     public AddCabinetPage clickAddButton() throws Exception {
         waitForPageToLoad();
-        buttonClick("Add", 1);
+        sleep(10);
+        click(find(add_Button));
         sleep(8);
         return new AddCabinetPage(driver);
     }

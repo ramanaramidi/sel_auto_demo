@@ -133,6 +133,8 @@ public class ESRTrackerPage extends BasePage {
         }
         find(okButton).click();
         switchToSpecificWindow(parent1);
+        waitUntilPageLoad();
+        sleep(5);
         find(cancelButton).click();
         switchToSpecificWindow(parentWindow);
         return Flag;
@@ -230,6 +232,8 @@ public class ESRTrackerPage extends BasePage {
         return Flag;
     }
     public void sortingASCOrder() throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         scrollToElement(find(refresh));
         hoverOver(find(refresh));
         click(find(refreshSorting));
@@ -239,8 +243,11 @@ public class ESRTrackerPage extends BasePage {
     }
     public void sortingDescOrder() throws Exception
     {
+        waitForPageToLoad();
+        sleep(10);
         scrollToElement(find(refresh));
         hoverOver(find(refresh));
+        sleep(20);
         click(find(refreshSorting));
         click(find(descOrder));
         waitUntilVisibleElement(find(searchData));

@@ -192,9 +192,11 @@ public class PowerCabinetPage extends BasePage {
 
     public boolean verifyCABRectifiers_VendorFields(String value, String data, String status) throws Exception {
         waitForPageToLoad();
-        sleep(6);
-        WebElement numberOfRectifiers = inputBoxDataBySname("CAB:Number of Rectifiers Supported (max) ");
-        setText(numberOfRectifiers, "20");
+        sleep(10);
+        // click(find(Rectifiers_Max));
+        //  setText(find(Rectifiers_Max),"20");
+        inputBoxDataBySname("CAB:Number of Rectifiers Supported (max) ", "20");
+        //setText(numberOfRectifiers, "20");
         sleep(4);
         scrollToElement(selectionBoxBySname("CAB:Cabinet Vendor").get(0));
         List<WebElement> dropDownField = findAll(cabinetVendor);
@@ -215,7 +217,8 @@ public class PowerCabinetPage extends BasePage {
         sleep(8);
         String parent = switchToChildWindows();
         fullScreenChildWindow();
-        sleep(8);
+        waitForPageToLoad();
+        sleep(10);
         searchForValue("393", "PR:Power Reference ID");
         sleep(4);
         click(find(okButton1));
@@ -293,32 +296,44 @@ public class PowerCabinetPage extends BasePage {
     }
 
     public boolean isEdit_buttonDisplayed() throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         List<WebElement> buttons = findAll(By.xpath("//input[@id='btnEdit0']"));
         if (buttons.size() > 0 && buttons.get(0).isDisplayed()) {
+            System.out.println("Edit Button is displayed" + buttons.get(0).isDisplayed());
             return true;
         }
         return false;
     }
 
     public boolean isAdd_buttonDisplayed() throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         List<WebElement> buttons = findAll(By.xpath("//input[@id='btnAdd0']"));
         if (buttons.size() > 0 && buttons.get(0).isDisplayed()) {
+            System.out.println("Add Button is displayed" + buttons.get(0).isDisplayed());
             return true;
         }
         return false;
     }
 
     public boolean isRowEditor_buttonDisplayed() throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         List<WebElement> buttons = findAll(By.xpath("//input[@id='btnEditRow0']"));
         if (buttons.size() > 0 && buttons.get(0).isDisplayed()) {
+            System.out.println("RowEditor Button is displayed" + buttons.get(0).isDisplayed());
             return true;
         }
         return false;
     }
 
     public boolean isExport_buttonDisplayed() throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         List<WebElement> buttons = findAll(By.xpath("//input[@id='btnGridExport0']"));
         if (buttons.size() > 0 && buttons.get(0).isDisplayed()) {
+            System.out.println("Export Button is displayed" + buttons.get(0).isDisplayed());
             return true;
         }
         return false;
@@ -348,6 +363,7 @@ public class PowerCabinetPage extends BasePage {
         waitForPageToLoad();
         sleep(4);
         click(find(rectifierTab));
+        waitForPageToLoad();
         sleep(2);
     }
 
@@ -543,6 +559,7 @@ public class PowerCabinetPage extends BasePage {
 
     public AddCabinetPage clickAddButton() throws Exception {
         waitForPageToLoad();
+        sleep(5);
         buttonClick("Add", 1);
         sleep(8);
         return new AddCabinetPage(driver);

@@ -57,7 +57,8 @@ public class AddCabinetPage extends BasePage {
     public String switchToAddCabinetPage() {
         parentWindow = switchToChildWindows();
         fullScreen();
-        sleep(3);
+        waitForPageToLoad();
+        sleep(6);
         return parentWindow;
     }
 
@@ -110,8 +111,8 @@ public class AddCabinetPage extends BasePage {
     public String verifyDotsDropDownField_CabinetTypePurpose(String data) throws Exception {
         waitForPageToLoad();
         scrollToElement(inputBoxDataBySname("CAB:Cabinet Type/Purpose"));
-        sleep(6);
-        find(cabinetTypePurpose).click();
+        sleep(10);
+        click(find(cabinetTypePurpose));
         sleep(8);
         String parent = switchToChildWindows();
         fullScreenChildWindow();
@@ -306,6 +307,7 @@ public class AddCabinetPage extends BasePage {
 
     public boolean validateFieldAllowsNumeric(String fieldName) throws Exception {
         waitForPageToLoad();
+        sleep(4);
         setText(inputBoxDataBySname(fieldName), "1");
         click(find(applyButton));
         waitForPageToLoad();

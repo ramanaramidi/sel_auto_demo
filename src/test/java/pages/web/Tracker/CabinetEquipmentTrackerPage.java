@@ -45,6 +45,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     public By selectYear = By.xpath("(//select[@id='year'])[2]");
     public By selectDay = By.xpath("(//td[contains(text(),'7')])[2]");
     public By voltageBoosterTab = By.xpath("//div[@title='CABE:Voltage Booster']");
+    public String voltageModelList = "//div[contains(@class,'customscroll')]//child::td[3]//a";
     String parentWindow = "";
 
     public void selectAddNewCabinetOption() throws Exception {
@@ -248,7 +249,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     public CabinetTrackerPage selectEditOption() throws Exception {
         waitForPageToLoad();
         waitUntilVisibleElement(find(editSite));
-        sleep(5);
+        sleep(9);
         click(find(editSite));
         return new CabinetTrackerPage(driver);
     }
@@ -431,15 +432,15 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         waitForPageToLoad();
     }
 
-    public String   getVLTModelValues() throws Exception{
+    public String  getVLTModelValues() throws Exception{
         waitForPageToLoad();
         dropDownDotsClick("CABE:VLT Manufacturer / Model");
         String parent1 = switchToChildWindows();
         fullScreenChildWindow();
         waitForPageToLoad();
         waitUntilVisibleElement(find(okButton1));
-        String tableList = tableDataList(3);
-        List<String> modelList = getDocumentTextListByXpathJs(tableList);
+        sleep(15);
+        List<String> modelList = getDocumentTextListByXpathJs(voltageModelList);
         String modelValues = modelList.toString();
         System.out.println(modelValues);
         click(find(okButton1));
