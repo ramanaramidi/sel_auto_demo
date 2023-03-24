@@ -272,4 +272,5 @@ public class PowerRectifierTests extends BaseTest {
         powerCabinetPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }*/
+
 }

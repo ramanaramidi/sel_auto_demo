@@ -379,8 +379,24 @@ public class BatteryTests extends BaseTest {
     }
     @Test(
             groups = {"Integration"},
-            description = "Update CABE:BAT Connected To field Values",
+            description = "Update CABE:BAT Connected To field Values to NA and Not connected should throw an error",
             priority = 18
+    )
+    public void updateBATConnectedToValuesWithNotConnectedAndNA(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        cabinetEquipmentTrackerPage = mainSideMenu.goToCabinetEquipmentTracker();
+        cabinetEquipmentTrackerPage.searchForValue(CabinetEquipmentID, "CABE:Cabinet Equipment ID");
+        cabinetEquipmentTrackerPage.selectEditOption();
+        String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
+        cabinetEquipmentTrackerPage.goToBatteryTab();
+        cabinetEquipmentTrackerPage.selectNotConnectedAndNA();
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow),"updating CABE:BAT Connected To with NA and Not connected is not a valid combination");
+        softAssert.closeAssert();
+    }
+    @Test(
+            groups = {"Integration"},
+            description = "Update CABE:BAT Connected To field Values",
+            priority = 19
     )
     public void updateBATConnectedToValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -389,15 +405,32 @@ public class BatteryTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToBatteryTab();
-        String response = cabinetEquipmentTrackerPage.updateBATConnectedTo();
+        String response = cabinetEquipmentTrackerPage.updateBATConnectedTo(Site_Active.siteId);
         softAssert.assertContains(response,"C1","CABE:BAT Connected To has updated with selected value");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
         softAssert.closeAssert();
     }
     @Test(
             groups = {"Integration"},
+            description = "Verify CABE:BAT Connected To Cabinets field should be read-only and auto populated",
+            priority = 20
+    )
+    public void verifyBATConnectedToCabinetsField(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        cabinetEquipmentTrackerPage = mainSideMenu.goToCabinetEquipmentTracker();
+        cabinetEquipmentTrackerPage.searchForValue(CabinetEquipmentID, "CABE:Cabinet Equipment ID");
+        cabinetEquipmentTrackerPage.selectEditOption();
+        String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
+        cabinetEquipmentTrackerPage.goToBatteryTab();
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsReadOnly("CABE:BAT Connected To Cabinets"),"CABE:BAT Connected To Cabinets is Read-only field");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.verifyBatteryConnectedToCabinets(),"CABE:BAT Connected To Cabinets is auto-populated");
+        cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
+        softAssert.closeAssert();
+    }
+    @Test(
+            groups = {"Integration"},
             description = "verify CABE:BAT Status Dropdown Values",
-            priority = 19
+            priority = 21
     )
     public void verifyBATStatusDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -415,7 +448,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:BAT Status field Dropdown value",
-            priority = 20
+            priority = 22
     )
     public void updateBATStatusDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -433,7 +466,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify CABE:BAT Date of Manufacture that on clicking the date field, a calendar widget should open",
-            priority = 21
+            priority = 23
     )
     public void verifyBATDateOfManufactureClickOpenCalender(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -449,7 +482,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify selecting the date from calendar gets displayed in the date field.",
-            priority = 22
+            priority = 24
     )
     public void selectBATDateOfManufacture(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -465,7 +498,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify CABE:BAT Date of Manufacture is in date format ",
-            priority = 23
+            priority = 25
     )
     public void verifyBATDateOfManufactureFieldFormat(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -482,7 +515,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify CABE:BAT Date of Installation that on clicking the date field, a calendar widget should open",
-            priority = 24
+            priority = 26
     )
     public void verifyBATDateOfInstallationClickOpenCalender(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -498,7 +531,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify selecting the date from calendar gets displayed in the date field",
-            priority = 25
+            priority = 27
     )
     public void selectBATDateOfInstallation(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -514,7 +547,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify CABE:BAT Date of Manufacture is in date format ",
-            priority = 26
+            priority = 28
     )
     public void verifyBATDateOfInstallationFieldFormat(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -530,7 +563,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "verify CABE:BAT Reason for Installation Dropdown Values",
-            priority = 27
+            priority = 29
     )
     public void verifyBATReasonForInstallationDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -550,7 +583,7 @@ public class BatteryTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:BAT Reason for Installation field Dropdown value",
-            priority = 28
+            priority = 30
     )
     public void updateBATReasonForInstallationDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -562,6 +595,49 @@ public class BatteryTests extends BaseTest {
         String selectOption = "Damaged";
         String response = cabinetEquipmentTrackerPage.updateDropdownFieldValue("CABE:BAT Reason for Installation", selectOption);
         softAssert.assertTrue(response.contains(selectOption), "CABE:BAT Reason for Installation is updated with selected value");
+        cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
+        softAssert.closeAssert();
+    }
+    @Test(
+            groups = {"Integration"},
+            description = "Verify If CABE:Active field is select with No, Battery Details fields are grey out.",
+            priority = 31
+    )
+    public void verifyIfCabeActiveIsSelectedNo(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        cabinetEquipmentTrackerPage = mainSideMenu.goToCabinetEquipmentTracker();
+        cabinetEquipmentTrackerPage.searchForValue(CabinetEquipmentID, "CABE:Cabinet Equipment ID");
+        cabinetEquipmentTrackerPage.selectEditOption();
+        String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
+        cabinetEquipmentTrackerPage.goToBatteryTab();
+        cabinetEquipmentTrackerPage.updateDropdownFieldValue("CABE:Active", "No");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CAB:Cabinet Type/Purpose"), "CAB:Cabinet Type/Purpose is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT String Type"), "CABE:BAT String Type is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Manufacturer"), "CABE:BAT Manufacturer is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Model"), "CABE:BAT Model is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Connected To"), "CABE:BAT Connected To is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Date of Manufacture"), "CABE:BAT Date of Manufacture is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Date of Installation"), "CABE:BAT Date of Installation is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Reason for Installation"), "CABE:BAT Reason for Installation Supported is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Status"), "CABE:BAT Status Used is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:Active"), "CABE:Active is Locked");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.verifyDetailID("CABE:BAT Battery String ID"),"CABE:BAT Battery String ID is apprehended with A");
+        cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
+        softAssert.closeAssert();
+    }
+    @Test(
+            groups = {"Integration"},
+            description = "Verify Other Cabinet Equipment with the same Xitor Class, the value of the deleted Battery record, will need to be re-generated",
+            priority = 32
+    )
+    public void verifyOtherCabinetVoltageBooster(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        cabinetEquipmentTrackerPage = mainSideMenu.goToCabinetEquipmentTracker();
+        cabinetEquipmentTrackerPage.searchForValue("SAUZGQNH_C1_B1", "CABE:Cabinet Equipment ID");
+        cabinetEquipmentTrackerPage.selectEditOption();
+        String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
+        cabinetEquipmentTrackerPage.goToBatteryTab();
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.verifyOtherCabinetDetailIDValues("CABE:BAT Battery String ID"),"The deleted Battery record has been re-generated for the other Cabinet Equipment");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
         softAssert.closeAssert();
     }

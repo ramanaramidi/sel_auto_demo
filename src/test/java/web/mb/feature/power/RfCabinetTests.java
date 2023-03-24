@@ -500,7 +500,7 @@ public class RfCabinetTests  extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditCabinetOption();
         String parentWindow3 =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToBatteryTab();
-        String response = cabinetEquipmentTrackerPage.updateBATConnectedTo();
+        String response = cabinetEquipmentTrackerPage.updateBATConnectedTo(Site_Active.siteId);
         softAssert.assertContains(response,"C1","CABE:BAT Connected To has updated with selected value");
         cabinetTrackerPage =  cabinetEquipmentTrackerPage.switchToAddTrackerPageByCancel(parentWindow3);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow2);

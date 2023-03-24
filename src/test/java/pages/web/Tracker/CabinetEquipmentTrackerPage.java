@@ -45,7 +45,11 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     public By selectYear = By.xpath("(//select[@id='year'])[2]");
     public By selectDay = By.xpath("(//td[contains(text(),'7')])[2]");
     public By voltageBoosterTab = By.xpath("//div[@title='CABE:Voltage Booster']");
-    public String voltageModelList = "//div[contains(@class,'customscroll')]//child::td[3]//a";
+    public String tableList = "//div[contains(@class,'customscroll')]//child::td[3]//a";
+    public By notConnectedCheckBox = By.xpath("(//table//*[text()='CAB:Cabinet ID']/..//following::a[contains(text(),'Not Connected')]//parent::td)//ancestor::tr//label//input");
+    public By warningMessage = By.xpath("//b[contains(text(),'Note:')]//br");
+    public By closeButton = By.xpath("//input[@value='Close']");
+    public By fieldHistory = By.xpath("//div[text()='Field History']");
     String parentWindow = "";
 
     public void selectAddNewCabinetOption() throws Exception {
@@ -333,25 +337,43 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         fullScreenChildWindow();
         waitForPageToLoad();
         waitUntilVisibleElement(find(okButton1));
-        String tableList = tableDataList(3);
-        List<String> tableValues = getDocumentTextListByXpathJs(tableList);
-        String options =tableValues.toString();
+        List<String> modelList = getDocumentTextListByXpathJs(tableList);
+        String options = modelList.toString();
         System.out.println(options);
         click(find(okButton1));
         switchToSpecificWindow(parent1);
         return options;
     }
-    public String updateBATConnectedTo() throws Exception{
+    public void selectNotConnectedAndNA() throws Exception{
         waitForPageToLoad();
         dropDownDotsClick("CABE:BAT Connected To");
         String parent2 = switchToChildWindows();
         fullScreenChildWindow();
         waitForPageToLoad();
         waitUntilVisibleElement(find(searchInputBox));
-        click(find(unselectValue));
+        checkBoxSelection("CAB:Cabinet ID","N/A");
+        boolean check = isCheckboxSelected( find(notConnectedCheckBox).getAttribute("id"));
+        if(!check){
+            checkBoxSelection("CAB:Cabinet ID","Not Connected");
+            sleep(2);
+        }
+        click(find(okButton1));
+        switchToSpecificWindow(parent2);
+    }
+    public String updateBATConnectedTo(String siteId) throws Exception{
         waitForPageToLoad();
-        sleep(2);
-        click(find(selectValue));
+        dropDownDotsClick("CABE:BAT Connected To");
+        String parent2 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        waitUntilVisibleElement(find(searchInputBox));
+        boolean check = isCheckboxSelected( find(notConnectedCheckBox).getAttribute("id"));
+        if(check){
+            checkBoxSelection("CAB:Cabinet ID","Not Connected");
+            waitForPageToLoad();
+            sleep(2);
+        }
+        checkBoxSelection("CAB:Cabinet ID",siteId+"_C1");
         waitForPageToLoad();
         sleep(2);
         click(find(okButton1));
@@ -373,6 +395,11 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         if (getValue.contains("calendar")){
             return true;
         }else return false;
+    }
+    public void updateNoOfModulesInstalled(String fieldName) throws Exception {
+        waitForPageToLoad();
+        setText(inputBoxDataBySname("CABE:VLT Number Of Modules Installed"), "0");
+        sleep(2);
     }
 
     public boolean verifyDateFormat(String name) throws Exception {
@@ -440,12 +467,20 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         waitForPageToLoad();
         waitUntilVisibleElement(find(okButton1));
         sleep(15);
-        List<String> modelList = getDocumentTextListByXpathJs(voltageModelList);
+        List<String> modelList = getDocumentTextListByXpathJs(tableList);
         String modelValues = modelList.toString();
         System.out.println(modelValues);
         click(find(okButton1));
         switchToSpecificWindow(parent1);
         return modelValues;
+    }
+    public boolean verifyBatteryConnectedToCabinets() throws Exception{
+        waitForPageToLoad();
+        WebElement fieldName = inputBoxDataLabel("CABE:BAT Connected To");
+        boolean getBatConnectedToValue = getDocumentTextByIdJs(fieldName.getAttribute("id")).contains("C1");
+        boolean getCabinetDetailIDValue = inputBoxDataBySname("CAB:Cabinet Detail ID").getAttribute("origval").contains("C1");
+        boolean getBatConnectedToCabinetsValue = inputBoxDataBySname("CABE:BAT Connected To Cabinets").getAttribute("origval").contains("C1");
+        return getBatConnectedToValue && getCabinetDetailIDValue && getBatConnectedToCabinetsValue;
     }
 
     public void updateVLTManufacturerValue(String text) throws Exception {
@@ -527,6 +562,57 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         scrollToElement(fieldName);
         String readOnly = fieldName.getAttribute("readonly");
         return readOnly != null;
+    }
+    public boolean validateFieldIsLocked(String sName) throws Exception{
+        waitForPageToLoad();
+        WebElement lock = lockByLabel(sName);
+        System.out.println(lock.getAttribute("class"));
+        if(lock.getAttribute("class").contains("lock-icon locked")){
+            return true;
+        }else {
+            return false;
+        }
+    }
+    public String getInputBoxFieldValue(String sName) throws Exception{
+        waitForPageToLoad();
+        WebElement fieldName = inputBoxDataBySname(sName);
+        String getValue = fieldName.getAttribute("origval");
+        return getValue;
+    }
+    public boolean verifyDetailID(String sName) throws Exception{
+        waitForPageToLoad();
+        String getValue = inputBoxDataBySname(sName).getAttribute("origval");
+        if(getValue.startsWith("A")){
+            return true;
+        }else return false;
+    }
+    public boolean verifyWarningMessage() throws Exception{
+        waitForPageToLoad();
+        if (findAll(warningMessage).size() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean verifyOtherCabinetDetailIDValues(String sName) throws Exception{
+        waitForPageToLoad();
+        WebElement fieldName = fieldByLabelTextIndex(sName).get(0);
+        click(fieldName);
+        click(find(fieldHistory));
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        sleep(5);
+        String tableList = tableDataList(1);
+        List<String> tableValues = getDocumentTextListByXpathJs(tableList);
+        int size = tableValues.size();
+        boolean Flag =false;
+        if(size>1){
+            Flag =true;
+        }
+        click(find(closeButton));
+        switchToSpecificWindow(parent);
+        return Flag;
     }
 
     public void updateBusbarInstalledValue(String option, String option1) throws Exception {

@@ -28,6 +28,7 @@ public class AddCabinetPage extends BasePage {
     public By okButton = By.xpath("//input[@id='btnOK']");
     public By cancelButton = By.xpath("//input[@id='btnCancel']");
     public By okButton1 = By.xpath("//input[@id='btnOK0']");
+    public By searchInputBox = By.xpath("//input[@id='qsValue0']");
     public By searchOption = By.xpath("//input[@id='qsValue0']");
     public By searchButton = By.xpath("//input[@id='btnSearch0']");
     public By getCount = By.xpath("//span[@id='tabCounter2']");
@@ -46,6 +47,8 @@ public class AddCabinetPage extends BasePage {
     public By CabinetVoltage = By.xpath("//select[@sname='CAB:Voltage']//option");
     public By cabinetStatus = By.xpath("//select[@sname='CAB:Cabinet Status']//option");
     public By cabinetEquipmentTrackerTab = By.xpath("//div[@title='CABE:Cabinet Equipment Tracker']");
+    public By closeButton = By.xpath("//input[@value='Close']");
+    public By fieldHistory = By.xpath("//div[text()='Field History']");
     public String parentWindow = "";
 
     public String getValueInField(String sname) throws Exception {
@@ -527,4 +530,130 @@ public class AddCabinetPage extends BasePage {
         String updatedValue = inputBoxDataBySname(fieldName).getAttribute("origval");
         return updatedValue.contains(input);
     }
+    public boolean validateFieldIsLocked(String sName) throws Exception {
+        waitForPageToLoad();
+        WebElement lock = lockByLabel(sName);
+        System.out.println(lock.getAttribute("class"));
+        if (lock.getAttribute("class").contains("lock-icon locked")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean verifyCabinetIPAddressFormat() throws Exception {
+        waitForPageToLoad();
+        WebElement cabinetIPAddress = inputBoxDataBySname("CAB:Cabinet IP Address");
+        setText(cabinetIPAddress, "192.168.1.1");
+        click(find(applyButton));
+        waitForPageToLoad();
+        sleep(5);
+        String getValue = inputBoxDataBySname("CAB:Cabinet IP Address").getAttribute("origval");
+        String ipv4Pattern = "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+                + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+                + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\."
+                + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
+        if (getValue.matches(ipv4Pattern)) {
+            return true;
+        } else return false;
+    }
+
+    public String getFieldValue(String sName) throws Exception {
+        waitForPageToLoad();
+        WebElement fieldName = inputBoxDataBySname(sName);
+        String getValue = fieldName.getAttribute("origval");
+        return getValue;
+    }
+
+    public String getSelectionFieldValue(String sName) throws Exception {
+        waitForPageToLoad();
+        WebElement fieldName = selectionBoxBySname(sName).get(0);
+        scrollToElement(fieldName);
+        String getValue = getFirstSelectedOptionInDropdown(fieldName);
+        System.out.println(getValue);
+        return getValue;
+    }
+
+    public String getFieldUpdatedValue(String sName) throws Exception {
+        waitForPageToLoad();
+        WebElement fieldName = inputBoxDataLabel(sName);
+        String getValue = getDocumentTextByIdJs(fieldName.getAttribute("id"));
+        System.out.println(getValue);
+        return getValue;
+    }
+    public boolean addVoltageBooster(String type) throws Exception {
+        waitForPageToLoad();
+        click(find(cabinetEquipmentTrackerTab));
+        waitForPageToLoad();
+        click(find(addOption));
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        WebElement cabinetEquipmentType = selectionBoxBySname("CABE:Cabinet Equipment Type").get(0);
+        selectDropdownOption(cabinetEquipmentType, type);
+        click(find(applyButton));
+        sleep(5);
+        if (!isAlertPresent()) {
+            click(find(okButton));
+            sleep(5);
+            switchToSpecificWindow(parent);
+            return true;
+        } else {
+            acceptAlert();
+            click(find(cancelButton));
+            if (!isAlertPresent()) {
+                switchToSpecificWindow(parent);
+            } else {
+                acceptAlert();
+                switchToSpecificWindow(parent);
+            }
+            return false;
+        }
+    }
+
+    public void updateEllipsisValue(String sName, String text) throws Exception {
+        waitForPageToLoad();
+        dropDownDotsClick(sName);
+        String parent1 = switchToChildWindows();
+        fullScreenChildWindow();
+        waitUntilVisibleElement(find(okButton1));
+        waitUntilVisibleElement(find(searchInputBox));
+        setText(find(searchInputBox), text);
+        selectSearchType("PR:Power Reference ID");
+        click(find(searchButton));
+        tableRadioButtonSelectionWithExactValue("PR:Power Reference ID", text);
+        click(find(okButton1));
+        sleep(5);
+        switchToSpecificWindow(parent1);
+        click(find(applyButton));
+        waitForPageToLoad();
+    }
+    public boolean verifyDetailID(String sName) throws Exception{
+        waitForPageToLoad();
+        String getValue = inputBoxDataBySname(sName).getAttribute("origval");
+        if(getValue.startsWith("A")){
+            return true;
+        }else return false;
+    }
+    public boolean verifyOtherCabinetDetailIDValues(String sName) throws Exception{
+        waitForPageToLoad();
+        WebElement fieldName = fieldByLabelTextIndex(sName).get(0);
+        click(fieldName);
+        click(find(fieldHistory));
+        String parent = switchToChildWindows();
+        fullScreenChildWindow();
+        waitForPageToLoad();
+        sleep(5);
+        String tableList = tableDataList(1);
+        List<String> tableValues = getDocumentTextListByXpathJs(tableList);
+        int size = tableValues.size();
+        boolean Flag =false;
+        if(size>1){
+            Flag =true;
+        }
+        click(find(closeButton));
+        switchToSpecificWindow(parent);
+        return Flag;
+    }
 }
+
