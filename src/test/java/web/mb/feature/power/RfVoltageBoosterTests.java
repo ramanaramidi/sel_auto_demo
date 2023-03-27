@@ -182,7 +182,7 @@ public class RfVoltageBoosterTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditCabinetOption();
         String parentWindow3 = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
-        String options = cabinetEquipmentTrackerPage.getVLTModelValues();
+        String options = cabinetEquipmentTrackerPage.getTableValues("CABE:VLT Manufacturer / Model");
         softAssert.assertContains(options, "025", "Model is Available");
         softAssert.assertContains(options, "026", "Model is Available");
         softAssert.assertContains(options, "027", "Model is Available");

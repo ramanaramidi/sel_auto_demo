@@ -11,6 +11,7 @@ import pages.web.Tracker.PowerCabinetPage;
 import pages.web.Tracker.site.SiteTrackerPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
+import rest.power.PowerHelper;
 import rest.site.SiteHelper;
 import utility.helper.AssertionsUtil;
 import utility.helper.MiscHelpers;
@@ -27,6 +28,8 @@ public class PowerRectifierTests extends BaseTest {
     CabinetTrackerPage cabinetTrackerPage;
     AddCabinetPage addCabinetPage;
     Site Site_Active;
+    Site cabinetID;
+    PowerHelper powerHelper = new PowerHelper();
     SiteHelper siteHelper = new SiteHelper();
     SiteTrackerPage siteTrackerPage;
     public PowerRectifierTests() {
@@ -61,27 +64,34 @@ public class PowerRectifierTests extends BaseTest {
         Site site_Active = new Site(ringId_Active, "Final Build", "Active Site");
         Site_Active =
                 siteHelper.createActiveRingAndPrimaryActiveSite(ring_Active, site_Active);
+        cabinetID = powerHelper.createNewCabinet(Site_Active,"Delta");
+        powerHelper.updateCabinetModel(Site_Active,"471");
     }
     @Test(groups = {"Integration"}, description = "verifyCabinetTrackerRectifierField", priority = 2)
     public void verifyCabinetTrackerRectifierField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         cabinetTrackerPage = mainSideMenu.goToCabinetTrackerPage();
-        cabinetTrackerPage.searchForValue(Site_Active.siteId, "S:Site Code");
+        cabinetTrackerPage.searchForValue(cabinetID.cabinet, "CAB:Cabinet ID");
         addCabinetPage = cabinetTrackerPage.selectEditOption();
         String parentWindow = addCabinetPage.switchToAddCabinetPage();
         softAssert.assertTrue(addCabinetPage.validateFieldIsDisplayed("CAB:Number of Rectifiers Supported (max) "), "CAB:Number of Rectifiers Supported (max)  field is displayed in Cabinet Tracker");
         softAssert.assertTrue(addCabinetPage.validateFieldIsDisplayed("CAB:Max Rectifiers"), "CAB:Max Rectifiers field is displayed in Cabinet Tracker");
+        addCabinetPage.switchToCabinetTrackerPage(parentWindow);
+        softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyCabinetTrackerRectifierField_Updated", priority = 3)
     public void verifyCabinetTrackerRectifierField_Updated(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         cabinetTrackerPage = mainSideMenu.goToCabinetTrackerPage();
-        cabinetTrackerPage.searchForValue(Site_Active.siteId, "S:Site Code");
+        cabinetTrackerPage.searchForValue(cabinetID.cabinet, "CAB:Cabinet ID");
         addCabinetPage = cabinetTrackerPage.selectEditOption();
+        String parentWindow = addCabinetPage.switchToAddCabinetPage();
         String count = addCabinetPage.validateNumberOfRectifiersSupported_Updated("CAB:Number of Rectifiers Supported (max) ");
         softAssert.assertTrue(count.length()>0,"CAB:Number of Rectifiers Supported (max)  field is displayed in Cabinet Tracker");
         String MaxCount = addCabinetPage.validateMaxRectifiersCount_Updated("CAB:Max Rectifiers");
         softAssert.assertTrue(MaxCount.length()>0, "CAB:Max Rectifiers field is displayed in Cabinet Tracker");
+        addCabinetPage.switchToTrackerPage(parentWindow);
+        softAssert.closeAssert();
     }
     @Test(groups = {"Integration"}, description = "verifyCABERectifier_VendorDropDownField", priority = 4)
     public void verifyCABERectifier_VendorDropDownField(Method method) throws Exception {
@@ -186,10 +196,10 @@ public class PowerRectifierTests extends BaseTest {
         softAssert.assertTrue(powerCabinetPage.validateFieldIsDisplayed("CABE:REC Shelf"), "CABE:REC Shelf field is displayed in Cabinet Tracker");
         softAssert.assertTrue(powerCabinetPage.validateFieldIsDisplayed("CAB:Cabinet Detail ID"), "CAB:Cabinet Detail ID field is displayed in Cabinet Equipment Tracker");
         softAssert.assertTrue(powerCabinetPage.validateFieldIsDisplayed("CABE:REC Rectifier Detail ID"), "CABE:REC Rectifier Detail ID field is displayed in Cabinet Equipment Tracker");
-        softAssert.assertTrue(powerCabinetPage.validateFieldIsDisplayed("CAB:Cabinet ID"), "CAB:Cabinet ID field is displayed in Cabinet Equipment Tracker");
-        softAssert.assertTrue(powerCabinetPage.validateField_IsDisplayed("CABE:Cabinet Equipment ID"), "CABE:Cabinet Equipment ID field is displayed in Cabinet Equipment Tracker");
+        softAssert.assertTrue(powerCabinetPage.validateFieldIs_Displayed("CAB:Cabinet ID"), "CAB:Cabinet ID field is displayed in Cabinet Equipment Tracker");
+        softAssert.assertTrue(powerCabinetPage.validateFieldIs_Displayed("CABE:Cabinet Equipment ID"), "CABE:Cabinet Equipment ID field is displayed in Cabinet Equipment Tracker");
         powerCabinetPage.switchToTracker(parentWindow);
-//        softAssert.closeAssert();
+        softAssert.closeAssert();
     }
 
     @Test(groups = {"Integration"}, description = "verifyCABERectifiers_VendorDropDownField", priority = 12)

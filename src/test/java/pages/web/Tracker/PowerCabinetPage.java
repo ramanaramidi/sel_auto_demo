@@ -305,7 +305,6 @@ public class PowerCabinetPage extends BasePage {
         }
         return false;
     }
-
     public boolean isAdd_buttonDisplayed() throws Exception {
         waitForPageToLoad();
         sleep(10);
@@ -515,6 +514,13 @@ public class PowerCabinetPage extends BasePage {
             Flag = true;
         }
         return Flag;
+    }
+    public boolean validateFieldIs_Displayed(String name) throws Exception {
+        waitForPageToLoad();
+        WebElement fieldNameText = fieldByLabelTextIndex(name).get(1);
+        scrollToElement(fieldNameText);
+        boolean fieldName = fieldNameText.isDisplayed();
+        return fieldName;
     }
 
     public String searchForValueInGrid(String columnName,int row) throws Exception {

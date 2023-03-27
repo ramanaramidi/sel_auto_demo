@@ -145,7 +145,7 @@ public class VoltageBoosterTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
-        String options = cabinetEquipmentTrackerPage.getVLTModelValues();
+        String options = cabinetEquipmentTrackerPage.getTableValues("CABE:VLT Manufacturer / Model");
         softAssert.assertContains(options,"025","Model is Available");
         softAssert.assertContains(options,"026","Model is Available");
         softAssert.assertContains(options,"027","Model is Available");
@@ -180,13 +180,13 @@ public class VoltageBoosterTests extends BaseTest {
     public void verifyIfOperatingConfigurationRequiredIsNo(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         cabinetEquipmentTrackerPage = mainSideMenu.goToCabinetEquipmentTracker();
-        cabinetEquipmentTrackerPage.searchForValue(CabinetEquipmentID, "CABE:Cabinet Equipment ID");
+        cabinetEquipmentTrackerPage.searchForValue("SAU4BOBZ_C1_VB1", "CABE:Cabinet Equipment ID");
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
         String text = "Delta";
         cabinetEquipmentTrackerPage.updateVLTManufacturerValue(text);
-        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsReadOnly("CABE:VLT Operating Configuration"), "CABE:VLT Operating Configuration is Disabled");
+        softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsDisabled("CABE:VLT Operating Configuration"), "CABE:VLT Operating Configuration is Disabled");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
         softAssert.closeAssert();
     }
@@ -199,13 +199,13 @@ public class VoltageBoosterTests extends BaseTest {
     public void verifyIfOperatingConfigurationRequiredIsYes(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         cabinetEquipmentTrackerPage = mainSideMenu.goToCabinetEquipmentTracker();
-        cabinetEquipmentTrackerPage.searchForValue(CabinetEquipmentID, "CABE:Cabinet Equipment ID");
+        cabinetEquipmentTrackerPage.searchForValue("SAU4BOBZ_C1_VB1", "CABE:Cabinet Equipment ID");
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
         String text = "Raycap V1";
         cabinetEquipmentTrackerPage.updateVLTManufacturerValue(text);
-        softAssert.assertFalse(cabinetEquipmentTrackerPage.validateFieldIsReadOnly("CABE:VLT Operating Configuration"), "CABE:VLT Operating Configuration is Enabled");
+        softAssert.assertFalse(cabinetEquipmentTrackerPage.validateFieldIsDisabled("CABE:VLT Operating Configuration"), "CABE:VLT Operating Configuration is Enabled");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
         softAssert.closeAssert();
     }

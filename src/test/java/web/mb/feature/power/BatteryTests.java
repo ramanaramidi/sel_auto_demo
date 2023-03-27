@@ -370,7 +370,7 @@ public class BatteryTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToBatteryTab();
-        String options =cabinetEquipmentTrackerPage.getBATConnectedToValues();
+        String options =cabinetEquipmentTrackerPage.getTableValues("CABE:BAT Connected To");
         softAssert.assertContains(options,"N/A","N/A is Available");
         softAssert.assertContains(options,"Not Connected","Not Connected is Available");
         softAssert.assertContains(options,"C1","C1 is Available");

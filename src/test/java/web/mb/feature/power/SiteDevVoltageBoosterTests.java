@@ -96,13 +96,13 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
         softAssert.assertTrue(addCabinetPage.verifyVoltageBoosters(),"CAB:Number Of Voltage Boosters Installed default value is '0'");
         cabinetTrackerPage = addCabinetPage.switchToCabinetTrackerPage(parentWindow3);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow);
-//        softAssert.closeAssert();
+        softAssert.closeAssert();
     }
 
     @Test(
             groups = {"Integration"},
             description = "Add VoltageBooster",
-            priority = 2
+            priority = 3
     )
     public void addVoltageBooster(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -127,7 +127,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify Voltage Booster Fields are displayed",
-            priority = 3
+            priority = 4
     )
     public void validateVoltageBoosterFieldsDisplayed(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -165,7 +165,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:VLT Manufacturer / Model field value",
-            priority = 4
+            priority = 5
     )
     public void verifyVLTManufacturerTypeValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -180,7 +180,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditCabinetOption();
         String parentWindow3 =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
-        String options = cabinetEquipmentTrackerPage.getVLTModelValues();
+        String options = cabinetEquipmentTrackerPage.getTableValues("CABE:VLT Manufacturer / Model");
         softAssert.assertContains(options,"025","Model is Available");
         softAssert.assertContains(options,"026","Model is Available");
         softAssert.assertContains(options,"027","Model is Available");
@@ -194,7 +194,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:VLT Manufacturer / Model field value",
-            priority = 5
+            priority = 6
     )
     public void updateVLTManufacturerType(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -221,7 +221,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "verify CABE:VLT Status Dropdown Values",
-            priority = 6
+            priority = 7
     )
     public void verifyVLTStatusDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -248,7 +248,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:VLT Status field Dropdown value",
-            priority = 7
+            priority = 8
     )
     public void updateVLTStatusDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -275,7 +275,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "verify CABE:VLT HCS (Hybrid Cable System) Type Dropdown Values",
-            priority = 8
+            priority = 9
     )
     public void verifyVLTHCSTypeDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -303,7 +303,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:VLT HCS (Hybrid Cable System) Type field Dropdown value",
-            priority = 9
+            priority = 10
     )
     public void updateVLTHCSTypeDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -331,7 +331,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
             groups = {"Integration"},
             description = "Verify CABE:VLT Number Of Modules Installed\n" +
                     "it should allow numeric values ",
-            priority = 10
+            priority = 11
     )
     public void verifyVLTNumberOfNumberOfModulesInstalledField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -357,7 +357,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:VLT Number Of Modules Installed",
-            priority = 11
+            priority = 12
     )
     public void updateVLTNumberOfNumberOfModulesInstalledField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -382,7 +382,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Updating CABE:VLT Number Of Modules Installed with above max value should throw an error",
-            priority = 12
+            priority = 13
     )
     public void updateVLTNumberOfNumberOfModulesInstalledFieldWithAboveMaxValue(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -406,7 +406,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "verify CABE:VLT Operating Configuration Dropdown Values",
-            priority = 13
+            priority = 14
     )
     public void verifyVLTOperatingConfigurationDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -433,7 +433,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Update CABE:VLT Operating Configuration field Dropdown value",
-            priority = 14
+            priority = 15
     )
     public void updateVLTOperatingConfigurationDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -459,7 +459,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "verify CABE:VLT Is Busbar Installed Dropdown Values",
-            priority = 15
+            priority = 17
     )
     public void verifyVLTIsBusbarInstalledDropdownValues(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -485,7 +485,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify If Operating Configuration is Single Mode - Busbar field value can be updated with 'No'",
-            priority = 16
+            priority = 18
     )
     public void verifyVLTIsBusbarInstalledValueISNoForSingleMode(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -509,7 +509,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify If Operating Configuration is Single Mode - Busbar field value cannot be updated with 'Yes'",
-            priority = 17
+            priority = 19
     )
     public void verifyVLTIsBusbarInstalledValueISYesForSingleMode(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -525,7 +525,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
         String parentWindow3 =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
         cabinetEquipmentTrackerPage.updateBusbarInstalledValue("Single Mode", "Yes");
-        softAssert.assertTrue(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3),"If Operating Configuration is Single Mode - Busbar field value cannot be updated with 'Yes'");
+        softAssert.assertFalse(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3),"If Operating Configuration is Single Mode - Busbar field value cannot be updated with 'Yes'");
         cabinetTrackerPage =  cabinetEquipmentTrackerPage.switchToAddTrackerPageByCancel(parentWindow2);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow);
         softAssert.closeAssert();
@@ -533,7 +533,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify If Operating Configuration is Single Mode - Busbar field value can be updated with 'No'",
-            priority = 18
+            priority = 20
     )
     public void verifyVLTIsBusbarInstalledValueISYesForParallelMode(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -557,7 +557,7 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
     @Test(
             groups = {"Integration"},
             description = "Verify If Operating Configuration is Parallel Mode - Busbar field value cannot be updated with 'No'",
-            priority = 19
+            priority = 21
     )
     public void verifyVLTIsBusbarInstalledValueISNoForParallelMode(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
@@ -573,10 +573,10 @@ public class SiteDevVoltageBoosterTests extends BaseTest {
         String parentWindow3 =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
         cabinetEquipmentTrackerPage.updateBusbarInstalledValue("Parallel Mode", "No");
-        softAssert.assertTrue(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3),"If Operating Configuration is Parallel Mode - Busbar field value cannot be updated with 'No'");
+        softAssert.assertFalse(cabinetEquipmentTrackerPage.isPopAlertPresent(parentWindow3),"If Operating Configuration is Parallel Mode - Busbar field value cannot be updated with 'No'");
         cabinetTrackerPage =  cabinetEquipmentTrackerPage.switchToAddTrackerPageByCancel(parentWindow2);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow);
-//        softAssert.closeAssert();
+        softAssert.closeAssert();
     }
     @Test(
             groups = {"Integration"},

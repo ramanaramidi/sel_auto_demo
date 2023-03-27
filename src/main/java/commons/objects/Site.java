@@ -80,7 +80,7 @@ public class Site {
         );
         List<String> siteClassListBuild = Arrays.asList(
                 "3G Repeater",
-                "Building Other",
+                //"Building Other",
                 "In Building",
                 "Non TMO Repeater",
                 "Repeater",

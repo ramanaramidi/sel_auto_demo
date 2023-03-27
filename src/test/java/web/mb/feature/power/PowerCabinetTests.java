@@ -111,7 +111,7 @@ public class PowerCabinetTests extends BaseTest {
         cabinetTrackerPage.searchForValue(Site_Active.siteId, "S:Site Code");
         addCabinetPage = cabinetTrackerPage.clickAddButton();
         String parentWindow = addCabinetPage.switchToAddCabinetPage();
-        softAssert.assertTrue(addCabinetPage.validateFieldIsDisplayed("S:Site Code"), "SiteCode field is displayed in Cabinet Tracker");
+        softAssert.assertTrue(addCabinetPage.validateField_IsDisplayed("S:Site Code"), "SiteCode field is displayed in Cabinet Tracker");
         softAssert.assertTrue(addCabinetPage.validateFieldIsDisplayed("CAB:Cabinet ID"), "CAB:Cabinet ID field is displayed in Cabinet Tracker");
         softAssert.assertTrue(addCabinetPage.validateFieldIsDisplayed("CAB:Cabinet Detail ID"), "CAB:Cabinet Detail ID field is displayed in Cabinet Tracker");
         softAssert.assertTrue(addCabinetPage.validateField_IsDisplayed("CAB:Cabinet Vendor"), "CAB:Cabinet Vendor field is displayed in Cabinet Tracker");

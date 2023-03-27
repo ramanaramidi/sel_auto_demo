@@ -37,8 +37,6 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     public By searchOption = By.xpath("//input[@id='qsValue0']");
     public By equipmentIDClick = By.xpath("//div[@class='objbox customscroll']//table[@class='obj']//tbody//tr[2]//td[2]//a");
     public By generalInfoTab = By.xpath("//div[@title='CABE:General Info']");
-    public By selectValue = By.xpath("(//div[@class='hdr_cell']//div[text()='CAB:Cabinet ID']/ancestor::table/../following-sibling::div//label)[3]");
-    public By unselectValue = By.xpath("(//div[@class='hdr_cell']//div[text()='CAB:Cabinet ID']/ancestor::table/../following-sibling::div//label)[2]");
     public By calendar = By.xpath("(//table[@id='calendar'])[2]");
     public By selectToday = By.xpath("//td[@_class='today']");
     public By selectMonth = By.xpath("(//select[@id='month'])[2]");
@@ -329,21 +327,6 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         click(find(applyButton));
         waitForPageToLoad();
     }
-
-    public String getBATConnectedToValues() throws Exception{
-        waitForPageToLoad();
-        dropDownDotsClick("CABE:BAT Connected To");
-        String parent1 = switchToChildWindows();
-        fullScreenChildWindow();
-        waitForPageToLoad();
-        waitUntilVisibleElement(find(okButton1));
-        List<String> modelList = getDocumentTextListByXpathJs(tableList);
-        String options = modelList.toString();
-        System.out.println(options);
-        click(find(okButton1));
-        switchToSpecificWindow(parent1);
-        return options;
-    }
     public void selectNotConnectedAndNA() throws Exception{
         waitForPageToLoad();
         dropDownDotsClick("CABE:BAT Connected To");
@@ -458,8 +441,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         click(find(voltageBoosterTab));
         waitForPageToLoad();
     }
-
-    public String  getVLTModelValues() throws Exception{
+    public String  getTableValues(String sName) throws Exception{
         waitForPageToLoad();
         dropDownDotsClick("CABE:VLT Manufacturer / Model");
         String parent1 = switchToChildWindows();
@@ -467,12 +449,12 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         waitForPageToLoad();
         waitUntilVisibleElement(find(okButton1));
         sleep(15);
-        List<String> modelList = getDocumentTextListByXpathJs(tableList);
-        String modelValues = modelList.toString();
-        System.out.println(modelValues);
+        List<String> tableData = getDocumentTextListByXpathJs(tableList);
+        String tableValues = tableData.toString();
+        System.out.println(tableValues);
         click(find(okButton1));
         switchToSpecificWindow(parent1);
-        return modelValues;
+        return tableValues;
     }
     public boolean verifyBatteryConnectedToCabinets() throws Exception{
         waitForPageToLoad();
@@ -491,7 +473,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
         waitForPageToLoad();
         waitUntilVisibleElement(find(okButton1));
         waitUntilVisibleElement(find(searchInputBox));
-        setText(find(searchInputBox), "Raycap V1");
+        setText(find(searchInputBox), text);
         selectSearchType("PR:VLT Voltage Booster Model");
         click(find(searchButton));
         radioButtonValueSelectionByTd("PR:Power Reference ID");
