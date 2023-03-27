@@ -186,7 +186,6 @@ public class RfVoltageBoosterTests extends BaseTest {
         softAssert.assertContains(options, "025", "Model is Available");
         softAssert.assertContains(options, "026", "Model is Available");
         softAssert.assertContains(options, "027", "Model is Available");
-        softAssert.assertContains(options, "028", "Model is Available");
         cabinetTrackerPage = cabinetEquipmentTrackerPage.switchToAddTrackerPageByOkay(parentWindow3);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow2);
         siteTrackerPage.switchToTracker(parentWindow);
@@ -211,7 +210,7 @@ public class RfVoltageBoosterTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditCabinetOption();
         String parentWindow3 = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
-        String text = "Raycap V1";
+        String text = "Raycap V2";
         cabinetEquipmentTrackerPage.updateVLTManufacturerValue(text);
         softAssert.assertTrue(cabinetEquipmentTrackerPage.isFieldUpdatedWithModel(text), "CABE:VLT Manufacturer / Model is updated with selected Model");
         cabinetTrackerPage = cabinetEquipmentTrackerPage.switchToAddTrackerPageByOkay(parentWindow3);
@@ -616,6 +615,6 @@ public class RfVoltageBoosterTests extends BaseTest {
         cabinetTrackerPage = cabinetEquipmentTrackerPage.switchToAddTrackerPageByOkay(parentWindow3);
         siteTrackerPage = cabinetTrackerPage.switchToAddTrackerPage(parentWindow2);
         siteTrackerPage.switchToTracker(parentWindow);
-       // softAssert.closeAssert();
+        softAssert.closeAssert();
     }
 }

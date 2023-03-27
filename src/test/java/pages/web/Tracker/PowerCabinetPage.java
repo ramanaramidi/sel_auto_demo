@@ -297,7 +297,7 @@ public class PowerCabinetPage extends BasePage {
 
     public boolean isEdit_buttonDisplayed() throws Exception {
         waitForPageToLoad();
-        sleep(10);
+        sleep(20);
         List<WebElement> buttons = findAll(By.xpath("//input[@id='btnEdit0']"));
         if (buttons.size() > 0 && buttons.get(0).isDisplayed()) {
             System.out.println("Edit Button is displayed" + buttons.get(0).isDisplayed());
@@ -565,9 +565,9 @@ public class PowerCabinetPage extends BasePage {
 
     public AddCabinetPage clickAddButton() throws Exception {
         waitForPageToLoad();
-        sleep(5);
+        sleep(15);
         buttonClick("Add", 1);
-        sleep(8);
+        sleep(3);
         return new AddCabinetPage(driver);
     }
 

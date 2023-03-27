@@ -149,7 +149,7 @@ public class BatteryTests extends BaseTest {
     public void updateNumberOfBatteryStringsSupportedField(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         cabinetTrackerPage = mainSideMenu.goToCabinetTrackerPage();
-        cabinetTrackerPage.searchForValue(Site_Active.siteId, "S:Site Code");
+        cabinetTrackerPage.searchForValue(cabinetID.cabinet, "CAB:Cabinet ID");
         addCabinetPage = cabinetTrackerPage.selectEditOption();
         String parentWindow = addCabinetPage.switchToAddCabinetPage();
         softAssert.assertTrue(addCabinetPage.validateFieldAllowsNumeric("CAB:Number of Battery Strings Supported"),"Field is updated");
@@ -611,7 +611,6 @@ public class BatteryTests extends BaseTest {
         String parentWindow =cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToBatteryTab();
         cabinetEquipmentTrackerPage.updateDropdownFieldValue("CABE:Active", "No");
-        //softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CAB:Cabinet Type/Purpose"), "CAB:Cabinet Type/Purpose is Locked");
         softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT String Type"), "CABE:BAT String Type is Locked");
         softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Manufacturer"), "CABE:BAT Manufacturer is Locked");
         softAssert.assertTrue(cabinetEquipmentTrackerPage.validateFieldIsLocked("CABE:BAT Model"), "CABE:BAT Model is Locked");

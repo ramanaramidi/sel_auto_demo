@@ -251,7 +251,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     public CabinetTrackerPage selectEditOption() throws Exception {
         waitForPageToLoad();
         waitUntilVisibleElement(find(editSite));
-        sleep(9);
+        sleep(15);
         click(find(editSite));
         return new CabinetTrackerPage(driver);
     }
@@ -443,7 +443,7 @@ public class CabinetEquipmentTrackerPage extends BasePage {
     }
     public String  getTableValues(String sName) throws Exception{
         waitForPageToLoad();
-        dropDownDotsClick("CABE:VLT Manufacturer / Model");
+        dropDownDotsClick(sName);
         String parent1 = switchToChildWindows();
         fullScreenChildWindow();
         waitForPageToLoad();

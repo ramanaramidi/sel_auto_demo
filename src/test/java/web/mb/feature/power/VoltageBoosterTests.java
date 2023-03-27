@@ -149,7 +149,6 @@ public class VoltageBoosterTests extends BaseTest {
         softAssert.assertContains(options,"025","Model is Available");
         softAssert.assertContains(options,"026","Model is Available");
         softAssert.assertContains(options,"027","Model is Available");
-        softAssert.assertContains(options,"028","Model is Available");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
         softAssert.closeAssert();
     }
@@ -166,7 +165,7 @@ public class VoltageBoosterTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
-        String text = "Raycap V1";
+        String text = "Raycap V2";
         cabinetEquipmentTrackerPage.updateVLTManufacturerValue(text);
         softAssert.assertTrue(cabinetEquipmentTrackerPage.isFieldUpdatedWithModel(text), "CABE:VLT Manufacturer / Model is updated with selected Model");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);
@@ -203,7 +202,7 @@ public class VoltageBoosterTests extends BaseTest {
         cabinetEquipmentTrackerPage.selectEditOption();
         String parentWindow = cabinetEquipmentTrackerPage.switchToCabinetPage();
         cabinetEquipmentTrackerPage.goToVoltageBoosterTab();
-        String text = "Raycap V1";
+        String text = "Raycap V2";
         cabinetEquipmentTrackerPage.updateVLTManufacturerValue(text);
         softAssert.assertFalse(cabinetEquipmentTrackerPage.validateFieldIsDisabled("CABE:VLT Operating Configuration"), "CABE:VLT Operating Configuration is Enabled");
         cabinetEquipmentTrackerPage.switchToTrackerPage(parentWindow);

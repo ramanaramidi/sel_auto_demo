@@ -542,6 +542,7 @@ public class MainSideMenu extends BasePage {
     }
 
     public CabinetTrackerPage goToCabinetTrackerPage() throws Exception {
+        waitForPageToLoad();
         navigateToAppCenter();
         search("Cabinet Tracker");
         click(find(cabinetTracker));
