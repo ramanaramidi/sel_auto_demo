@@ -222,7 +222,8 @@ public class FOPSTelcoTests extends BaseTest {
         siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
         siteFopsPage.goToFopsTab();
-        softAssert.assertTrue(siteFopsPage.verifyDropDownField_S247TelcoAccess(),"Dropdown Field is Present");
+        softAssert.assertTrue(siteFopsPage.isFieldDropDown("S:24x7 Telco Access?"),"Dropdown Field is Present");
+        softAssert.assertNotNull(siteFopsPage.fieldDropDownValues("S:24x7 Telco Access?"),"S:PWR Door Alarm Configured should not be null");
         siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }

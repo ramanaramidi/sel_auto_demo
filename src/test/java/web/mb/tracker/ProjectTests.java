@@ -125,6 +125,7 @@ public class ProjectTests extends BaseTest {
         porTrackerPage = addPORPage.returnToPORTracker();
         porTrackerPage.refresh();
         sleepFor(15);
+        porTrackerPage.searchForValue(porData.porId,"POR:POR ID");
         String response = porTrackerPage.searchForValueInGrid("PJ:Project ID","POR:POR ID",porData.porId);
         projectTrackerPage = mainSideMenu.goToProjectTracker();
         projectTrackerPage.searchForValue(response,"PJ:Project ID");

@@ -119,7 +119,7 @@ public class FOPSOtherAccessTests extends BaseTest {
         softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Notification Period"),"FOPS Other Access Testing","S:Other Access Notification Period isText Field");
         softAssert.assertNotNull(siteFopsPage.validateFieldIsReadOnly("S:Other Access Modified By"),"S:Other Access Modified By is Read only");
         softAssert.assertContains(siteFopsPage.verifyTextFields("S:Other Access Modified Date"),MiscHelpers.currentDateTime("MM/dd/yyyy"),"S:Other Access Modified Date is Text Field");
-        softAssert.assertTrue(siteFopsPage.verifyDropDownField_S247OtherAccess(),"$24*7 Other Access Drop Down");
+        softAssert.assertTrue(siteFopsPage.isFieldDropDown("S:Other Access 24x7"),"$24*7 Other Access Drop Down");
         softAssert.assertContains(siteFopsPage.verifyNotificationCheckBox("S:Other Access Notification Required"),"checkbox","Other Access Notification Required CheckBox is Present");
         softAssert.assertTrue(siteFopsPage.verifyCheckBoxChecked_OtherAccess("S:Other Access Notification Required"),"Other Notification checkBox checked and saved");
         siteFopsPage.switchToTrackerPage();
@@ -275,7 +275,8 @@ public class FOPSOtherAccessTests extends BaseTest {
         siteFopsPage.searchForValue(Site_Active.siteId, "S:Site Code");
         siteFopsPage.selectEditOption();
         siteFopsPage.goToFopsTab();
-        softAssert.assertTrue(siteFopsPage.verifyDropDownField_S247OtherAccess(),"Dropdown Field is Present");
+        softAssert.assertTrue(siteFopsPage.isFieldDropDown("S:Other Access 24x7"),"Dropdown Field is Present");
+        softAssert.assertNotNull(siteFopsPage.fieldDropDownValues("S:Other Access 24x7"),"S:PWR Door Alarm Configured should not be null");
         siteFopsPage.switchToTrackerPage();
         softAssert.closeAssert();
     }

@@ -377,6 +377,7 @@ public class SiteTrackerPage extends BasePage {
         waitUntilVisibleElement(find(okButton));
         sleep(10);
         scrollToElement(pencilIcon("S:Hub Site ID").get(0));
+        sleep(10);
         click(pencilIcon("S:Hub Site ID").get(0));
         String parent3 = switchToChildWindows();
         fullScreenChildWindow();
@@ -434,6 +435,7 @@ public class SiteTrackerPage extends BasePage {
         sleep(4);
         dropDownValueSelection("S:Site Category","BBU/BTS");
         click(find(applyButton));
+        waitForPageToLoad();
         sleep(10);
         dropDownDotsClick("S:Hub Site ID");
         String parent2 = switchToChildWindows();
@@ -447,7 +449,8 @@ public class SiteTrackerPage extends BasePage {
         quickClick(find(siteCodeSelectionOKButton));
         switchToSpecificWindow(parent2);
         click(find(applyButton));
-        sleep(10);
+        waitForPageToLoad();
+        sleep(15);
         click(pencilIcon("S:Hub Site ID").get(0));
         String parent3 = switchToChildWindows();
         fullScreenChildWindow();

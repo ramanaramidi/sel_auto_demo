@@ -401,6 +401,7 @@ public class PORTrackerPage extends BasePage {
     }
 
     public boolean verifyStats() throws Exception {
+        waitForPageToLoad();
         waitUntilVisibleElement(find(cancel));
         boolean stats = find(statsValues).getText().equals("");
         System.out.println("Stats::" + stats);
@@ -410,7 +411,8 @@ public class PORTrackerPage extends BasePage {
     public void selectPlanType() throws Exception {
         waitUntilVisibleElement(find(cancel));
         selectDropdownOption(find(gridStatsSelectionBox), "PAT:Plan Type");
-        sleep(10);
+        waitForPageToLoad();
+        sleep(20);
     }
     public String VerifyProgramNameInPORTracker(String program) throws Exception {
         parentWindow = switchToChildWindows();

@@ -300,6 +300,8 @@ public class ProjectNTPPage extends BasePage {
     }
 
     public String VerifyFileName(String sheetName) throws Exception {
+        waitForPageToLoad();
+        sleep(5);
         scrollToElement(inputBoxDataBySname(sheetName));
         String fileName = getDocumentTextByIdJs(inputBoxDataBySname(sheetName).getAttribute("id"));
         return fileName;

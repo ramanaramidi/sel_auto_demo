@@ -108,6 +108,7 @@ public class ESRTrackerPage extends BasePage {
     }
     public ESRTrackerPage selectEditOption() throws Exception {
         waitForPageToLoad();
+        sleep(5);
         waitUntilVisibleElement(find(EditButton));
         click(find(EditButton));
         return new ESRTrackerPage(driver);
@@ -133,9 +134,8 @@ public class ESRTrackerPage extends BasePage {
         }
         find(okButton).click();
         switchToSpecificWindow(parent1);
-        waitUntilPageLoad();
         sleep(5);
-        find(cancelButton).click();
+        click(find(cancelButton));
         switchToSpecificWindow(parentWindow);
         return Flag;
     }
@@ -204,8 +204,8 @@ public class ESRTrackerPage extends BasePage {
     }
     public void waitUntilPageLoad() throws Exception{
         waitForPageToLoad();
-        waitUntilVisibleElement(find(EditButton));
         sleep(20);
+        waitUntilVisibleElement(find(EditButton));
     }
     public boolean verifyComponentFieldHistory() throws Exception{
         parentWindow = switchToChildWindows();
@@ -306,7 +306,7 @@ public class ESRTrackerPage extends BasePage {
     }
     public List<String> validateDataTypePDF() throws Exception{
         parentWindow = switchToChildWindows();
-        fullScreen();
+        fullScreenChildWindow();
         List<String> reportFormatList = getDocumentTextListByXpathJs(reportFormatDropDown);
         System.out.println(reportFormatList);
         click(find(cancelButton));

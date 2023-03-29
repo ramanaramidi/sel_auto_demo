@@ -65,6 +65,7 @@ public class AcsPage extends BasePage {
     }
 
     public SiteTrackerPage goToSiteTracker() throws Exception {
+        waitForPageToLoad();
         click(find(okButton));
         sleep(5);
         switchToSpecificWindow(parentWindow);

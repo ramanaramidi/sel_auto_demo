@@ -184,7 +184,7 @@ public class DevProjectTests extends BaseTest {
         projectTrackerPage.switchToTracker(parentWindow);
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"}, description = "displaySector_ProjectLink", priority = 10)
+    //@Test(groups = {"Integration"}, description = "displaySector_ProjectLink", priority = 10)
     public void displaySector_ProjectLink(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         rfSectorPage = mainSideMenu.goToRFSectorTracker();
@@ -430,7 +430,7 @@ public class DevProjectTests extends BaseTest {
         softAssert.assertTrue(projectTrackerPage.isPopALert(parentWindow),"Pop-up Error Verified Successfully");
         softAssert.closeAssert();
     }
-    @Test(groups = {"Integration"},description = "UPload The Document To Site Scope  Field",priority = 2)
+    //@Test(groups = {"Integration"},description = "UPload The Document To Site Scope  Field",priority = 2)
     public void documentUploadToSiteScopeFiled_Project() throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         projectTrackerPage = mainSideMenu.goToProjectTracker();

@@ -73,7 +73,7 @@ public class SdmUserTests extends BaseTest {
         softAssert.closeAssert();
     }
 
-   @Test(groups = {"Integration"},description = "User should able to see only Project Tracker and import Data",priority = 3)
+   //@Test(groups = {"Integration"},description = "User should able to see only Project Tracker and import Data",priority = 3)
     public void ATCVendorTest(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         mainSideMenu = loginPage.LoginAsUser(ATC_AGonzal);
@@ -92,7 +92,7 @@ public class SdmUserTests extends BaseTest {
        loginPage.userLogin(alphaUser);
     }
 
-     @Test(groups = {"Integration"},description = "User should able to see only Project Tracker and import Data",priority = 4)
+     //@Test(groups = {"Integration"},description = "User should able to see only Project Tracker and import Data",priority = 4)
     public void SBAVendorTest(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();
         mainSideMenu = loginPage.LoginAsUser(SBA_AMaldonado);

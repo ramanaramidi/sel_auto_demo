@@ -37,32 +37,7 @@ public class SiteFopsPage extends BasePage {
             "//label//i[contains(text(),'OSHA Compliance documentation is located on the D:Document tab.')]"
     );
     public By FOPSInfoTab = By.xpath("//div[@title='S:FOPS Info']");
-    public By roofTopBTSDrpField = By.xpath(
-            "(//select[@sname='S:Rooftop BTS Risk Rank']//option)[1]"
-    );
-    public String oshaRemediationDrpField =
-            "//select[@sname='S:OSHA Remediation Complete']//option";
-    public By remediationCompleteDrpField = By.xpath(
-            "//select[@sname='S:OSHA Remediation Complete']//option"
-    );
-    public String roofTopBTSRiskRankDrpField =
-            "//select[@sname='S:Rooftop BTS Risk Rank']//option";
     public By cancelButton = By.xpath("//*[@id='btnCancel']");
-    public By equipmentShelterDrpField = By.xpath(
-            "//select[@sname='S:Equipment Shelter at Site?']//option"
-    );
-    public By vaultSiteDrpField = By.xpath(
-            "//select[@sname='S:Vault Site']//option"
-    );
-    public By siteAccessDrpField = By.xpath(
-            "//select[@sname='S:24x7 Site Access?']//option"
-    );
-    public By s247TelcoAccessField = By.xpath(
-            "//select[@sname='S:24x7 Telco Access?']//option"
-    );
-    public By s247OtherAccessField = By.xpath(
-            "//select[@sname='S:Other Access 24x7']//option"
-    );
     public By notificationCheckBox = By.xpath("//label[text()='S:Telco Access Notification Required']//parent::td//following-sibling::td//child::label//input");
     public By notificationCheckBox_Other = By.xpath("//label[text()='S:Other Access Notification Required']//parent::td//following-sibling::td//child::label//input");
     public By fieldTechName = By.xpath("//label[text()='S:Field Tech Name ']");
@@ -99,20 +74,10 @@ public class SiteFopsPage extends BasePage {
     public By docTrackerError = By.xpath(
             "(//label[text()='S:Copy EME To Doc Tracker Error'])[2]"
     );
-    // public By siteSecurityDropDown = By.xpath("(//label[text()='S:Site Backhaul Type'])[2]");
+     //public By siteSecurityDropDown = By.xpath("(//label[text()='S:Site Backhaul Type'])[2]");
 
-    public By siteSecurityDrpField = By.xpath(
-            "//select[@sname='S:Site Security Issues']//option"
-    );
-    public String siteSecurityField =
-            "//select[@sname='S:Site Security Issues']//option";
-    public String signageVisitField =
-            "//select[@sname='S:EME Signage Visit Required']//option";
     public By siteSecurity = By.xpath(
             "//select[@sname='S:Site Security Issues']"
-    );
-    public By signageVisitDrpField = By.xpath(
-            "//select[@sname='S:EME Signage Visit Required']//option"
     );
     public By DocTrackerError = By.xpath(
             "(//textarea[@sname='S:Copy EME To Doc Tracker Error'])[2]"
@@ -195,38 +160,13 @@ public class SiteFopsPage extends BasePage {
         boolean fieldName = fieldNameText.isDisplayed();
         return fieldName;
     }
-    public boolean validateFieldIsDisplayed_Facility(String name) throws Exception {
+    public boolean validateField_IsDisplayed(String name) throws Exception {
         waitForPageToLoad();
         WebElement fieldNameText = fieldByLabelTextIndex(name).get(1);
         scrollToElement(fieldNameText);
         boolean fieldName = fieldNameText.isDisplayed();
         return fieldName;
     }
-
-    public boolean verifyRoofTopBTSIsDropDown_OSHA() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(selectionBoxBySname("S:Rooftop BTS Risk Rank").get(0));
-        List<WebElement> dropDownField = findAll(roofTopBTSDrpField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
-    public boolean verifyRemediationCompleteIsDropDown_OSHA() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(selectionBoxBySname("S:OSHA Remediation Complete").get(0));
-        List<WebElement> dropDownField = findAll(remediationCompleteDrpField, 2);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
     public String validateFieldIsReadOnly(String name) throws Exception {
         waitForPageToLoad();
         WebElement fieldName = inputBoxDataBySname(name);
@@ -241,17 +181,6 @@ public class SiteFopsPage extends BasePage {
         scrollToElement(fieldName);
         String readOnly = fieldName.getAttribute("readonly");
         return readOnly;
-    }
-
-    public String getRoofTopBTSDropDownValues() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(roofTopBTSDrpField));
-        List<String> drpList = getDocumentTextListByXpathJs(
-                roofTopBTSRiskRankDrpField
-        );
-        System.out.println(drpList);
-        String roofTopBTSList = drpList.toString();
-        return roofTopBTSList;
     }
     public void selectDropDownValue(String fieldName, String fieldValue)
             throws Exception {
@@ -283,18 +212,6 @@ public class SiteFopsPage extends BasePage {
             return true;
         }
     }
-
-    public String validateOSHARemediationValues_OSHA() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(remediationCompleteDrpField));
-        List<String> drpList = getDocumentTextListByXpathJs(
-                oshaRemediationDrpField
-        );
-        System.out.println(drpList);
-        String roofTopBTSList = drpList.toString();
-        return roofTopBTSList;
-    }
-
     public String verifyFieldIsCheckbox(String fieldName) throws Exception {
         waitForPageToLoad();
         WebElement checkBoxField = checkBoxByLabelInput(fieldName);
@@ -379,32 +296,6 @@ public class SiteFopsPage extends BasePage {
             return true;
         } else return false;
     }
-
-    public boolean verifyEquipmentShelterFieldIsDropDown_Facility()
-            throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(equipmentShelterDrpField));
-        List<WebElement> dropDownField = findAll(equipmentShelterDrpField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
-    public boolean verifyVaultSiteFieldIsDropDown_Facility() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(vaultSiteDrpField));
-        List<WebElement> dropDownField = findAll(vaultSiteDrpField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
     public String validateTextAreaFieldIsReadOnly_Facility(String name)
             throws Exception {
         waitForPageToLoad();
@@ -413,19 +304,6 @@ public class SiteFopsPage extends BasePage {
         String readOnly = fieldName.getAttribute("readonly");
         return readOnly;
     }
-
-    public boolean verifySiteAccessIsDropDown() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(siteAccessDrpField));
-        List<WebElement> dropDownField = findAll(siteAccessDrpField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
     public void addAccessDescriptionComments_Facility(
             String accessDescriptionText
     ) throws Exception {
@@ -803,19 +681,6 @@ public class SiteFopsPage extends BasePage {
         } else return false;
     }
 
-    public Boolean verifyDropDownField_S247TelcoAccess() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(selectionBoxBySname("S:24x7 Telco Access?").get(0));
-        List<WebElement> dropDownField = findAll(s247TelcoAccessField);
-        System.out.println("DropDown Options are - " + dropDownField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
     public Boolean verifyTextField_NotesField(String name, String text) throws Exception {
         waitForPageToLoad();
         // String text =
@@ -1041,27 +906,6 @@ public class SiteFopsPage extends BasePage {
         waitForPageToLoad();
         sleep(3);
     }
-    public Boolean verifyDropDownField_S247OtherAccess() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(selectionBoxBySname("S:Other Access 24x7").get(0));
-        List<WebElement> dropDownField = findAll(s247OtherAccessField);
-        System.out.println("DropDown Options are - " + dropDownField);
-        for (WebElement e: dropDownField
-        ) {
-            String option = e.getText();
-            System.out.println("Option is -" + option);
-            if (e.getText().equals("Yes")){
-                e.click();
-            }
-        }
-
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
     public boolean verifyCheckBoxChecked_OtherAccess(String fieldName) throws Exception {
         waitForPageToLoad();
         WebElement checkBoxField = checkBoxByLabelInput(fieldName);
@@ -1225,71 +1069,6 @@ public class SiteFopsPage extends BasePage {
         switchToSpecificWindow(parentWindow);
         fullScreenChildWindow();
     }
-
-    public boolean validateAuditPhotos() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(AuditPhotos);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateAuditLast() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(auditLast);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateAuditSignage() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(auditSignage);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateSignageVisit() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(signageVisit);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateBackaulType() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(backhaulType);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateDocumentUploadedBy() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(documentUploadedBy);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateDocumentUploadedByUser() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(documentUploadedByUser);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
-    public boolean validateDocTrackerError() throws Exception {
-        waitForPageToLoad();
-        WebElement fieldNameText = find(docTrackerError);
-        scrollToElement(fieldNameText);
-        boolean fieldName = fieldNameText.isDisplayed();
-        return fieldName;
-    }
-
     public boolean veryfySiteSecuruity() throws Exception {
         waitForPageToLoad();
         WebElement siteSecurity = selectionBoxBySname("S:Site Security Issues")
@@ -1300,31 +1079,6 @@ public class SiteFopsPage extends BasePage {
         }
         return false;
     }
-
-    public boolean verifySiteSecurityDropDown() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(siteSecurityDrpField));
-        List<WebElement> dropDownField = findAll(siteSecurityDrpField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
-    public boolean verifySignageVisitDropDown() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(signageVisitDrpField));
-        List<WebElement> dropDownField = findAll(signageVisitDrpField);
-        boolean Flag = false;
-        if (dropDownField.size() > 0) {
-            System.out.println(dropDownField.size());
-            Flag = true;
-        }
-        return Flag;
-    }
-
     public boolean verifyDocumentUploadedByTextField() throws Exception {
         waitForPageToLoad();
         scrollToElement(
@@ -1423,25 +1177,6 @@ public class SiteFopsPage extends BasePage {
         String readOnly = fieldName.getAttribute("readonly");
         return readOnly;
     }
-
-    public String validateSiteSecurityDropDownValues() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(find(siteSecurity));
-        List<String> drpList = getDocumentTextListByXpathJs(siteSecurityField);
-        System.out.println(drpList);
-        String siteSecurityList = drpList.toString();
-        return siteSecurityList;
-    }
-
-    public String validateSignageVisitDropDownValues() throws Exception {
-        waitForPageToLoad();
-        scrollToElement(selectionBoxBySname("S:EME Signage Visit Required").get(1));
-        List<String> drpList = getDocumentTextListByXpathJs(signageVisitField);
-        System.out.println(drpList);
-        String siteSecurityList = drpList.toString();
-        return siteSecurityList;
-    }
-
     public boolean updateSiteSecurityWithFirstOption() throws Exception {
         waitForPageToLoad();
         scrollToElement(find(siteSecurity));

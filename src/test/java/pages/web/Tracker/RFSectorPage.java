@@ -221,6 +221,8 @@ public class RFSectorPage extends BasePage
     }
 
     public RFSectorPage addNewRFSector() throws Exception {
+        waitForPageToLoad();
+        sleep(10);
         waitUntilVisibleElement(find(AddButton));
         buttonClick("Add", 1);
         return new RFSectorPage(driver);
@@ -228,6 +230,7 @@ public class RFSectorPage extends BasePage
 
     public RFSectorPage editRFSector() throws Exception {
         waitForPageToLoad();
+        sleep(15);
         waitUntilVisibleElement(find(EditButton));
         buttonClick("Edit", 3);
         return new RFSectorPage(driver);

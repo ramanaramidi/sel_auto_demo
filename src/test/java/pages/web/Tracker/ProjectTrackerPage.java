@@ -90,6 +90,7 @@ public class ProjectTrackerPage extends BasePage {
     public By generalInfoTab = By.xpath("//div[@title='PJ:General Info']");
     public By projectOffAirButton = By.xpath("(//td//label[contains(text(),'PJ:Project')]//b//following::td//following::div//input)[1]");
     public By runEventCheckBox = By.xpath("//label[text()='PJ:Run Event Rule']//parent::td//following-sibling::td//child::label//input");
+    public By sectorIdBuild = By.xpath("(//label[text()='PJ:Sector IDs (Build)']/../following-sibling::td/div/div/input)[2]");
     String parentWindow;
     String parentWindow1;
     String parentWindowHolder;
@@ -1091,7 +1092,8 @@ public class ProjectTrackerPage extends BasePage {
         sleep(3);
         click(find(DASTab));
         sleep(2);
-        dropDownDotsClick("PJ:Sector IDs (Build)");
+        //dropDownDotsClick("PJ:Sector IDs (Build)");
+        click(find(sectorIdBuild));
         sleep(4);
         String parent = switchToChildWindows();
         fullScreen();

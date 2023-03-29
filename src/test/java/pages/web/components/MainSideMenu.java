@@ -194,6 +194,7 @@ public class MainSideMenu extends BasePage {
     }
 
     public ProjectTrackerPage goToProjectTracker() throws Exception {
+        waitForPageToLoad();
         navigateToAppCenter();
         sleep(4);
         clickingProjectTracker();

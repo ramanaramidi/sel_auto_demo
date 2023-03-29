@@ -149,6 +149,7 @@ public class AddRingPage extends BasePage {
         buttonClick("OK", 4);
         click(find(applyButton));
         waitForPageToLoad();
+        sleep(5);
         waitUntilVisibleElement(find(okButton));
         sleep(5);
         click(find(okButton));
