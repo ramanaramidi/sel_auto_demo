@@ -135,6 +135,7 @@ public class ProjectTrackerPage extends BasePage {
 
     public boolean isValuePresentInGrid(String columnName) throws Exception {
         waitForPageToLoad();
+        sleep(10);
         int columnToFind = getTableData(columnName);
         List<WebElement> tableContents = findAll(tableData);
         List<WebElement> cellDataForTheFirstRow = findAll(By.tagName("td"),tableContents.get(1));
@@ -192,6 +193,7 @@ public class ProjectTrackerPage extends BasePage {
     public String searchForValueInGrid(String columnName, String searchByColumn, String searchValue) throws Exception {
         fullScreen();
         waitForPageToLoad();
+        sleep(10);
         int columnToFind = getTableData(columnName);
         int columnValueToMatch = getTableData(searchByColumn);
         List<WebElement> tableContents = findAll(tableData);
@@ -216,6 +218,7 @@ public class ProjectTrackerPage extends BasePage {
 
     public AddProjectPage selectEditOption() throws Exception {
         waitForPageToLoad();
+        sleep(40);
         waitUntilVisibleElement(find(editProject));
         click(find(editProject));
         sleep(10);

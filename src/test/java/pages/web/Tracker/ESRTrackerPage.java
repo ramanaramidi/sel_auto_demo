@@ -233,9 +233,10 @@ public class ESRTrackerPage extends BasePage {
     }
     public void sortingASCOrder() throws Exception {
         waitForPageToLoad();
-        sleep(10);
+        sleep(25);
         scrollToElement(find(refresh));
         hoverOver(find(refresh));
+        sleep(20);
         click(find(refreshSorting));
         click(find(ascOrder));
         waitUntilVisibleElement(find(searchData));
@@ -244,7 +245,7 @@ public class ESRTrackerPage extends BasePage {
     public void sortingDescOrder() throws Exception
     {
         waitForPageToLoad();
-        sleep(10);
+        sleep(25);
         scrollToElement(find(refresh));
         hoverOver(find(refresh));
         sleep(20);

@@ -374,8 +374,8 @@ public class SiteTrackerPage extends BasePage {
         switchToSpecificWindow(parent2);
         click(find(applyButton));
         waitForPageToLoad();
+        sleep(15);
         waitUntilVisibleElement(find(okButton));
-        sleep(10);
         scrollToElement(pencilIcon("S:Hub Site ID").get(0));
         sleep(10);
         click(pencilIcon("S:Hub Site ID").get(0));

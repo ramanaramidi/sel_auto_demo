@@ -50,35 +50,11 @@ public class SiteFopsPage extends BasePage {
     public By fieldTechEmail = By.xpath(
             "(//label[contains(text(),'S:Field Tech Email')]/parent::td/following-sibling::td/div/div/input)[1]"
     );
-    public By AuditPhotos = By.xpath(
-            "(//label[text()='S:EME Audit Photos [Doc]'])[2]"
-    );
-    public By auditLast = By.xpath(
-            "(//label[text()='S:EME Audit Last Performed Date'])[2]"
-    );
-    public By auditSignage = By.xpath(
-            "(//label[text()='S:EME Audit Signage Expiration Date'])[2]"
-    );
-    public By signageVisit = By.xpath(
-            "(//label[text()='S:EME Signage Visit Required'])[2]"
-    );
-    public By backhaulType = By.xpath(
-            "(//label[text()='S:Site Backhaul Type'])[2]"
-    );
-    public By documentUploadedBy = By.xpath(
-            "(//label[text()='S:EME Document Uploaded By'])[2]"
-    );
-    public By documentUploadedByUser = By.xpath(
-            "(//label[text()='S:EME Document Uploaded User'])[2]"
-    );
-    public By docTrackerError = By.xpath(
-            "(//label[text()='S:Copy EME To Doc Tracker Error'])[2]"
-    );
-     //public By siteSecurityDropDown = By.xpath("(//label[text()='S:Site Backhaul Type'])[2]");
-
     public By siteSecurity = By.xpath(
             "//select[@sname='S:Site Security Issues']"
     );
+    public String signageVisitField =
+            "//select[@sname='S:EME Signage Visit Required']//option";
     public By DocTrackerError = By.xpath(
             "(//textarea[@sname='S:Copy EME To Doc Tracker Error'])[2]"
     );
@@ -1176,6 +1152,14 @@ public class SiteFopsPage extends BasePage {
         //List<WebElement> dropDownField = findAll(signageVisitDrpField);
         String readOnly = fieldName.getAttribute("readonly");
         return readOnly;
+    }
+    public String validateSignageVisitDropDownValues() throws Exception {
+        waitForPageToLoad();
+        scrollToElement(selectionBoxBySname("S:EME Signage Visit Required").get(1));
+        List<String> drpList = getDocumentTextListByXpathJs(signageVisitField);
+        System.out.println(drpList);
+        String siteSecurityList = drpList.toString();
+        return siteSecurityList;
     }
     public boolean updateSiteSecurityWithFirstOption() throws Exception {
         waitForPageToLoad();

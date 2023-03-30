@@ -222,7 +222,7 @@ public class RFSectorPage extends BasePage
 
     public RFSectorPage addNewRFSector() throws Exception {
         waitForPageToLoad();
-        sleep(10);
+        sleep(15);
         waitUntilVisibleElement(find(AddButton));
         buttonClick("Add", 1);
         return new RFSectorPage(driver);
@@ -230,7 +230,7 @@ public class RFSectorPage extends BasePage
 
     public RFSectorPage editRFSector() throws Exception {
         waitForPageToLoad();
-        sleep(15);
+        sleep(20);
         waitUntilVisibleElement(find(EditButton));
         buttonClick("Edit", 3);
         return new RFSectorPage(driver);
@@ -379,6 +379,8 @@ public class RFSectorPage extends BasePage
     }
 
     public RFSectorPage selectEditOption() throws Exception {
+        waitForPageToLoad();
+        sleep(40);
         waitUntilVisibleElement(find(editButton));
         click(find(editButton));
         sleep(10);
@@ -1192,12 +1194,12 @@ public class RFSectorPage extends BasePage
         sleep(5);
         switchToSpecificWindow(parent1);
         click(find(ApplyButton));
+        waitForPageToLoad();
         sleep(10);
-        WebElement fieldValue1 = inputBoxDataLabel(fieldName);
-        scrollToElement(fieldValue1);
+        scrollToElement(inputBoxDataLabel(fieldName));
         sleep(3);
-        String cellVal = getDocumentTextByIdJs(fieldValue1.getAttribute("id"));
-        boolean cellValue = getDocumentTextByIdJs(fieldValue1.getAttribute("id")).equals("");
+        String cellVal = getDocumentTextByIdJs(inputBoxDataLabel(fieldName).getAttribute("id"));
+        boolean cellValue = cellVal.equals("");
         System.out.println(cellVal);
         return cellValue;
     }

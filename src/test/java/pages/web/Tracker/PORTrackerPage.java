@@ -91,6 +91,8 @@ public class PORTrackerPage extends BasePage {
 
     public String searchForValueInGrid(String columnName, String searchByColumn, String searchValue) throws Exception {
         fullScreen();
+        waitForPageToLoad();
+        sleep(10);
         int columnToFind = getTableData(columnName);
         int columnValueToMatch = getTableData(searchByColumn);
         List<WebElement> tableContents = findAll(tableData);
@@ -144,6 +146,8 @@ public class PORTrackerPage extends BasePage {
     }
 
     public AddPORPage selectEditOption() throws Exception {
+        waitForPageToLoad();
+        sleep(40);
         waitUntilVisibleElement(find(editPOR));
         click(find(editPOR));
         // sleep(5);

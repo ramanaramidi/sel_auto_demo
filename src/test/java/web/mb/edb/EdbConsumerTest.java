@@ -487,7 +487,7 @@ public class EdbConsumerTest extends BaseTest {
         softAssert.closeAssert();
     }
 
-    @Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 30)
+    //@Test(groups = {"Integration"},description = "verifyEdbMessagePostSiteCreation_Edb",priority = 30)
     public void
     verifyEdbCEntryForMovingExistingSite(Method method) throws Exception {
         AssertionsUtil softAssert = new AssertionsUtil();

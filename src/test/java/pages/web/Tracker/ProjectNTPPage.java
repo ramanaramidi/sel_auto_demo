@@ -66,9 +66,9 @@ public class ProjectNTPPage extends BasePage {
     }
 
     public AddProjectPage selectEditOption() throws Exception {
-        // wait(5);
-        // waitUntilVisibleElement(find(editButton));
-        sleep(4);
+         waitForPageToLoad();
+        sleep(40);
+        waitUntilVisibleElement(find(editButton));
         click(find(editButton));
         waitForPageToLoad();
         // sleep(4);

@@ -221,6 +221,7 @@ public class MainSideMenu extends BasePage {
     }
 
     public SiteTrackerPage goToSiteTracker() throws Exception {
+        waitForPageToLoad();
         navigateToAppCenter();
         clickingSiteTracker();
         return new SiteTrackerPage(driver);
@@ -537,6 +538,7 @@ public class MainSideMenu extends BasePage {
         return new RunReportsPage(driver);
     }
     public SiteFopsPage goToSiteTrackerFops() throws Exception {
+        waitForPageToLoad();
         navigateToAppCenter();
         clickingSiteTracker();
         return new SiteFopsPage(driver);

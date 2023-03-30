@@ -316,8 +316,9 @@ public class AddSitePage extends BasePage {
         buttonClick("OK", 4);
         click(find(applyButton));
         waitForPageToLoad();
+        waitUntilVisibleElement(find(applyButton));
+        sleep(20);
         waitUntilVisibleElement(find(okButton));
-        sleep(9);
         click(find(okButton));
         sleep(4);
         switchToSpecificWindow(parent1);
@@ -374,6 +375,8 @@ public class AddSitePage extends BasePage {
     public SiteTrackerPage editSiteMandatoryDetails(Site site) throws Exception {
         String parent = setMandatoryDetails(site);
         applyChanges();
+        waitForPageToLoad();
+        sleep(5);
         waitUntilVisibleElement(find(okButton));
         sleep(5);
         click(find(okButton));
@@ -816,6 +819,7 @@ public class AddSitePage extends BasePage {
 
     public void assignSiteWithHub1(String siteId) throws Exception {
         waitForPageToLoad();
+        sleep(5);
         WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
         scrollToElement(sitecategory);
         dropDownDotsClick("S:Hub Site ID");
@@ -889,6 +893,7 @@ public class AddSitePage extends BasePage {
     }
 
     public void assignSiteWithRouter(String siteId) throws Exception {
+        waitForPageToLoad();
         WebElement sitecategory = selectionBoxBySname("S:Site Category").get(0);
         scrollToElement(sitecategory);
         dropDownDotsClick("S:Hub Site ID");

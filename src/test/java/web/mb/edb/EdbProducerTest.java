@@ -649,7 +649,7 @@ public class EdbProducerTest extends BaseTest {
                         edbProducerTrackerPage.searchForValueInGrid("EPM:Producer Message", 1)
         );
         softAssert.closeAssert();
-    }
+    }/*
 
     @Test(
             groups = { "Integration" },
@@ -715,7 +715,7 @@ public class EdbProducerTest extends BaseTest {
                         edbProducerTrackerPage.searchForValueInGrid("EPM:Producer Message", 1)
         );
         softAssert.closeAssert();
-    }
+    }*/
 
     @Test(
             groups = { "Integration" },

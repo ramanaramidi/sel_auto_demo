@@ -255,7 +255,7 @@ public class FOPSOSHATests extends BaseTest {
         siteFopsPage.selectEditOption();
         siteFopsPage.goToFOPSTab();
         List<String> options = siteFopsPage.fieldDropDownValues(
-                "S:Power Access 24x7"
+                "S:OSHA Remediation Complete"
         );
         softAssert.assertTrue(options.contains(""),  "Value is Present");
         softAssert.assertTrue(

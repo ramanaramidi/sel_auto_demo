@@ -263,18 +263,16 @@ public class FOPSSafetyTests extends BaseTest {
         siteFopsPage.searchForValue(site.siteId,"S:Site Code");
         siteFopsPage.selectEditOption();
         siteFopsPage.goToFopsTab();
-        List<String> options = siteFopsPage.fieldDropDownValues(
-                "S:EME Signage Visit Required"
-        );
-        softAssert.assertTrue(
-                options.contains("No"),
+        softAssert.assertContains(
+                siteFopsPage.validateSignageVisitDropDownValues(),
+                "No",
                 "signage visit dropdown contain No value"
         );
-        softAssert.assertTrue(
-                options.contains("Yes"),
+        softAssert.assertContains(
+                siteFopsPage.validateSignageVisitDropDownValues(),
+                "Yes",
                 "signage visit dropdown contain Yes value"
-        );
-        siteFopsPage.switchToTrackerPageByCancel();
+        );siteFopsPage.switchToTrackerPageByCancel();
         softAssert.closeAssert();
     }
 
