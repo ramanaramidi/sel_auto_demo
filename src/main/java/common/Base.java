@@ -46,7 +46,7 @@ public class Base {
     @BeforeMethod
     public void setUp(@Optional("false") boolean selGrid, @Optional("tanvirahmmed") String userName, @Optional("http://10.154.94.65:5557/wd/hub")
             String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName, @Optional("")
-                              String browserVersion, @Optional("http://www.t-mobile.com") String url,@Optional("C:\\Report\\test.html") String rptFilePathP)throws IOException {
+                              String browserVersion, @Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url,@Optional("C:\\Report\\test.html") String rptFilePathP)throws IOException {
         rptFilePath = rptFilePathP;
         //BasicConfigurator.configure();
         if(selGrid==true){

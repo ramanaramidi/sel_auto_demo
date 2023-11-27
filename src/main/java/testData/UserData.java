@@ -54,6 +54,8 @@ public final class UserData {
     public static String getInstance(){
         return token;
     }
+
+    /*
     public static void getToken(String privateKey)throws NoSuchAlgorithmException, IllegalBlockSizeException, InvalidKeyException,
             BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
         System.out.println("Getting token");
@@ -79,6 +81,8 @@ public final class UserData {
         String plainText = MiscHelpers.decrypt(algorithm, tokenCipher, key, ivParameterSpec);
         token =  plainText;
     }
+
+     */
 
     public static Users getAlphaUserDetails(Users userDetails) {
         try {

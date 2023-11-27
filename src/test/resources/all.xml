@@ -9,7 +9,7 @@
         <!--        <parameter name="jsonReports" value="false"/>-->
         <!--        <parameter name="ZipReports" value="false"/>-->
         <!--        <parameter name="webPublish" value="false"/>-->
-        <parameter name="selGrid" value="true"/>
+        <parameter name="selGrid" value="false"/>
         <parameter name="nodeURL" value="http://stgpwsele0012:4444/wd/hub/"/>
         <!-- <parameter name="nodeURL" value="https://selenium-grid4-demo.px-prd1103.pks.t-mobile.com/"/> -->
         <!--        <parameter name="browserName" value="chrome"/>-->

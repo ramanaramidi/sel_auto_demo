@@ -96,7 +96,7 @@ public abstract class BaseTest_V2 {
 	@Parameters({"selGrid","nodeURL", "os", "browserName", "url","localDriverPath"})
 	@BeforeClass (alwaysRun = true)
 	public void beforeClass(@Optional("false") boolean selGrid,@Optional("http://10.154.94.65:5557/wd/hub")
-			String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName,@Optional("http://www.t-mobile.com") String url,@Optional("C:/driver/chromedriver.exe") String localDriverPath) throws IOException, InterruptedException {
+			String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName,@Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url,@Optional("C:/driver/chromedriver.exe") String localDriverPath) throws IOException, InterruptedException {
 		//BasicConfigurator.configure();
 
 
@@ -134,7 +134,7 @@ public abstract class BaseTest_V2 {
 	@BeforeMethod(alwaysRun = true)
 	public void beforeMethod(@Optional("false") boolean selGrid, @Optional("tanvirahmmed") String userName, @Optional("http://10.154.94.65:5557/wd/hub")
 			String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName, @Optional("")
-									 String browserVersion, @Optional("http://www.t-mobile.com") String url, @Optional("C:/Report/test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:/chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
+									 String browserVersion, @Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url, @Optional("C:/Report/test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:/chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
 
 		driver.navigate().refresh();
 		ExtentTestManager.startTest(""+method.getName());

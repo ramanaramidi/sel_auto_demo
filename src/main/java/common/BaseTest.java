@@ -123,7 +123,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 							@Optional("http://10.154.94.65:5557/wd/hub") String nodeURL,
 							@Optional("Windows 7") String os,
 							@Optional("chrome") String browserName,
-							@Optional("http://www.t-mobile.com") String url,
+							@Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url,
 							@Optional("C:/driver/chromedriver.exe") String localDriverPath) throws IOException, InterruptedException, InvalidAlgorithmParameterException, IllegalBlockSizeException, NoSuchPaddingException, NoSuchAlgorithmException, BadPaddingException, InvalidKeyException {
 		//BasicConfigurator.configure();
 		//this.driver.manage().window().maximize();
@@ -167,7 +167,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 		System.out.println(ntCode);
 		privateKey = System.getProperty("USER_KEY");
 		System.out.println(privateKey);
-		UserData.getToken(privateKey);
+		//UserData.getToken(privateKey);
 		superUser = UserData.getSuperUserDetails(superUser);
 		nonSuper = UserData.getNonSuperUserDetails(nonSuper);
 		if(userName==null || password==null || ntCode==null) {
@@ -183,7 +183,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 	@BeforeMethod(alwaysRun = true)
 	public void beforeMethod(@Optional("false") boolean selGrid, @Optional("tanvirahmmed") String userName, @Optional("http://10.154.94.65:5557/wd/hub")
 	String nodeURL, @Optional("Windows 7") String os, @Optional("chrome") String browserName, @Optional("")
-							 String browserVersion, @Optional("http://www.t-mobile.com") String url, @Optional("C:/Report/test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:/chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
+							 String browserVersion, @Optional("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login") String url, @Optional("C:/Report/test.html") String rptFilePathP,Method method,@Optional("desktop") String deviceType,@Optional("D:/chromedriver.exe") String localDriverPath,@Optional("false") Boolean monitoringDB,@Optional("false") Boolean jsonReports) throws IOException, InterruptedException {
 
 		if(envURL!=null)
 		{
@@ -629,7 +629,7 @@ public abstract class BaseTest extends TestListenerAdapter{
 		ntCode = System.getProperty("USER_NTID");
 		ntCode = System.getProperty("USER_NTID");
 		privateKey = System.getProperty("USER_KEY");
-		UserData.getToken(privateKey);
+		//UserData.getToken(privateKey);
 		superUser = UserData.getSuperUserDetails(superUser);
 		if(userName==null || password==null || ntCode==null) {
 			alphaUser = UserData.getAlphaUserDetails(alphaUser);
