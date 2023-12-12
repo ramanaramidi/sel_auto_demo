@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 import pages.BasePage;
 import pages.web.OrangeHRMPages.AdminOrgHrmPage;
 
-import commons.enums.LoginOptionEnum;
+//import commons.enums.LoginOptionEnum;
 import commons.objects.Site;
 import commons.objects.Users;
 import org.checkerframework.checker.units.qual.A;
@@ -53,11 +53,6 @@ public class MainSideMenu extends BasePage {
         click(find(timeTab));
         return new AdminOrgHrmPage(driver);
     }
-
-
-
-
-
 
 
 }

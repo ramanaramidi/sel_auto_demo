@@ -1,9 +1,9 @@
 package web.mb.OrangeHRM;
 
 import common.BaseTest;
-import org.checkerframework.checker.units.qual.A;
+//import org.checkerframework.checker.units.qual.A;
 import org.testng.annotations.Test;
-import commons.objects.Ring;
+//import commons.objects.Ring;
 //import pages.web.Tracker.RingTrackerPage;
 import pages.web.OrangeHRMPages.AdminOrgHrmPage;
 import pages.web.components.MainSideMenu;
@@ -25,14 +25,15 @@ public class OrangeHRMTests extends BaseTest {
     AdminOrgHrmPage adminOrgHrmPage;
     String ringCode = "XZ" + MiscHelpers.getRandomString(5, true).toUpperCase();
     String ringCodeCancel = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
-/*
+
+    /*
     public OrangeHRMTests()
     {
         if(envURL == null) {envConfig.setWebUrl("https://opensource-demo.orangehrmlive.com/web/index.php/auth/login");}
         // if(testSuite == null) {testSuite = "sectorSet.xml";}
     }
 
- */
+    */
 
     @Test(groups = {"Integration"},description = "login",priority = 1)
     public void login_Ring(Method method) throws Exception {
