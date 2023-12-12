@@ -1,8 +1,10 @@
 package web.mb.OrangeHRM;
 
 import common.BaseTest;
-import commons.objects.Ring;
+import org.checkerframework.checker.units.qual.A;
 import org.testng.annotations.Test;
+import commons.objects.Ring;
+//import pages.web.Tracker.RingTrackerPage;
 import pages.web.OrangeHRMPages.AdminOrgHrmPage;
 import pages.web.components.MainSideMenu;
 import pages.web.onboarding.LoginPage;
@@ -19,7 +21,7 @@ public class OrangeHRMTests extends BaseTest {
     LoginPage loginPage;
     MainSideMenu mainSideMenu;
 
-
+    //RingTrackerPage ringTracker;
     AdminOrgHrmPage adminOrgHrmPage;
     String ringCode = "XZ" + MiscHelpers.getRandomString(5, true).toUpperCase();
     String ringCodeCancel = "AU" + MiscHelpers.getRandomString(5, true).toUpperCase();
@@ -155,6 +157,103 @@ public class OrangeHRMTests extends BaseTest {
 
  */
 
+
+    @Test(groups = {"Integration"}, description = "VerifyTabs", priority = 14)
+    public void VerifyTabs(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyPimTab(), "OrangeHRM contains PIM Tab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyLeaveTab(), "OrangeHRM contains LeaveTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyTimeTab(), "OrangeHRM contains TimeTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyRecruitmentTab(), "OrangeHRM contain RecruitmentTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyMyInfoTab(), "OrangeHRM contains MyInfoTab");
+    }
+    @Test(groups = {"Integration"}, description = "VerifyTabs", priority = 15)
+    public void VerifyPerformanceTab(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyPerformanceTab(), "OrangeHRM contains PerformanceTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyDashBoardTab(), "OrangeHRM contains DashBoardTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyDirectoryTab(), "OrangeHRM contains DirectoryTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyMaintenanceTab(), "OrangeHRM contains maintenanceTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyClaimTab(), "OrangeHRM contains MaintenanceTab");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyBuzzTab(), "OrangeHRM contains BuzzTab");
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"Integration"}, description = "VerifyAdminFields", priority = 16)
+    public void VerifyAdminFields(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.isUserNameEnable(), "Username field Is Enabled");
+        adminOrgHrmPage.UserRoleFiled();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyEmployeeName(), "Employee Name is Enabled");
+        adminOrgHrmPage.Status();
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"integration"}, description = "VerifyPimFields", priority = 17)
+    public void VerifyPimFields(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.gotoPimOrgHrmPage();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyEmployeeName1(), "PIM Tab contains Employee Name");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyEmployeeId(), "PIM Tab Contains EmployeeId");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyEmploymentStatus(),"PIM Tab Contains EmployeeStatus");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyInclude(),"PIM Tab Contains Include Field");
+        softAssert.assertTrue(adminOrgHrmPage.VerifySupervisorName(),"PIM Tab Contains Supervisor Name");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyJobTitle(),"PIM Tab Contains Job Title");
+        softAssert.assertTrue(adminOrgHrmPage.VerifySubUnit(),"PIM Tab Contains Sub Unit");
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"integration"}, description = "VerifyAddEmployee", priority = 18)
+    public void VerifyAddEmployee(Method method) throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.gotoPimOrgHrmPage();
+        adminOrgHrmPage.AddNewEmployee();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyPersonalDetailPage(), "Personal Details are Verified");
+        softAssert.assertTrue(adminOrgHrmPage.VerifyPersonalRecord(), "Personal Record is Verified");
+        softAssert.closeAssert();
+    }
+    @Test(groups =  {"Integration"}, description = "VerifyTimeSheet", priority = 19)
+    public void VerifyTimeSheet(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyTimeTab(), "Employee Time Sheet Is Verified");
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"Integration"}, description = "VerifyAdminTab", priority = 20)
+    public void VerifyAdminTab() throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyAdminTab(), "Admin Tab contains all Tabs");
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"Integration"}, description = "VerifyPimTab1", priority = 21)
+    public void VerifyPimTab1() throws Exception {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.VerifyPimTab1(), "Verify Functioning in Pim Tab");
+        softAssert.closeAssert();
+    }
+    @Test(groups =  {"Integration"}, description = "VerifyPageTitle", priority = 22)
+    public void VerifyPageTitle(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.verifyPageTitle(), "Page Title Is OrangeHRM");
+        softAssert.closeAssert();
+    }
+    @Test(groups = {"Integration"}, description = "DeleteRecord", priority = 23)
+    public void DeleteRecord(Method method) throws Exception
+    {
+        AssertionsUtil softAssert = new AssertionsUtil();
+        adminOrgHrmPage = mainSideMenu.goToAdminOrgHrm();
+        softAssert.assertTrue(adminOrgHrmPage.DeleteRecord(),"Record Deleted in PIM Tab");
+        softAssert.closeAssert();
+    }
 
 
 }

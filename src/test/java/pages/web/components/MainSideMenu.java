@@ -5,6 +5,20 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.BasePage;
 import pages.web.OrangeHRMPages.AdminOrgHrmPage;
+
+import commons.enums.LoginOptionEnum;
+import commons.objects.Site;
+import commons.objects.Users;
+import org.checkerframework.checker.units.qual.A;
+
+
+//import pages.web.Tracker.*;
+//import pages.web.Tracker.site.SiteFopsPage;
+//import pages.web.Tracker.site.SiteTrackerPage;
+import pages.web.onboarding.LoginPage;
+//import pages.web.reports.ImportPage;
+//import pages.web.reports.RunReportsPage;
+
 import java.util.List;
 
 public class MainSideMenu extends BasePage {
@@ -18,6 +32,10 @@ public class MainSideMenu extends BasePage {
     public By adminOrgHrm = By.xpath("//span[text()='Admin']");
     public By pimTab = By.linkText("PIM");
     public By timeTab = By.linkText("Time");
+
+
+
+
 
     public AdminOrgHrmPage goToAdminOrgHrm() throws Exception {
         waitUntilVisibleElement(find(adminOrgHrm));
@@ -35,4 +53,11 @@ public class MainSideMenu extends BasePage {
         click(find(timeTab));
         return new AdminOrgHrmPage(driver);
     }
+
+
+
+
+
+
+
 }
